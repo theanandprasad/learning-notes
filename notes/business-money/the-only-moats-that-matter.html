@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Only Moats That Matter — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .step .ex{color:var(--muted);font-size:13px;display:block;margin-top:3px}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>The Only Moats That Matter</h1>
+    <div class="meta">
+      <span>By <strong>Michael Bloch</strong> (@michaelxbloch, Quiet Capital)</span>
+      <span class="dot">•</span>
+      <span>Published Mar 28, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 8, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Moats</span>
+      <span class="tag">AI Strategy</span>
+      <span class="tag">Defensibility</span>
+      <span class="tag">Investing</span>
+    </div>
+  </header>
+
+  <p class="lede">In a world where AI can build any software, replicate any product, and automate any process — what actually makes a business defensible? Most answers are bets that intelligence won't get 100× faster, better, and cheaper. It will.</p>
+
+  <div class="callout key">
+    <h4>The one filter</h4>
+    <p style="margin:0">Defensibility comes from two things: things that are <strong>hard to do</strong> and things that are <strong>hard to get</strong>. <strong>AI is making "hard to do" worthless.</strong> What endures is "hard to get" — because <em>"AI compresses the time it takes to do things. It does not compress the time it takes for things to happen."</em> Five moats pass that test.</p>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">The core test: hard to do vs. hard to get</div>
+    <div class="twocol">
+      <div class="vs bad"><h4>Hard to do → dying</h4><p style="margin:0;font-size:14px">Building software, maintaining integrations, embedding so deep it takes a year to rip out. Increasingly easy. These were moats against the <strong>scarcity of intelligence</strong> — the one scarcity we know is ending.</p></div>
+      <div class="vs good"><h4>Hard to get → durable</h4><p style="margin:0;font-size:14px">Ten million users, a government license, a chip fab, a billion in deployable capital. AI can't compress the <strong>elapsed real-world time</strong> these take to accumulate.</p></div>
+    </div>
+    <figcaption>The single most important filter the author applies when investing.</figcaption>
+  </figure>
+
+  <h2>The five moats that pass</h2>
+  <div class="steps">
+    <div class="step"><b>1 · Compounding proprietary data.</b> Not static datasets (those get synthesized or worked around — "hard to do, not hard to get"). The moat is <strong>living data</strong>: proprietary information continuously generated through operations that are themselves defensible.<span class="ex">Orchard AI mounts cameras on farm equipment, tracking billions of fruit across millions of trees over many seasons and geographies — every pass makes the dataset richer. You can't replicate it without driving the same cameras through the same orchards for years.</span></div>
+    <div class="step"><b>2 · Network effects.</b> Every user makes the product more valuable for every other user.<span class="ex">DoorDash: clone the app overnight, but the drivers, restaurants, customers, and delivery density across 10,000 cities don't come with it. (Cache, an exchange fund: a larger pool → better diversification → more participants.) AI makes the <em>cold-start problem harder</em> — a hundred well-built clones now fight to bootstrap the same network; whoever already has liquidity compounds.</span></div>
+    <div class="step"><b>3 · Regulatory permission.</b> Governments move at the speed of politics, not technology.<span class="ex">Anduril needs procurement clearances and classified contracts. A bank charter takes years; FDA approval takes years. The surface area of regulation is <em>expanding</em>, not shrinking, as AI raises the stakes. The forms may change; the need for human permission won't.</span></div>
+    <div class="step"><b>4 · Capital at scale.</b> The one almost everyone is underweighting — "the endgame is physical."<span class="ex">Chip fabs, nuclear plants, and satellite constellations each cost billions. (There's a reason Musk is raising ~$75B and IPOing SpaceX even while saying money might not matter in 15 years.) When the bottleneck shifts from software to atoms, the ability to finance and deploy capital at massive scale is a defining advantage — and capital access is also institutional trust, track record, and relationships built over decades.</span></div>
+    <div class="step"><b>5 · Physical infrastructure.</b> Factories, power plants, battery networks, data centers.<span class="ex">Base Power is deploying thousands of battery units across Texas homes while building its own manufacturing. You can design the system in a week with AI; you cannot manufacture, install, and interconnect thousands of units in a week. Physics sets a floor that intelligence can't break — whoever broke ground first leads more every month.</span></div>
+  </div>
+
+  <h2>The meta-moat: time that can't be parallelized</h2>
+  <p>Every one of the five shares a property: they required <strong>years of real-world elapsed time</strong> to accumulate, and no amount of intelligence compresses that clock.</p>
+  <figure class="diagram">
+    <div class="dtitle">All five reduce to one thing</div>
+    <div class="col">
+      <div class="row grow" style="max-width:720px">
+        <div class="node"><div class="nh">Network density</div><div class="ns">years of adoption</div></div>
+        <div class="node"><div class="nh">Regulatory approval</div><div class="ns">years of process</div></div>
+        <div class="node"><div class="nh">Infrastructure</div><div class="ns">years to build</div></div>
+        <div class="node"><div class="nh">Data</div><div class="ns">years to compound</div></div>
+        <div class="node"><div class="nh">Capital relationships</div><div class="ns">decades to earn</div></div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="node accent2" style="max-width:520px"><div class="nh">Time that can't be parallelized</div><div class="ns">the head start <em>is</em> the moat — holders pull further ahead every day</div></div>
+    </div>
+    <figcaption>Companies already holding these positions aren't just defensible; they compound their lead.</figcaption>
+  </figure>
+
+  <h2>What didn't make the list</h2>
+  <p>The false moats — all bottlenecked by intelligence, which is exactly the scarcity that's ending:</p>
+  <figure class="diagram">
+    <div class="dtitle">Moats against the scarcity of intelligence (eroding)</div>
+    <div class="row grow" style="max-width:720px">
+      <div class="node warn"><div class="nh">Workflow embeddedness</div><div class="ns">switching cost is just engineering time in disguise</div></div>
+      <div class="node warn"><div class="nh">Ecosystem lock-in</div><div class="ns">AI rebuilds integrations as fast as you describe them</div></div>
+      <div class="node warn"><div class="nh">Software scale</div><div class="ns">stops mattering when engineering costs approach zero</div></div>
+    </div>
+    <figcaption>Durable-sounding, until you notice each is a bet on intelligence staying scarce.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <h4>Two open questions the author flags</h4>
+    <ul style="margin:0">
+      <li><strong>Trust as a moat?</strong> Someone must be accountable when things go wrong — the institution that bears the liability might become <em>more</em> valuable as AI does more of the work.</li>
+      <li><strong>Human attention as a moat?</strong> When the cost of creating content drops to zero, the brands that already hold attention may have the most compounding advantage of all.</li>
+    </ul>
+    <p style="margin:10px 0 0">He believes both are real — unsure yet whether they're their own categories or byproducts of the five.</p>
+  </div>
+
+  <h2>The takeaway</h2>
+  <blockquote>Hard to do, or hard to get? If your moat is bottlenecked by intelligence, you're on borrowed time. If it's bottlenecked by years, by human behavior, by physics, by political will, by capital — you're probably building something that lasts.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Michael Bloch (@michaelxbloch, Partner at Quiet Capital; early DoorDash, founded Pillar), <a href="https://x.com/michaelxbloch/status/2038753872890778029" target="_blank" rel="noopener">"The Only Moats That Matter"</a> (X article, Mar 28 2026). Company examples (Orchard AI, DoorDash, Cache, Anduril, SpaceX, Base Power) and figures are the author's; a couple of specific dollar amounts were omitted from the source capture and are described as "billions." Diagrams are HTML/CSS reconstructions of the argument. Related: <a href="what-ai-cant-kill.html">What AI Can't Kill</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-08 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
