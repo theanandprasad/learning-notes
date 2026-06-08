@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idea Graph — Learning Notes</title>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<style>
+  :root{--bg:#ffffff;--ink:#1b1f27;--muted:#5b6573;--line:#dfe3ea;--accent:#3858d6;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  body{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  header{padding:12px 18px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+  header h1{font-size:18px;margin:0;letter-spacing:-.01em;white-space:nowrap}
+  header .back{color:var(--muted);font-size:13px;text-decoration:none;white-space:nowrap}
+  header .back:hover{color:var(--accent)}
+  #search{flex:0 1 240px;min-width:150px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;font-size:13px;outline:none;color:var(--ink)}
+  #search:focus{border-color:var(--accent)}
+  .legend{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-left:auto}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#fff;padding:4px 11px;border-radius:999px;cursor:pointer;user-select:none;border:1px solid transparent;transition:opacity .12s}
+  .chip.off{opacity:.32;text-decoration:line-through}
+  .chip .dotc{display:none}
+  #wrap{flex:1;position:relative;min-height:0}
+  #net{position:absolute;inset:0}
+  #info{position:absolute;left:14px;bottom:14px;max-width:330px;background:rgba(255,255,255,.96);border:1px solid var(--line);
+    border-radius:12px;padding:13px 15px;font-size:13px;line-height:1.5;box-shadow:0 6px 24px rgba(20,30,60,.10);backdrop-filter:blur(3px)}
+  #info h3{margin:0 0 5px;font-size:13px}
+  #info .hint{color:var(--muted)}
+  #info a{color:var(--accent);text-decoration:none;display:block;margin:3px 0}
+  #info a:hover{text-decoration:underline}
+  #info .meta{color:var(--muted);font-size:11.5px;margin-top:2px}
+  #info .reset{color:var(--muted);font-size:11.5px;cursor:pointer;margin-top:8px;display:inline-block}
+  #info .reset:hover{color:var(--accent)}
+  .keytype{position:absolute;right:14px;bottom:14px;background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:10px;
+    padding:8px 12px;font-size:11.5px;color:var(--muted);line-height:1.7}
+  .keytype b{color:var(--ink)}
+  .sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+  .swo{border-radius:50%}
+  @media(max-width:600px){.keytype{display:none} header h1{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← Notes</a>
+  <h1>🕸️ Idea Graph</h1>
+  <input id="search" type="text" placeholder="Search ideas &amp; articles…" autocomplete="off">
+  <div class="legend" id="legend"></div>
+</header>
+<div id="wrap">
+  <div id="net"></div>
+  <div id="info">
+    <h3>Explore the web of ideas</h3>
+    <div class="hint">Round gold nodes are <b>ideas</b>; boxes are <b>articles</b> (colored by topic).<br>
+    • Click an <b>idea</b> → highlights the notes that share it.<br>
+    • Click an <b>article</b> → opens the note.<br>
+    • Drag, zoom, or use the topic chips &amp; search.</div>
+  </div>
+  <div class="keytype">
+    <span class="sw swo" style="background:#f3d27a;border:1px solid #c79a2a"></span><b>idea</b> &nbsp;·&nbsp;
+    <span class="sw" style="background:#3858d6"></span><b>article</b>
+  </div>
+</div>
+
+<script>
+const TOPICS = {
+  tech:   {name:'Technology & AI', folder:'technology-ai', bg:'#3858d6', bd:'#2a43a8'},
+  writing:{name:'Writing',         folder:'writing',       bg:'#b06d12', bd:'#8a560e'},
+  self:   {name:'Self & Growth',   folder:'self-growth',   bg:'#2e9a52', bd:'#237a40'},
+  phil:   {name:'Philosophy',      folder:'philosophy',    bg:'#7b50d6', bd:'#5f3cac'},
+  biz:    {name:'Business & Money', folder:'business-money',bg:'#0e9e88', bd:'#0b7d6c'},
+};
+// slug : {n:short title, s:summary, t:topic}
+const ART = {
+ 'what-is-an-agent-harness':{n:'What is an Agent Harness?',s:'The 9 components every agent harness converged on.',t:'tech'},
+ 'hierarchical-memory-management':{n:'Hierarchical Memory Management',s:'Files + Unix as agent memory; make context feel infinite.',t:'tech'},
+ 'context-management-in-agent-harnesses':{n:'Context Management in Harnesses',s:'How Pi / OpenClaw / Claude Code / Letta manage the context window.',t:'tech'},
+ 'hermes-harness-architecture':{n:'Hermes Harness Architecture',s:"Teardown of Nous Research's open-source harness.",t:'tech'},
+ 'testing-7-models-same-harness':{n:'Testing 7 Models, Same Harness',s:'Swap only the model: correctness held, operations diverged.',t:'tech'},
+ 'sandboxes-are-the-servers':{n:'Sandboxes Are the Servers',s:'The sandbox is the server of the harness era.',t:'tech'},
+ 'swarm-management-of-agent-harnesses':{n:'Swarm Management of Harnesses',s:'The control plane that turns one agent into a fleet.',t:'tech'},
+ 'ai-knowledge-layer':{n:'The AI Knowledge Layer',s:'A two-layer knowledge base your agents read before acting.',t:'tech'},
+ 'knowledge-graphs-blazing-fast':{n:'Knowledge Graphs, Blazing Fast',s:'A query-optimization survey for knowledge graphs.',t:'tech'},
+ 'llms-are-not-brains':{n:'LLMs Are Not Brains',s:'Five concrete gaps between LLMs and AGI.',t:'tech'},
+ 'how-to-write-well':{n:'How to Write Well (Orwell)',s:"Orwell's six rules for clear, honest prose.",t:'writing'},
+ 'articulate-yourself-intelligently':{n:'Articulate Yourself Intelligently',s:'Inner album of ideas + 3 frameworks (Dan Koe).',t:'writing'},
+ 'how-to-have-original-thoughts':{n:'Have Original Thoughts',s:'Original thinking is a skill: add friction, catch your raw reaction.',t:'writing'},
+ 'how-to-become-disgustingly-creative':{n:'Become Disgustingly Creative',s:'Focus + flow + curation; creativity is a muscle.',t:'writing'},
+ 'research-practice-creative-identity':{n:'Research = Creative Identity',s:'Collecting vs researching; taste as a moat.',t:'writing'},
+ 'youre-not-a-bad-writer':{n:"You're Not a Bad Writer",s:"The block isn't talent — it's fear.",t:'writing'},
+ 'why-write-about-your-own-life':{n:'Write About Your Own Life',s:'Enter your columnist era; your life is already enough.',t:'writing'},
+ 'you-dont-need-discipline-better-routine':{n:'You Need a Better Routine',s:'Reduce friction; consistency over intensity.',t:'writing'},
+ 'write-with-a-full-time-job':{n:'Write With a Full-Time Job',s:'Map your week; match the task to your energy.',t:'writing'},
+ 'habits-that-make-you-a-writer':{n:'Habits That Make a Writer',s:'Small, stacked habits beat willpower.',t:'writing'},
+ 'beginners-guide-to-personal-essays':{n:"Beginner's Guide to Personal Essays",s:'Truth, voice, structure, detail, reflection.',t:'writing'},
+ 'special-but-average':{n:'Special, But Just Average',s:'Be average at some things to be great at others.',t:'self'},
+ 'how-to-be-a-great-conversationalist':{n:'Be a Great Conversationalist',s:'Listen, ask intentional questions, let them talk.',t:'self'},
+ 'how-to-sit-with-your-feelings':{n:'Sit With Your Feelings',s:'Name → feel in body → sit → act.',t:'self'},
+ 'how-to-do-what-you-love':{n:'How to Do What You Love',s:'Like vs admire; beware prestige and money (Paul Graham).',t:'phil'},
+ 'how-to-pick-a-career':{n:'How to Pick a Career',s:'Chef not cook; the Yearning Octopus; plan the next dot.',t:'phil'},
+ 'hell-yeah-or-no':{n:'Hell Yeah or No',s:"If it's not a hell yeah, say no (Derek Sivers).",t:'phil'},
+ 'make-your-work-your-calling':{n:'Make Your Work Your Calling',s:'Chop wood, carry water: make any work a calling.',t:'phil'},
+ 'pmarca-guide-to-career-planning':{n:'Pmarca Career Planning',s:"Don't plan; build skills and chase opportunity.",t:'phil'},
+ 'passive-income-with-ai-tool-sites':{n:'Passive Income With AI',s:'Boring tool sites built by an 11-agent swarm.',t:'biz'},
+ 'what-ai-cant-kill':{n:"What AI Can't Kill",s:'Four moats that survive every model update.',t:'biz'},
+ '17-claude-skills-income':{n:'17 Claude Skills → $10K/mo',s:'Claude consulting skills you can sell.',t:'biz'},
+ 'claude-skills-service-business':{n:'7 Claude Skills That Sell',s:'Productized Claude Skills as a service.',t:'biz'},
+};
+// 1-based index for the idea mappings below
+const IDX = ['',
+ 'what-is-an-agent-harness','hierarchical-memory-management','context-management-in-agent-harnesses','hermes-harness-architecture','testing-7-models-same-harness','sandboxes-are-the-servers','swarm-management-of-agent-harnesses','ai-knowledge-layer','knowledge-graphs-blazing-fast','llms-are-not-brains',
+ 'how-to-write-well','articulate-yourself-intelligently','how-to-have-original-thoughts','how-to-become-disgustingly-creative','research-practice-creative-identity','youre-not-a-bad-writer','why-write-about-your-own-life','you-dont-need-discipline-better-routine','write-with-a-full-time-job','habits-that-make-you-a-writer','beginners-guide-to-personal-essays',
+ 'special-but-average','how-to-be-a-great-conversationalist','how-to-sit-with-your-feelings',
+ 'how-to-do-what-you-love','how-to-pick-a-career','hell-yeah-or-no','make-your-work-your-calling','pmarca-guide-to-career-planning',
+ 'passive-income-with-ai-tool-sites','what-ai-cant-kill','17-claude-skills-income','claude-skills-service-business'];
+
+const IDEAS = [
+ {id:'i1', l:'Agent harness architecture', a:[1,2,3,4,5,6,7]},
+ {id:'i2', l:'Context & memory for AI', a:[3,2,8,1,9]},
+ {id:'i3', l:'Multi-agent orchestration', a:[7,4,6,30,8]},
+ {id:'i4', l:'Convergent design (bottom-up)', a:[1,3,2]},
+ {id:'i5', l:"The human edge AI can't replace", a:[10,31,14,15,8]},
+ {id:'i6', l:'Productize expertise with AI', a:[32,33,30]},
+ {id:'i7', l:'Distribution & audience', a:[31,30,14,12,17]},
+ {id:'i8', l:'Compounding over years', a:[31,30,15,8,29,20]},
+ {id:'i9', l:'Taste & curation', a:[15,8,14,31]},
+ {id:'i10',l:'Original ideas = synthesis', a:[13,14,15,12]},
+ {id:'i11',l:'First-principles thinking', a:[26,13,12,10]},
+ {id:'i12',l:'Authenticity & your voice', a:[16,21,17,13,14]},
+ {id:'i13',l:'Clarity & simplicity', a:[11,12,21]},
+ {id:'i14',l:'A skill, not a trait', a:[13,14,12,20,22]},
+ {id:'i15',l:'Systems > willpower', a:[20,18,19,29]},
+ {id:'i16',l:'Start before ready', a:[16,22,14,18,29]},
+ {id:'i17',l:'Focus & saying no', a:[27,22,25,14]},
+ {id:'i18',l:'Beware prestige & validation', a:[25,13,22,26]},
+ {id:'i19',l:'Work as calling & meaning', a:[28,25,26,29]},
+ {id:'i20',l:"Explore, don't over-plan", a:[26,29,25]},
+ {id:'i21',l:'Combine skills to be rare', a:[29,14,12]},
+ {id:'i22',l:'Self-knowledge & inner work', a:[24,26,17,25]},
+ {id:'i23',l:'Writing to understand yourself', a:[17,21,13,24]},
+ {id:'i24',l:'Deep attention & boredom', a:[14,18,13,15]},
+ {id:'i25',l:'Curiosity, listening & service', a:[23,28,13]},
+];
+
+const FADE_BG='#eef0f3', FADE_BD='#e0e4ea', FADE_FONT='#aeb6c2', FADE_EDGE='#eef0f3', EDGE='#cdd5e1';
+const base = {}; // id -> {color:{background,border}, font:{color}}
+const nodes = [], edges = [];
+
+// article nodes
+for (const slug in ART){
+  const a = ART[slug], tp = TOPICS[a.t];
+  base[slug] = {color:{background:tp.bg, border:tp.bd}, font:{color:'#ffffff'}};
+  nodes.push({id:slug, label:a.n, title:a.n+' — '+a.s, shape:'box', topic:a.t, kind:'article',
+    url:'notes/'+tp.folder+'/'+slug+'.html',
+    color:{background:tp.bg,border:tp.bd}, font:{color:'#ffffff',size:13,face:'inherit'},
+    margin:8, widthConstraint:{maximum:148}, borderWidth:1, shapeProperties:{borderRadius:7}});
+}
+// idea nodes
+for (const idea of IDEAS){
+  base[idea.id] = {color:{background:'#f3d27a', border:'#c79a2a'}, font:{color:'#1f1b15'}};
+  nodes.push({id:idea.id, label:idea.l, title:'Idea · links '+idea.a.length+' notes', shape:'dot',
+    kind:'idea', value:idea.a.length,
+    color:{background:'#f3d27a',border:'#c79a2a'}, font:{color:'#1f1b15',size:14,face:'inherit'},
+    widthConstraint:{maximum:135}, borderWidth:2});
+  for (const num of idea.a){
+    edges.push({from:idea.id, to:IDX[num], color:{color:EDGE, opacity:.7}, width:1});
+  }
+}
+
+const nodesDS = new vis.DataSet(nodes);
+const edgesDS = new vis.DataSet(edges);
+const network = new vis.Network(document.getElementById('net'), {nodes:nodesDS, edges:edgesDS}, {
+  nodes:{scaling:{min:14,max:40,label:{enabled:true,min:12,max:20}}, font:{multi:false}},
+  edges:{smooth:{type:'continuous'}, selectionWidth:0},
+  physics:{barnesHut:{gravitationalConstant:-9000, springLength:130, springConstant:0.035, damping:0.45, avoidOverlap:0.25}, stabilization:{iterations:300}, minVelocity:0.6},
+  interaction:{hover:true, tooltipDelay:120, hideEdgesOnDrag:true},
+});
+
+// ---- focus / dim ----
+function applyFocus(keep){
+  const nUp=[], eUp=[];
+  nodesDS.forEach(n=>{
+    if(keep.has(n.id)) nUp.push({id:n.id, color:base[n.id].color, font:{color:base[n.id].font.color}});
+    else nUp.push({id:n.id, color:{background:FADE_BG,border:FADE_BD}, font:{color:FADE_FONT}});
+  });
+  edgesDS.forEach(e=>{
+    const on = keep.has(e.from) && keep.has(e.to);
+    eUp.push({id:e.id, color:{color:on?EDGE:FADE_EDGE, opacity:on?.9:.25}});
+  });
+  nodesDS.update(nUp); edgesDS.update(eUp);
+}
+function resetFocus(){
+  const nUp=[], eUp=[];
+  nodesDS.forEach(n=>nUp.push({id:n.id, color:base[n.id].color, font:{color:base[n.id].font.color}}));
+  edgesDS.forEach(e=>eUp.push({id:e.id, color:{color:EDGE, opacity:.7}}));
+  nodesDS.update(nUp); edgesDS.update(eUp);
+}
+
+// ---- info panel ----
+const info = document.getElementById('info');
+const DEFAULT_INFO = info.innerHTML;
+function showIdea(idea){
+  let h = '<h3>💡 '+idea.l+'</h3><div class="meta">Notes sharing this idea:</div>';
+  idea.a.forEach(num=>{ const slug=IDX[num], a=ART[slug], tp=TOPICS[a.t];
+    h += '<a href="notes/'+tp.folder+'/'+slug+'.html" target="_blank">→ '+a.n+'</a>';
+  });
+  h += '<span class="reset" onclick="clearSel()">✕ clear</span>';
+  info.innerHTML = h;
+}
+function clearSel(){ resetFocus(); network.unselectAll(); info.innerHTML = DEFAULT_INFO; document.getElementById('search').value=''; }
+window.clearSel = clearSel;
+
+network.on('click', params=>{
+  if(params.nodes.length){
+    const id = params.nodes[0];
+    const idea = IDEAS.find(x=>x.id===id);
+    if(idea){ // idea: highlight neighbourhood
+      const keep = new Set([id, ...idea.a.map(n=>IDX[n])]);
+      applyFocus(keep); showIdea(idea);
+    } else { // article: open the note
+      const node = nodesDS.get(id);
+      if(node && node.url) window.open(node.url, '_blank');
+    }
+  } else { clearSel(); }
+});
+
+// ---- search ----
+document.getElementById('search').addEventListener('input', e=>{
+  const q = e.target.value.trim().toLowerCase();
+  if(!q){ resetFocus(); info.innerHTML = DEFAULT_INFO; return; }
+  const keep = new Set();
+  nodesDS.forEach(n=>{
+    const hay = (n.label+' '+(n.title||'')).toLowerCase();
+    if(hay.includes(q)) keep.add(n.id);
+  });
+  if(keep.size) applyFocus(keep); else resetFocus();
+});
+
+// ---- topic legend / filters ----
+const legend = document.getElementById('legend');
+const hidden = new Set();
+for(const key in TOPICS){
+  const tp = TOPICS[key];
+  const chip = document.createElement('span');
+  chip.className='chip'; chip.style.background=tp.bg; chip.textContent=tp.name;
+  chip.onclick=()=>{
+    const off = hidden.has(key);
+    if(off){ hidden.delete(key); chip.classList.remove('off'); }
+    else { hidden.add(key); chip.classList.add('off'); }
+    const up=[];
+    nodesDS.forEach(n=>{ if(n.kind==='article' && n.topic===key) up.push({id:n.id, hidden:hidden.has(key)}); });
+    nodesDS.update(up);
+  };
+  legend.appendChild(chip);
+}
+network.once('stabilizationIterationsDone', ()=>{ network.fit({animation:{duration:500}}); });
+</script>
+</body>
+</html>
