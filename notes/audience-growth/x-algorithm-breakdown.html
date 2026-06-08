@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How I Went From 0 to 1,000 Followers in 30 Days — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre-wrap;overflow-x:auto;margin:10px 0}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>How I Went From 0 to 1,000 Followers in 30 Days (and Nearly 1M Impressions)</h1>
+  <div class="meta">
+    By <strong>Tarang Agarwal</strong> (@tarang8811)
+    <span class="dot">·</span> Published Mar 21, 2026
+    <span class="dot">·</span> Saved Jun 8, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">X Algorithm</span>
+    <span class="tag">Audience Growth</span>
+    <span class="tag">TweepCred</span>
+    <span class="tag">Replies</span>
+  </div>
+</header>
+
+<p class="lede">The algorithm isn't random. It's a system. And it's open source — you can read what X promotes and what it doesn't.</p>
+
+<div class="disclaimer">
+  Captured as-is. An X-growth breakdown citing X's open-sourced algorithm; the TweepCred formula is from the source, but the score-bracket percentages, multiplier ranges, and follower figures are the author's reading/estimates, not official. Archived for the mental model, not as guaranteed numbers.
+</div>
+
+<div class="callout key">
+  <h4>The Key Idea</h4>
+  <p>Every account has a hidden <strong>0–100 reputation score (TweepCred)</strong>, derived from PageRank over X's social graph. It controls how many people see your tweets. You grow it by earning <strong>quality</strong> followers and engagement — not raw count — keeping your following under <strong>2,500</strong>, and treating replies and relationships as the real engine of growth.</p>
+</div>
+
+<h2>TweepCred: the hidden score</h2>
+<p>TweepCred is a <strong>0–100 reputation score</strong> X assigns every account. It's derived from PageRank — the same idea Google used to rank web pages by how many authoritative pages link to them. On X, "links" are follows: who follows you, and how much weight each of those followers carries. The higher your TweepCred, the more of your audience the algorithm shows each tweet to.</p>
+<p>The score is computed by squashing your raw PageRank value into the 0–100 band:</p>
+<div class="codeblk">TweepCred = max(0, min(100, round(130 + 5.21 × ln(PageRank))))</div>
+<p>The author maps the resulting scores into rough brackets. <strong>These bracket percentages are his estimates, not official figures:</strong></p>
+<table>
+  <thead>
+    <tr><th>TweepCred</th><th>Share of users (est.)</th><th>What it means</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="k">0–15</span></td><td>~25%</td><td>Effectively invisible</td></tr>
+    <tr><td><span class="k">16–35</span></td><td>~45%</td><td>Limited reach</td></tr>
+    <tr><td><span class="k">36–60</span></td><td>~20%</td><td>Normal algorithmic consideration</td></tr>
+    <tr><td><span class="k">61–80</span></td><td>~8%</td><td>Preferred / amplified</td></tr>
+    <tr><td><span class="k">81–100</span></td><td>~2%</td><td>Maximum promotion</td></tr>
+  </tbody>
+</table>
+<p>He started around <strong>12–15</strong> (tweets pulling 15–50 views) and climbed to roughly <strong>44–48</strong> over the 30 days — crossing from "limited" into "normal algorithmic consideration," which is when growth started compounding.</p>
+
+<h2>What moves PageRank (and what doesn't)</h2>
+<p>Because TweepCred is downstream of PageRank, the question that matters is: which follows actually raise your PageRank? The weight of a follow depends on the follower's own authority and how concentrated their attention is.</p>
+<div class="twocol">
+  <div class="vs good">
+    <h4>Moves it</h4>
+    <ul>
+      <li>Being followed by <strong>high-PageRank accounts</strong></li>
+      <li>Followers who themselves <strong>follow very few people</strong> (their vote weighs more)</li>
+      <li><strong>Mutual follows</strong> with established accounts</li>
+      <li>Engagement from <strong>verified / high-authority</strong> accounts</li>
+    </ul>
+  </div>
+  <div class="vs bad">
+    <h4>Does almost nothing</h4>
+    <ul>
+      <li><strong>Bot / inactive</strong> followers</li>
+      <li>Followers who follow <strong>10,000+</strong> accounts (diluted vote)</li>
+      <li><strong>Raw follower count</strong> on its own</li>
+    </ul>
+  </div>
+</div>
+<p>The math punchline: <strong>1 real, engaged follower ≈ 10× the PageRank contribution of 10,000 bots.</strong> Buying followers is, in his words, "mathematically stupid" — you pay for nodes that pass almost no weight. His approach instead: engage real builders and SaaS founders in the <strong>500–10K follower range</strong>, where accounts are authoritative enough to matter but still attentive.</p>
+
+<h2>The number that kills accounts: 2,500</h2>
+<p>Following more than <strong>2,500 accounts</strong> triggers a TweepCred penalty defined in X's <code>Reputation.scala</code>. The penalty scales with how far over you are and can reduce your effective reputation by up to <strong>~50×</strong>. The cutoff is hard: 2,499 is safe, 2,501 is penalized.</p>
+<table>
+  <thead>
+    <tr><th>Followers</th><th>Following</th><th>Penalty</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>5,000</td><td>2,400</td><td>None</td></tr>
+    <tr><td>5,000</td><td>3,500</td><td>~30% reduction</td></tr>
+    <tr><td>3,000</td><td>5,000</td><td>~92% reduction</td></tr>
+    <tr><td>1,200</td><td>15,000</td><td>~98% reduction</td></tr>
+  </tbody>
+</table>
+<p>The author keeps his following at <strong>491</strong> — roughly a 2.2:1 follower-to-following ratio. His blunt advice: if you're over 2,500, fixing it is the <strong>single highest-impact change</strong> you can make.</p>
+
+<h2>Replies &gt; tweets (RealGraph)</h2>
+<p>X scores every relationship between two accounts via <strong>RealGraph</strong>. A reply from someone you have a strong RealGraph score with carries far more weight than one from a stranger — and that weight feeds back into reach. The multipliers below are the author's reading of the model:</p>
+<table>
+  <thead>
+    <tr><th>Relationship</th><th>Weight</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Mutual follow + frequent interaction</td><td><span class="k">2.5×</span></td></tr>
+    <tr><td>Mutual follow, some interaction</td><td><span class="k">1.8×</span></td></tr>
+    <tr><td>No follow / no interaction</td><td><span class="k">1.0× (baseline)</span></td></tr>
+  </tbody>
+</table>
+<p>He replied to <strong>~70–80 accounts a day</strong>. Two distinct payoffs came from two kinds of replies:</p>
+<ul>
+  <li><strong>Big-account replies</strong> (replying under Grok or trending posts) gave raw <em>impressions</em> — one reply hit <strong>155K views</strong>, another <strong>101K with 261 likes</strong>, for roughly <strong>900K total reply impressions over 30 days</strong>.</li>
+  <li><strong>Mid-tier relationships</strong> (500–10K builders) drove most of the actual <em>follower growth</em>. Impressions are vanity; relationships are the engine.</li>
+</ul>
+
+<h2>What the algorithm boosts &amp; penalizes</h2>
+<p>The measured multipliers below are per the source, as read and estimated by the author.</p>
+<h3>Content format</h3>
+<ul>
+  <li><strong>Thread</strong> (5–10 tweets): +20–30% on the first tweet</li>
+  <li><strong>Image</strong>: +10–15%</li>
+  <li><strong>Video</strong>: +15–25%</li>
+  <li><strong>External link</strong>: <strong>−5 to −15% penalty</strong> — this is exactly why "link in bio" exists</li>
+</ul>
+<h3>Verification (Premium)</h3>
+<ul>
+  <li>1.3–1.8× reach</li>
+  <li>3–4× reply visibility near the top of threads</li>
+  <li>+200–400% search ranking</li>
+</ul>
+<p class="muted">He subscribed to Premium <em>before</em> starting, treating verification as table stakes.</p>
+<h3>Account-health killers</h3>
+<ul>
+  <li><strong>4 "Not Interested" clicks in 90 days</strong> → ~80% reach reduction</li>
+  <li><strong>Engagement pods</strong> → detected and discounted</li>
+  <li><strong>Follow/unfollow churn</strong> → 30–50% quality reduction</li>
+  <li><strong>Too-regular posting</strong> → flagged as bot-like</li>
+</ul>
+
+<h2>His actual numbers</h2>
+<table>
+  <thead>
+    <tr><th>Date</th><th>Followers</th><th>Daily rate</th><th>Note</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Feb 1</td><td>0</td><td>—</td><td>TweepCred ~12</td></tr>
+    <tr><td>Feb 13</td><td>~100</td><td>8/day</td><td></td></tr>
+    <tr><td>Mar 11</td><td>500</td><td>13/day</td><td>TweepCred crosses into 36–60</td></tr>
+    <tr><td>Mar 15</td><td>857</td><td>20/day</td><td></td></tr>
+    <tr><td>Mar 18</td><td>1,001</td><td>48/day</td><td>Hot streak</td></tr>
+    <tr><td>Mar 21</td><td>1,083</td><td>27/day</td><td>Settled at a higher floor</td></tr>
+  </tbody>
+</table>
+<p>Across the run: <strong>~1M impressions</strong> and a <strong>6.9% engagement rate</strong> (versus a 1.5–3% benchmark). Growth visibly accelerated <em>after</em> crossing 500 followers, when TweepCred entered the 36–60 band. His takeaway on the spikes: <strong>hot streaks fade, but they raise your floor</strong> — the algorithm rewards in steps, not straight lines.</p>
+
+<h2>The daily playbook</h2>
+<div class="steps">
+  <div class="step"><b>1 post per day, 8–10 PM IST</b> — timed so the US audience is awake.</div>
+  <div class="step"><b>70–80 replies/day</b> — big accounts for reach, builders for relationships.</div>
+  <div class="step"><b>10–15 targeted #buildinpublic follows/day</b> — selective, never spray.</div>
+  <div class="step"><b>Zero external links in tweets</b> — avoid the format penalty.</div>
+  <div class="step"><b>Zero follow/unfollow</b> — protect account health.</div>
+</div>
+<div class="twocol">
+  <div class="vs good">
+    <h4>What worked</h4>
+    <ul>
+      <li>Posts with <strong>specific numbers</strong></li>
+      <li>Honest <strong>struggle posts</strong></li>
+      <li><strong>Connection posts</strong> (replies that start conversations)</li>
+    </ul>
+  </div>
+  <div class="vs bad">
+    <h4>What didn't</h4>
+    <ul>
+      <li>Posting 5×/day (the timeline caps you at 1–2 per load)</li>
+      <li>Generic advice</li>
+      <li>Hashtags</li>
+      <li>Posting when the audience is asleep</li>
+    </ul>
+  </div>
+</div>
+
+<h2>The six things the algorithm rewards</h2>
+<ol>
+  <li><strong>Quality over quantity</strong> — PageRank-weighted followers, not raw count.</li>
+  <li><strong>Engagement velocity</strong> — what happens in the first 15 minutes.</li>
+  <li><strong>Relationship depth</strong> — replies that themselves get replies.</li>
+  <li><strong>Staying under 2,500 following</strong> — avoid the Reputation.scala penalty.</li>
+  <li><strong>Threads &amp; images over links</strong> — favor formats the algorithm boosts.</li>
+  <li><strong>Consistency in 1–2 topics</strong> — build a legible niche.</li>
+</ol>
+<p class="muted">He flags concepts left for a Part 2: the Phoenix model, topical authority, the relationship graph, and shadow banning.</p>
+
+<hr class="soft">
+
+<p class="src">
+  <strong><a href="https://x.com/tarang8811/status/2035314847173550513">How I Went From 0 to 1,000 Followers in 30 Days</a></strong> — Tarang Agarwal (@tarang8811, building GetIntel; prior SaaS ~$900K ARR). X article, Mar 21, 2026. The TweepCred formula is from X's open-sourced algorithm; the score brackets, multipliers, and follower figures are the author's reading/estimates. Diagrams and tables here are HTML/CSS reconstructions.
+  <br><br>
+  Related: <a href="30-day-x-reply-routine.html">The 30-Day X Reply Routine</a> (his companion piece) · <a href="reply-guy-strategy.html">The Reply Guy Strategy</a>.
+</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-08 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>
