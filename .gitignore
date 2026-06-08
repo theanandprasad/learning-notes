@@ -1,3 +1,4 @@
 .DS_Store
 .note-style*.html
 *.tmp
+.claude/
