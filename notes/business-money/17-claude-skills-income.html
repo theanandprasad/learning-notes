@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>17 Claude Skills → $10K/Month — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>17 Claude Skills → $500/Day → $10K/Month</h1>
+  <div class="meta">
+    By <strong>CyrilXBT</strong> (@cyrilXBT)
+    <span class="dot">·</span> Published Apr 14, 2026
+    <span class="dot">·</span> Saved Jun 6, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">AI Side Income</span>
+    <span class="tag">Claude</span>
+    <span class="tag">Freelancing</span>
+    <span class="tag">Consulting</span>
+  </div>
+</header>
+
+<p class="lede">Six months ago I was just trying to figure out how to use Claude to write better emails. Today there are 17 Claude skills that companies are actively paying for — and most people have no idea the market exists.</p>
+
+<div class="disclaimer">
+  Captured as-is. This is a marketing-flavored income playbook; the rates, the $312/day figure, and the 90-day claims are the author's own and unverified, and it ends with follow/engagement CTAs. Archived for the idea/landscape, not as financial advice or an endorsement.
+</div>
+
+<div class="callout key">
+  <h4>The core idea</h4>
+  <p>Companies have quietly moved from ChatGPT to Claude for serious work. The gap between <em>using</em> Claude and <em>deploying it professionally</em> is worth $50–500/hr. Here are 17 skills that fill that gap — what each one pays, and how to start charging for it.</p>
+</div>
+
+<h2>Why Claude skills pay</h2>
+<p>Enterprises are increasingly choosing Claude for the work that actually matters: long context windows that swallow whole contracts, stronger reasoning on messy problems, and safer, more controllable outputs. They want it wired into internal tools, doing legal review, running research, and handling customer operations.</p>
+<p>But the people inside these companies who can <em>build</em> that — not just chat with the model, but architect, integrate, and ship a reliable system — are rare. That scarcity is the whole business. You are not selling access to Claude (everyone has that). You are selling the hours and judgment to make it work.</p>
+
+<h2>The 17 skills</h2>
+<p class="muted">Each one: the name, what you're really selling, and the rough rate range.</p>
+
+<div class="steps">
+  <div class="step"><b>1 · Claude Prompt Architecture</b> — $50–150/hr<br>You're not writing prompts. You're architecting prompt <em>systems</em> that hold up across cases.</div>
+  <div class="step"><b>2 · Claude API Integration</b> — $75–200/hr<br>Wiring Claude into CRMs, databases, support desks, and data pipelines.</div>
+  <div class="step"><b>3 · Claude Agent Builds</b> — $100–300/hr <span class="muted">(highest-paid)</span><br>Multi-step autonomous agents that replace an entire process. Example: <strong>$3,000–12,000 per build</strong>.</div>
+  <div class="step"><b>4 · Content Operations</b> — $40–100/hr<br>Building the system that writes — editorial workflows, brand voice, quality control.</div>
+  <div class="step"><b>5 · Legal Document Review</b> — $80–200/hr<br>Using the 200K context window to read contracts end-to-end and flag issues.</div>
+  <div class="step"><b>6 · Financial Analysis</b> — $75–175/hr<br>Earnings, research, and due-diligence pipelines.</div>
+  <div class="step"><b>7 · Course Creation</b> — $30–80/hr or productized<br>Claude education and curriculum design.</div>
+  <div class="step"><b>8 · Customer Support Automation</b> — $60–150/hr<br>Tier-1 support trained on company knowledge.</div>
+  <div class="step"><b>9 · Sales Enablement</b> — $50–120/hr<br>Personalized outreach at scale, proposals, CRM enrichment.</div>
+  <div class="step"><b>10 · Research &amp; Intelligence</b> — $60–150/hr<br>Competitive intel and market-mapping pipelines.</div>
+  <div class="step"><b>11 · HR &amp; Recruiting</b> — $50–120/hr<br>JD writing, resume screening, onboarding docs.</div>
+  <div class="step"><b>12 · Obsidian Stack</b> — $40–100/hr or productized<br>Second-brain systems for executives.</div>
+  <div class="step"><b>13 · Product Development</b> — $75–175/hr<br>PRDs, user stories, specs.</div>
+  <div class="step"><b>14 · Healthcare Documentation</b> — $80–200/hr<br>Clinical notes and compliance. High pay, low competition.</div>
+  <div class="step"><b>15 · MCP Integration</b> — $100–250/hr<br>Model Context Protocol — the "emerging high-value skill of 2026." Almost nobody has it. Example: <strong>$5,000–25,000 for a custom server</strong>.</div>
+  <div class="step"><b>16 · Education &amp; E-Learning</b> — $40–100/hr<br>Curricula, assessments, tutoring builds.</div>
+  <div class="step"><b>17 · Audit &amp; Optimization</b> — $75–150/hr<br>Fixing companies' broken Claude stacks. The easiest entry point.</div>
+</div>
+
+<h2>The math to $312/day</h2>
+<p>You don't need all 17. You need <strong>three</strong> that match your background. Pick by who you already are:</p>
+<div class="twocol">
+  <div class="vs a"><h4>Legal</h4>5 · Legal Review<br>10 · Research &amp; Intel<br>17 · Audit &amp; Optimization</div>
+  <div class="vs b"><h4>Marketing</h4>1 · Prompt Architecture<br>4 · Content Operations<br>9 · Sales Enablement</div>
+</div>
+<div class="vs good" style="margin:0 0 8px"><h4>Developer</h4>2 · API Integration · 3 · Agent Builds · 15 · MCP Integration</div>
+
+<figure class="diagram">
+  <div class="dtitle">From $7K to $10K / month</div>
+  <div class="row grow">
+    <div class="node accent2"><div class="nh">2 retainers</div><div class="ns">@ $1,500/mo<br>= $3,000</div></div>
+    <div class="node accent"><div class="nh">+ 1 project</div><div class="ns">@ $4,000/mo<br>= $4,000</div></div>
+    <div class="node ok"><div class="nh">= $7,000/mo</div><div class="ns">≈ $233/day</div></div>
+  </div>
+  <div class="arrow">↓ scale up</div>
+  <div class="row grow">
+    <div class="node accent2"><div class="nh">1 retainer → $2,500</div><div class="ns">+ add a 2nd project</div></div>
+    <div class="node ok"><div class="nh">= $10,000/mo</div><div class="ns">≈ $333/day</div></div>
+  </div>
+  <figcaption>The author claims most people who commit hit this within 90 days. (His numbers, unverified.)</figcaption>
+</figure>
+
+<h2>How to start this week</h2>
+<p>A five-day sprint. No course, no waiting.</p>
+<div class="steps">
+  <div class="step"><b>Day 1 — Pick your 3.</b> Choose three skills that match your background, and write one paragraph on why you're credible at them.</div>
+  <div class="step"><b>Day 2 — Find the budget.</b> Search LinkedIn for jobs mentioning Claude or Anthropic. Companies hiring for it are already spending — those are your potential clients.</div>
+  <div class="step"><b>Day 3 — Build proof.</b> Build one demo plus a 2-minute screen recording walking through it.</div>
+  <div class="step"><b>Day 4 — Reach out.</b> Send 5 outreach messages <em>sharing the demo</em> — not pitching, just showing what you made.</div>
+  <div class="step"><b>Day 5 — Follow up.</b> Follow up on everything. The money is in the follow-up, not the first message.</div>
+</div>
+
+<h2>The real advantage is time</h2>
+<p>Everyone has access to the same Claude. The difference isn't the tool — it's the hours in the seat. The window where these skills are still rare won't last. The people who put in the reps now are the ones who get to charge for them later.</p>
+
+<hr class="soft">
+<p class="src">Source: <a href="https://x.com/cyrilXBT/status/2043849758490472955">CyrilXBT (@cyrilXBT) — "17 Claude Skills → $500/Day → $10K/Month"</a> (X article, Apr 14 2026). Figures are the author's own claims, captured as-is — not verified or endorsed. The original ends with a follow CTA ("daily Claude breakdowns, AI tools, and crypto analysis"). All diagrams here are rendered in HTML/CSS.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-06 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

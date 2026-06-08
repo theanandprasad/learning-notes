@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7 Claude Skills That Sell for $2,000–$5,000/Month — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>7 Claude Skills That Sell for $2,000–$5,000/Month</h1>
+  <div class="meta">
+    By <strong>Nav Toor</strong> (@heynavtoor)
+    <span class="dot">·</span> Published Apr 9, 2026
+    <span class="dot">·</span> Saved Jun 6, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">AI Side Income</span>
+    <span class="tag">Claude Skills</span>
+    <span class="tag">Productized Service</span>
+    <span class="tag">No-Code</span>
+  </div>
+</header>
+
+<div class="lede">
+  I built a Claude Skill in 47 minutes that turns a 45-minute podcast into 15 pieces of content. I sold it for $2,500 setup + $400/month.
+</div>
+
+<div class="disclaimer">
+  Captured as-is. A marketing-flavored "productized service" playbook — the prices, the income math, and the "window is closing" framing are the author's own and unverified, and it ends with act-now CTAs. Archived for the idea/landscape, not as financial advice or an endorsement.
+</div>
+
+<div class="callout key">
+  <h4>Core idea</h4>
+  <p style="margin:0">Claude's Skill Creator turns business expertise into sellable software with <strong>no code</strong>. A Skill is a reusable, permanent workflow (not a one-off prompt) that can connect to 75+ tools via MCP, process documents, run on schedules, and use memory. The opportunity: <em>businesses that need this don't know it exists; people who know it exists don't know how to sell it.</em></p>
+</div>
+
+<h2>The 60-second primer: what Claude Skills are</h2>
+<p>A Claude Skill is a reusable automation that lives inside Claude. You build it once, and it runs every time it's triggered — by a keyword, a schedule, or a command. The Skill Creator builds it from a plain-English Q&amp;A; you describe what you want, and it assembles the skill.</p>
+
+<div class="twocol">
+  <div class="vs bad">
+    <h4>A prompt</h4>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">One-time. You type it, get an answer, and it's gone. Next time you start over.</p>
+  </div>
+  <div class="vs good">
+    <h4>A skill</h4>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">Permanent workflow. Built once, lives in Claude, fires on trigger — forever.</p>
+  </div>
+</div>
+
+<p class="muted" style="font-size:14px;margin-bottom:4px">What skills can do:</p>
+<ul>
+  <li>Connect to Sheets, Gmail, Notion, Slack — and 75+ tools via MCP</li>
+  <li>Process documents and PDFs</li>
+  <li>Generate formatted outputs</li>
+  <li>Run on schedules</li>
+  <li>Access memory</li>
+</ul>
+
+<h2>The 7 skills</h2>
+<div class="steps">
+
+  <div class="step">
+    <b>1 · The Brand Clone</b>
+    <p style="margin:6px 0 8px">What you're really selling: <em>a client who never has to explain their voice again.</em></p>
+    <p style="margin:0 0 8px;font-size:14px">Ingest 20–30 writing samples → build a "Brand Voice DNA" so Claude sounds exactly like the client.</p>
+    <p style="margin:0;font-size:13px;color:var(--muted)"><span class="k">Who pays:</span> any business that produces written content. <span class="k">Price:</span> $1,000–2,000 setup + $200/mo. Fastest to build (~90 min, no connectors) and the foundation the others build on.</p>
+  </div>
+
+  <div class="step">
+    <b>2 · The Weekly Autopilot Report</b>
+    <p style="margin:6px 0 8px">What you're really selling: <em>the end of "where do we stand?" Monday scrambles.</em></p>
+    <p style="margin:0 0 8px;font-size:14px">Pulls metrics from Sheets, project-management tools, and email via MCP, then generates a formatted report every Friday.</p>
+    <p style="margin:0;font-size:13px;color:var(--muted)"><span class="k">Who pays:</span> agencies, ops teams, anyone reporting to a boss or client. <span class="k">Price:</span> $1,500–3,000 setup + $300–500/mo.</p>
+  </div>
+
+  <div class="step">
+    <b>3 · The Content Atomizer</b>
+    <p style="margin:6px 0 8px">What you're really selling: <em>10x the content output from work they already do.</em></p>
+    <p style="margin:0 0 8px;font-size:14px">Turns 1 long-form piece into 15+ short-form pieces in the client's brand voice. Builds on the Brand Clone.</p>
+    <p style="margin:0;font-size:13px;color:var(--muted)"><span class="k">Who pays:</span> creators, marketers, agencies. <span class="k">Price:</span> $2,000–3,500 setup + $500/mo.</p>
+  </div>
+
+  <div class="step">
+    <b>4 · The Proposal Machine</b>
+    <p style="margin:6px 0 8px">What you're really selling: <em>more deals closed with less of the founder's time.</em></p>
+    <p style="margin:0 0 8px;font-size:14px">A 10-minute intake → a full proposal / SOW with a custom executive summary.</p>
+    <p style="margin:0;font-size:13px;color:var(--muted)"><span class="k">Who pays:</span> consultants, agencies, freelancers. <span class="k">Price:</span> $1,500–2,500 setup + $300/mo. <strong>Best first build if you've never sold</strong> — it's both product and sales tool.</p>
+  </div>
+
+  <div class="step">
+    <b>5 · The Client Radar</b>
+    <p style="margin:6px 0 8px">What you're really selling: <em>recovered revenue.</em></p>
+    <p style="margin:0 0 8px;font-size:14px">Monitors CRM, contracts, and invoices; flags renewals, churn-risk, and upsell signals — with pre-drafted messages.</p>
+    <p style="margin:0;font-size:13px;color:var(--muted)"><span class="k">Who pays:</span> any business with recurring clients. <span class="k">Price:</span> $2,000–3,500 setup + $400/mo.</p>
+  </div>
+
+  <div class="step">
+    <b>6 · The Support Shield</b>
+    <p style="margin:6px 0 8px">What you're really selling: <em>support that scales without headcount.</em></p>
+    <p style="margin:0 0 8px;font-size:14px">Ingests the knowledge base, drafts on-tone support replies, categorizes urgency, and escalates anything below an 85% confidence threshold.</p>
+    <p style="margin:0;font-size:13px;color:var(--muted)"><span class="k">Who pays:</span> SaaS, e-commerce, service businesses. <span class="k">Price:</span> $3,000–5,000 setup + $500/mo — the highest-ticket skill.</p>
+  </div>
+
+  <div class="step">
+    <b>7 · The Outreach Engine</b>
+    <p style="margin:6px 0 8px">What you're really selling: <em>personalization at scale.</em></p>
+    <p style="margin:0 0 8px;font-size:14px">Researches a target across web, LinkedIn, and news; generates 3–5 personalized angles plus a custom message, with a 1–10 personalization score.</p>
+    <p style="margin:0;font-size:13px;color:var(--muted)"><span class="k">Who pays:</span> sales teams, agencies, founders doing outbound. <span class="k">Price:</span> $2,500–4,000 setup + $400/mo.</p>
+  </div>
+
+</div>
+
+<h2>3 ways to make money without building from scratch</h2>
+<div class="twocol" style="grid-template-columns:1fr">
+  <div class="vs a">
+    <h4>1 · AI Employee Setup Service</h4>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">Audit the business, recommend skills, configure them, and train the team — for <strong>$3,000–5,000</strong>. The skills themselves are free; the expertise is what's paid for. Roughly <strong>100% margin</strong>.</p>
+  </div>
+  <div class="vs b">
+    <h4>2 · Niche-Specific Skill Packs</h4>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)">Bundle 3–5 skills for one industry. <strong>"Real Estate Agent Stack"</strong> $3,000 · <strong>"Consultant Operations Kit"</strong> $4,000 · <strong>"E-commerce Growth Pack"</strong> $3,500. The more specific the niche, the higher the price.</p>
+  </div>
+  <div class="vs good">
+    <h4>3 · Skill Workshops</h4>
+    <p style="margin:0;font-size:13.5px;color:var(--muted)"><strong>$300–500</strong> live, <strong>$149</strong> for the recording, <strong>$49/mo</strong> Q&amp;A upsell. The workshop is both product and sales funnel.</p>
+  </div>
+</div>
+
+<h2>The math</h2>
+<figure class="diagram">
+  <div class="dtitle">Year 1 — author's projections</div>
+  <div class="row grow">
+    <div class="node accent2">
+      <div class="nh">Conservative</div>
+      <div class="ns">1 skill × 10 clients<br>@ $2,500 setup + $400/mo</div>
+    </div>
+    <div class="arrow" style="display:flex;align-items:center">→</div>
+    <div class="node ok">
+      <div class="nh">$73k / year 1</div>
+      <div class="ns">$25k upfront + $4k/mo<br>($48k/yr recurring)</div>
+    </div>
+  </div>
+  <div class="row grow" style="margin-top:14px">
+    <div class="node accent">
+      <div class="nh">Scaled</div>
+      <div class="ns">3 skills × 3 niches × 10 clients<br>@ same pricing</div>
+    </div>
+    <div class="arrow" style="display:flex;align-items:center">→</div>
+    <div class="node ok">
+      <div class="nh">$219k / year 1</div>
+      <div class="ns">$75k upfront + $12k/mo<br>($144k/yr recurring)</div>
+    </div>
+  </div>
+  <figcaption>"Built on a $20/month Claude subscription." Figures are the author's projections, not verified.</figcaption>
+</figure>
+
+<h2>Where to start (priority framework)</h2>
+<div class="steps">
+  <div class="step"><b>Never sold before?</b> → Start with the <strong>Proposal Machine (#4)</strong> — it's both product and sales tool.</div>
+  <div class="step"><b>Already have clients?</b> → Start with the <strong>Weekly Autopilot Report (#2)</strong>.</div>
+  <div class="step"><b>Want highest-ticket?</b> → Start with the <strong>Support Shield (#6)</strong>.</div>
+  <div class="step"><b>Want fastest to build?</b> → Start with the <strong>Brand Clone (#1)</strong>.</div>
+</div>
+
+<h2>The window</h2>
+<p>Millions of businesses know AI exists but can't implement it. Thousands of skills sit unbuilt. Almost nobody is selling this as a service yet — and, the author argues, the gap will close.</p>
+
+<hr class="soft">
+
+<p class="src">
+  Source: Nav Toor (@heynavtoor), <a href="https://x.com/heynavtoor/status/2042291937483637219">"7 Claude Skills That Sell for $2,000–$5,000/Month"</a> (X article, Apr 9 2026). Prices and income figures are the author's own claims, captured as-is and not independently verified or endorsed; the original ends with act-now CTAs. Diagrams reconstructed in HTML/CSS for this note.
+</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-06 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

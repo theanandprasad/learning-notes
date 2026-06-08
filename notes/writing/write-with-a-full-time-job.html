@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to Write When You Have a Full-Time Job — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  h3{font-size:18px;margin:28px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#16181d}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .rulecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .rulecard .rn{font-family:var(--serif);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .rulecard h3{margin:4px 0 8px;font-size:18px}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Write When You Have a Full-Time Job</h1>
+    <div class="meta">
+      By <strong>Elin</strong> (In It For The Plot)
+      <span class="dot">·</span> Published Apr 20, 2026
+      <span class="dot">·</span> Saved Jun 5, 2026
+    </div>
+    <div class="tags">
+      <span class="tag">Writing Habits</span>
+      <span class="tag">Productivity</span>
+      <span class="tag">Energy Management</span>
+      <span class="tag">Practical</span>
+    </div>
+  </header>
+
+  <p class="lede">Social media makes it look like everyone has endless hours and an aesthetic process. Most of us don't. This is practical advice for the version of you that is tired after work — no gatekeeping, and absolutely no "just wake up at 5am." You fit writing to the life you actually have, not the life the internet says you should have.</p>
+
+  <div class="callout key">
+    <h4>The core idea</h4>
+    <p>Meet yourself where you are. Map your real week, learn your natural energy, and scale your effort to high-energy and low-energy days. <strong>Staying connected to your writing matters more than constantly pushing yourself</strong> — that's the part we don't talk about enough.</p>
+  </div>
+
+  <p>This corner of the internet is for when you're tired after work, you have twenty-seven tabs open, dinner still needs making — and you'd really like to write the book. Most people balance writing with a job, or uni, or kids, or chores, or friends, or groceries. So advice from full-time creators often just isn't built for your life. Here's advice that is.</p>
+
+  <h2><span class="num">01</span>Start with what you actually want</h2>
+  <p>Before the calendar and the energy tracking, spend some time on direction. What do you actually want from your writing? To finish a book? To write more consistently? To publish on Substack twice a week? To finally become a person who writes instead of someone who keeps saying "I want to write"?</p>
+  <p>Then write it down as one sentence — and don't skip the second half. The <em>why</em> matters as much as the <em>what</em>, because it's what holds you up when motivation dips (and it always does).</p>
+
+  <div class="callout">
+    <h4>Fill in the blank</h4>
+    <div class="codeblk">I want to ______________ because ______________.
+                (the what)         (your why)</div>
+    <p class="muted" style="margin-bottom:0">For example:</p>
+    <ul style="margin-top:6px">
+      <li>"I want to <strong>publish on Substack twice a week</strong> because <em>I want to build something that is mine</em>."</li>
+      <li>"I want to <strong>write more consistently</strong> because <em>I miss feeling creative</em>."</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">02</span>Map your real week</h2>
+  <p>Our minds are wildly overambitious. They plan for a version of us who wakes at 5am, meal preps, journals, runs, and writes 2,000 words before work — all with glowy skin and a perfectly balanced nervous system. That person is not coming. So plan for the one who actually exists.</p>
+  <p>Take your calendar — Google Calendar, a paper planner, your notes app, whatever — and map <strong>everything</strong> in a normal week. Not the idealised version. The real one:</p>
+  <ul>
+    <li>sleep, meals, work, commuting</li>
+    <li>walks, the gym, coffee with a friend</li>
+    <li>the three episodes you watched because you needed it today</li>
+    <li>and that mysterious forty minutes lost to scrolling — technically doing nothing, but not actually resting either</li>
+  </ul>
+  <p>Then spend a week adjusting it against reality. Maybe you think you have a free hour each evening, but you really have twenty minutes before you become one with the sofa. That's fine. The point isn't to shame yourself — it's to see where your time actually is, and where you might gently re-prioritise.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The whole exercise, in three moves</div>
+    <div class="row grow">
+      <div class="node accent">
+        <div class="nh">1 · Map your week</div>
+        <div class="ns">Write down everything — even the scrolling and the sofa</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node accent2">
+        <div class="nh">2 · Find your energy</div>
+        <div class="ns">Notice when your brain is sharp vs. a cloud</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node ok">
+        <div class="nh">3 · Match task to day</div>
+        <div class="ns">Big work on high days, small work on low days</div>
+      </div>
+    </div>
+    <figcaption>Meet yourself where you are, then let the plan follow the real you.</figcaption>
+  </figure>
+
+  <h2><span class="num">03</span>Learn your natural energy</h2>
+  <p>Next, spend a few days paying attention to your natural energy levels. Keep a little section in your notes app for the observations. Do you feel more energetic in the morning? Do you focus better in the evening? Are you always a bit useless around lunch? When is your brain sharp, and when is it a cloud?</p>
+  <blockquote>
+    I'm quite useless between 5 and 7pm unless someone actively tells me what to do — I'll go to a paid workout class because someone expects me there, but I'll never talk myself into a run. Then later in the evening I get a spike of energy and creativity, so evening writing sessions work well for me.
+    <cite>— Elin, on tracking her own energy</cite>
+  </blockquote>
+  <p>Where people go wrong is trying to fit writing into a shape they saw online instead of meeting themselves where they are. You do <strong>not</strong> need to be the TikTok person writing three hours every morning with a candle and a jazz playlist. You need to know your own rhythm and build around it.</p>
+
+  <h2><span class="num">04</span>Plan for low and high energy days</h2>
+  <p>Not every day is the same, so stop expecting the same volume from every day. Instead, set different expectations for different kinds of days. The goal is to always have <em>something</em> you can do — so you stay connected even when you're running on empty.</p>
+
+  <div class="twocol">
+    <div class="vs good">
+      <h4>High-energy day</h4>
+      <ul style="margin:0">
+        <li>Drafting</li>
+        <li>Writing new scenes</li>
+        <li>Brainstorming and generating</li>
+      </ul>
+    </div>
+    <div class="vs a">
+      <h4>Low-energy day</h4>
+      <ul style="margin:0">
+        <li>Rereading what you wrote</li>
+        <li>Fixing a single sentence</li>
+        <li>Making notes</li>
+        <li>Writing down questions about the plot</li>
+      </ul>
+    </div>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Two kinds of days, one continuous thread</div>
+    <div class="row">
+      <div class="node ok" style="min-width:200px">
+        <div class="nh">High energy → create</div>
+        <div class="ns">Draft · new scenes · brainstorm</div>
+      </div>
+      <div class="node accent2" style="min-width:200px">
+        <div class="nh">Low energy → tend</div>
+        <div class="ns">Reread · fix a sentence · note plot questions</div>
+      </div>
+    </div>
+    <div class="legend">Either way, you stayed connected to the work today.</div>
+    <figcaption>Pushing isn't the goal. Not losing the thread is.</figcaption>
+  </figure>
+
+  <p>Staying connected to your writing matters more than constantly pushing yourself — and that's something we really don't talk about enough. You don't need to do what everyone else does. There are always things we don't see behind the scenes, so don't compare yourself to the polished, aesthetic versions online. Build the practice that fits your actual life, and keep showing up to it.</p>
+
+  <hr class="soft">
+  <p class="src">Source: Elin, <a href="https://notetrail.substack.com/p/how-to-write-when-you-have-a-full">How to Write When You Have a Full-Time Job</a>, "In It For The Plot" (NoteTrail) on Substack, Apr 20 2026. Diagrams here are HTML/CSS illustrations of the article's own exercises.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

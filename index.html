@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --ink:#1b1f27; --muted:#5b6573; --line:#dfe3ea;
+    --accent:#3858d6; --accent2:#0e9e88; --radius:14px;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:64px 24px 96px}
+  a{color:inherit;text-decoration:none}
+  header.site h1{font-size:40px;margin:0 0 8px;letter-spacing:-.02em}
+  header.site p{color:var(--muted);margin:0;font-size:17px}
+
+  /* topic nav chips */
+  .topicnav{display:flex;gap:8px;flex-wrap:wrap;margin:30px 0 8px}
+  .topicnav a{background:#eef1f6;border:1px solid var(--line);color:var(--muted);font-size:13px;padding:6px 13px;border-radius:999px;transition:border-color .15s,color .15s}
+  .topicnav a:hover{border-color:var(--accent);color:var(--ink)}
+
+  /* topic section */
+  .topic{margin-top:46px}
+  .topic-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:8px}
+  .topic-head h2{font-size:24px;margin:0;letter-spacing:-.01em}
+  .topic-head .n{color:var(--muted);font-size:13px}
+  .topic-head .blurb{color:var(--muted);font-size:13px;margin:0 0 0 auto;text-align:right;max-width:46%}
+
+  .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 22px;margin:14px 0;transition:border-color .15s,transform .15s}
+  .card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .card h3{margin:0 0 6px;font-size:20px;letter-spacing:-.01em}
+  .card .sub{color:var(--muted);font-size:14px;margin:0 0 11px}
+  .card .desc{color:#3a4250;font-size:15px;margin:0 0 13px}
+  .tags{display:flex;gap:7px;flex-wrap:wrap}
+  .tag{background:#eef1f6;color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;border:1px solid var(--line)}
+  .arrow{float:right;color:var(--accent);font-size:20px}
+
+  .empty{border:1px dashed var(--line);border-radius:var(--radius);padding:22px;color:var(--muted);font-size:14px;text-align:center;margin:14px 0}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  code{background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.86em;color:var(--accent2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <h1>📚 Learning Notes</h1>
+    <p>Useful articles from the internet — captured, distilled, and diagrammed. Organized by area of life.</p>
+  </header>
+
+  <nav class="topicnav">
+    <a href="#technology-ai">💻 Technology &amp; AI <span style="opacity:.6">10</span></a>
+    <a href="#writing">✍️ Writing &amp; Creativity <span style="opacity:.6">11</span></a>
+    <a href="#self-growth">🌱 Self &amp; Growth <span style="opacity:.6">3</span></a>
+    <a href="#philosophy">🧠 Philosophy <span style="opacity:.6">5</span></a>
+    <a href="#business-money">💼 Business &amp; Money <span style="opacity:.6">4</span></a>
+    <a href="#culture">🎭 Culture</a>
+  </nav>
+
+  <!-- ============ TECHNOLOGY & AI ============ -->
+  <section class="topic" id="technology-ai">
+    <div class="topic-head">
+      <h2>💻 Technology &amp; AI</h2>
+      <span class="n">10 notes</span>
+      <span class="blurb">The agent-harness series (read top to bottom), plus standalone AI/infra deep-dives.</span>
+    </div>
+
+    <a class="card" href="notes/technology-ai/what-is-an-agent-harness.html">
+      <span class="arrow">→</span>
+      <h3>What is an Agent Harness?</h3>
+      <p class="sub">Aparna Dhinakaran (Arize AI) · Apr 22 · ★ start here</p>
+      <p class="desc">The fixed, out-of-the-box architecture — born from real coding agents like Claude Code &amp; Cursor — that wraps an LLM in an act-observe-adjust loop. The nine components every harness independently converged on, with all seven infographics redrawn.</p>
+      <div class="tags"><span class="tag">AI Agents</span><span class="tag">LLM Infrastructure</span><span class="tag">Architecture</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/hierarchical-memory-management.html">
+      <span class="arrow">→</span>
+      <h3>Hierarchical Memory Management in Agent Harnesses</h3>
+      <p class="sub">Aparna Dhinakaran &amp; team (Arize AI) · Jan 29 · the origin essay</p>
+      <p class="desc">Why the best agents use the file system + Unix commands as memory: composable primitives that make a fixed context feel infinite. The 1980s memory-hierarchy analogy, a 10,000-file eval, and dynamic indexes (grep/ls as runtime indexes).</p>
+      <div class="tags"><span class="tag">Agent Memory</span><span class="tag">Unix / Filesystem</span><span class="tag">Foundational</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/context-management-in-agent-harnesses.html">
+      <span class="arrow">→</span>
+      <h3>Context Management in Agent Harnesses</h3>
+      <p class="sub">Aparna Dhinakaran (Arize AI) · Apr 27 · deep dive</p>
+      <p class="desc">How four real harnesses — Pi, OpenClaw, Claude Code, and Letta — manage a context window that's always too small. File-read caps, session compaction, sub-agent isolation, and the striking convergence: all four arrived at the same playbook independently.</p>
+      <div class="tags"><span class="tag">Context Window</span><span class="tag">Compaction / Memory</span><span class="tag">Harness Internals</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/hermes-harness-architecture.html">
+      <span class="arrow">→</span>
+      <h3>Hermes Harness Architecture</h3>
+      <p class="sub">Aparna Dhinakaran (Arize AI) · May 29 · case study</p>
+      <p class="desc">A teardown of Hermes (Nous Research) — one of the best open-source harnesses — mapped against the nine-component model. Provider abstraction, compression-as-lineage-chain, sessions-as-infrastructure, and the messaging/profile/cron subsystems that push it toward long-lived agents.</p>
+      <div class="tags"><span class="tag">Open Source</span><span class="tag">Hermes / Nous Research</span><span class="tag">Architecture</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/testing-7-models-same-harness.html">
+      <span class="arrow">→</span>
+      <h3>Testing 7 Models Under the Same Agent Harness</h3>
+      <p class="sub">Nancy Chauhan (Arize AI) · May 20 · empirical</p>
+      <p class="desc">Hold the harness fixed, swap only the model across 7 targets (Sonnet 4.0/4.5/4.6, GPT-5/5.5, Gemini 3.1 Pro / 3 Flash), 1,330 runs. Correctness stayed in a tight 79.6–85.1% band — but latency and tool-call counts moved far more. A model swap is a migration, not a config change.</p>
+      <div class="tags"><span class="tag">Evals &amp; Benchmarks</span><span class="tag">Model Migration</span><span class="tag">Harness</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/sandboxes-are-the-servers.html">
+      <span class="arrow">→</span>
+      <h3>Sandboxes Are the Servers of the Harness Era</h3>
+      <p class="sub">Aparna Dhinakaran (Arize AI) · Apr 19 · infra layer</p>
+      <p class="desc">The harness is the application; the sandbox is the server. From disposable eval environments to long-running harnesses you depend on — what makes one restartable (trajectory + local data), who controls the state, and why the market battle lines are the swarm layer and the trajectory data.</p>
+      <div class="tags"><span class="tag">Sandboxes / Infra</span><span class="tag">State &amp; Trajectories</span><span class="tag">Market Structure</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/swarm-management-of-agent-harnesses.html">
+      <span class="arrow">→</span>
+      <h3>Swarm Management of Agent Harnesses</h3>
+      <p class="sub">Aparna Dhinakaran (Arize AI) · May 4 · the layer above</p>
+      <p class="desc">Spawning subagents isn't swarm management — it's the start of the problem. The seven control-plane requirements (durable identity, routed completion, queues, steer/kill/cascade, roles, recovery, cleanup) that turn one harness into a fleet, read through OpenClaw vs. Hermes.</p>
+      <div class="tags"><span class="tag">Swarm / Orchestration</span><span class="tag">Long-Running Agents</span><span class="tag">Control Plane</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/ai-knowledge-layer.html">
+      <span class="arrow">→</span>
+      <h3>The AI Knowledge Layer</h3>
+      <p class="sub">Shann (@shannholmberg) · Apr 14 2026 · standalone</p>
+      <p class="desc">Why your agents are useless without it: a two-layer system — a dynamic, agent-maintained Knowledge Base Layer plus a static, human-edited Brand Foundation — that compiles your sources into a cross-linked wiki agents read before acting. Why it beats RAG, the 5 levels of AI, and a 20-minute open-source setup.</p>
+      <div class="tags"><span class="tag">AI Agents</span><span class="tag">Knowledge Management</span><span class="tag">Context Engineering</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/knowledge-graphs-blazing-fast.html">
+      <span class="arrow">→</span>
+      <h3>How to Make Knowledge Graphs Blazing Fast</h3>
+      <p class="sub">ramakrushna (@techwith_ram) · Apr 14 2026 · standalone</p>
+      <p class="desc">A four-minute query is a query problem, not a data problem. A survey of every optimization class for subgraph matching: the six permutation indexes, BFS/DFS/Dijkstra/A*/bidirectional traversal, join ordering &amp; Leapfrog Triejoin, caching/materialization, embeddings &amp; Bloom filters, and distribution.</p>
+      <div class="tags"><span class="tag">Knowledge Graphs</span><span class="tag">Query Optimization</span><span class="tag">Algorithms</span></div>
+    </a>
+
+    <a class="card" href="notes/technology-ai/llms-are-not-brains.html">
+      <span class="arrow">→</span>
+      <h3>LLMs Are Not Brains, and What's Missing for AGI</h3>
+      <p class="sub">Jyothi Venkat (@jyothiwrites) · Apr 9 2026 · standalone</p>
+      <p class="desc">The brain isn't a tidy "layer cake" — it's interconnected subsystems. LLMs share some computational principles but differ fundamentally. The five concrete gaps to AGI: no body (grounding), no memory, no causal reasoning, no world model, and backwards (global) learning — plus the three paths being explored to close them.</p>
+      <div class="tags"><span class="tag">AGI</span><span class="tag">LLMs</span><span class="tag">Neuroscience</span></div>
+    </a>
+  </section>
+
+  <!-- ============ WRITING & CREATIVITY ============ -->
+  <section class="topic" id="writing">
+    <div class="topic-head">
+      <h2>✍️ Writing &amp; Creativity</h2>
+      <span class="n">11 notes</span>
+      <span class="blurb">Craft, voice, habit, and the work of putting a life into words.</span>
+    </div>
+
+    <a class="card" href="notes/writing/how-to-write-well.html">
+      <span class="arrow">→</span>
+      <h3>How to Write Well — Orwell's 6 Rules</h3>
+      <p class="sub">The Culturist · May 28 2025</p>
+      <p class="desc">Bad writing reflects vague thinking and quiet dishonesty. Orwell's six rules from "Politics and the English Language" — kill clichés, prefer short words, cut ruthlessly, stay active, drop jargon — and the meta-rule: break any of them sooner than say something barbarous.</p>
+      <div class="tags"><span class="tag">Clarity</span><span class="tag">Style</span><span class="tag">Orwell</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/articulate-yourself-intelligently.html">
+      <span class="arrow">→</span>
+      <h3>How to Articulate Yourself Intelligently</h3>
+      <p class="sub">Dan Koe · Nov 20 2025</p>
+      <p class="desc">Articulation is a skill, not innate intelligence. Build an "inner album of greatest hits" (8–10 refined ideas), then deploy three frameworks — the Micro Story, the Pyramid Principle, and Cross-Domain Synthesis — plus the "lego blocks" for filling any section.</p>
+      <div class="tags"><span class="tag">Communication</span><span class="tag">Frameworks</span><span class="tag">Thinking</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/how-to-have-original-thoughts.html">
+      <span class="arrow">→</span>
+      <h3>How to Start Having Original Thoughts</h3>
+      <p class="sub">Feifei (Feifei's Substack) · Mar 9 2026</p>
+      <p class="desc">Original thinking is a skill, not a trait — and synthesis, not invention from nothing. The reason you don't have original thoughts is zero friction between you and what you consume. The practice: catch your raw reaction before the internet answers for you, and sit with not-knowing.</p>
+      <div class="tags"><span class="tag">Thinking</span><span class="tag">Attention</span><span class="tag">Creativity</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/how-to-become-disgustingly-creative.html">
+      <span class="arrow">→</span>
+      <h3>How to Become Disgustingly Creative in 2026</h3>
+      <p class="sub">Hussain Ibarra (The Profitable Micro Business) · Apr 20 2026</p>
+      <p class="desc">Focus is the greatest skill of the AI era — trainable, limited, your mental "RAM." Creativity is curation, not invention: chase curiosity, find flow at the challenge sweet spot, and run a 5-step pipeline (pick topics → go broad → consume with intention → collect experiences → iterate).</p>
+      <div class="tags"><span class="tag">Creativity</span><span class="tag">Focus</span><span class="tag">Flow</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/research-practice-creative-identity.html">
+      <span class="arrow">→</span>
+      <h3>Your Research Practice Is Your Creative Identity</h3>
+      <p class="sub">Zoë Yasemin (Art Direction) · Feb 21 2026</p>
+      <p class="desc">In an age of AI "aesthetic flattening," your research practice is what sets you apart. The difference between collecting (a passive database) and research (active inquiry that builds a visual argument) — and why sources outside the canon compound into a signature only you have.</p>
+      <div class="tags"><span class="tag">Research</span><span class="tag">Taste</span><span class="tag">Art Direction</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/youre-not-a-bad-writer.html">
+      <span class="arrow">→</span>
+      <h3>You're Not a Bad Writer. You're Just Afraid to Be a Writer.</h3>
+      <p class="sub">Aleena Rose · Dec 9 2025</p>
+      <p class="desc">A lyrical essay on the fear at the heart of writing: leaving "the coldest corner of yourself" for the open fields of the world, abandoning the self to make room for everyone else. The block isn't talent — it's fear. Embrace it; you're a thief of the greatest kind.</p>
+      <div class="tags"><span class="tag">Essay</span><span class="tag">Creative Courage</span><span class="tag">Vulnerability</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/why-write-about-your-own-life.html">
+      <span class="arrow">→</span>
+      <h3>Why You Should Start Writing About Your Own Life</h3>
+      <p class="sub">Elin (In It For The Plot) · Apr 7 2026</p>
+      <p class="desc">Enter your "columnist era." Write not just to remember where you were, but to reflect on where you are. What a column is, how writing reveals what a story is really about, and why your ordinary life is already interesting enough.</p>
+      <div class="tags"><span class="tag">Personal Writing</span><span class="tag">Columns</span><span class="tag">Reflection</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/you-dont-need-discipline-better-routine.html">
+      <span class="arrow">→</span>
+      <h3>You Don't Need More Discipline; You Need a Better Routine</h3>
+      <p class="sub">Elin (In It For The Plot) · Jan 6 2026</p>
+      <p class="desc">It was never willpower — it was forcing a routine that didn't fit. A routine exists to reduce friction, not force you. Start from your real life, choose time over output, get bored on purpose, and let consistency (not intensity) build the trust that finishes books.</p>
+      <div class="tags"><span class="tag">Routine</span><span class="tag">Consistency</span><span class="tag">Friction</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/write-with-a-full-time-job.html">
+      <span class="arrow">→</span>
+      <h3>How to Write When You Have a Full-Time Job</h3>
+      <p class="sub">Elin (In It For The Plot) · Apr 20 2026</p>
+      <p class="desc">No "just wake up at 5am." Define what you want and your why, map your real week, learn your natural energy, and scale the task to high- vs low-energy days. Staying connected to the work beats constantly pushing.</p>
+      <div class="tags"><span class="tag">Writing Habits</span><span class="tag">Energy Management</span><span class="tag">Practical</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/habits-that-make-you-a-writer.html">
+      <span class="arrow">→</span>
+      <h3>Habits That Will Make You a Better Writer</h3>
+      <p class="sub">Elin (In It For The Plot) · Apr 8 2026</p>
+      <p class="desc">You don't need more motivation — you need small habits that reduce friction. Make writing obvious and easy, stack it onto existing routines, build for who you actually are, and learn to keep going once the new-idea excitement fades.</p>
+      <div class="tags"><span class="tag">Writing Habits</span><span class="tag">Atomic Habits</span><span class="tag">Consistency</span></div>
+    </a>
+
+    <a class="card" href="notes/writing/beginners-guide-to-personal-essays.html">
+      <span class="arrow">→</span>
+      <h3>The Beginner's Guide to Writing Personal Essays</h3>
+      <p class="sub">The Open Letters (Hasif) · Oct 26 2025</p>
+      <p class="desc">Five pillars of the personal essay — truth, voice, structure, detail, reflection — each with a hands-on exercise. The three essay structures (thematic / chronological / circular), show-don't-tell, and the reflection ladder from a private moment to a universal truth.</p>
+      <div class="tags"><span class="tag">Personal Essays</span><span class="tag">Craft</span><span class="tag">Self-Expression</span></div>
+    </a>
+  </section>
+
+  <!-- ============ SELF & GROWTH ============ -->
+  <section class="topic" id="self-growth">
+    <div class="topic-head">
+      <h2>🌱 Self &amp; Growth</h2>
+      <span class="n">3 notes</span>
+      <span class="blurb">Mindset, relationships, and the inner life.</span>
+    </div>
+
+    <a class="card" href="notes/self-growth/special-but-average.html">
+      <span class="arrow">→</span>
+      <h3>You Want to Be Special, But You're Just Average</h3>
+      <p class="sub">chicgirlmoment · Feb 14 2026</p>
+      <p class="desc">The fear of being merely average stops us from ever starting. Trying to be the best at everything means giving 50% to each and being average at all of it. Sort your pursuits honestly into "be average (for fun)" vs "be the best (worth the sacrifice)" — you'll be average at some things in order to be excellent at others.</p>
+      <div class="tags"><span class="tag">Mindset</span><span class="tag">Perfectionism</span><span class="tag">Ambition</span></div>
+    </a>
+
+    <a class="card" href="notes/self-growth/how-to-be-a-great-conversationalist.html">
+      <span class="arrow">→</span>
+      <h3>How to Be a Great Conversationalist</h3>
+      <p class="sub">Bella Dane · Nov 21 2025</p>
+      <p class="desc">Great conversation is mostly listening, genuine curiosity, and intention — not talking more. Six techniques: guard your "contribution score," let people talk about themselves, ask intentional questions, drop autopilot replies, pause before answering, and let them tell their story first.</p>
+      <div class="tags"><span class="tag">Communication</span><span class="tag">Social Skills</span><span class="tag">Listening</span></div>
+    </a>
+
+    <a class="card" href="notes/self-growth/how-to-sit-with-your-feelings.html">
+      <span class="arrow">→</span>
+      <h3>How to Actually Sit With Your Feelings</h3>
+      <p class="sub">Farah (Voilà Farah) · Aug 20 2025</p>
+      <p class="desc">"Just feel it and let it go" — but how? A repeatable 4-step routine: name the feeling (a feelings wheel beyond happy/sad/angry), feel it in your body, sit with it, then take action. The insight: taking days to "decide how you feel" is often delay, not processing.</p>
+      <div class="tags"><span class="tag">Emotions</span><span class="tag">Self-Trust</span><span class="tag">Mindfulness</span></div>
+    </a>
+  </section>
+
+  <!-- ============ PHILOSOPHY ============ -->
+  <section class="topic" id="philosophy">
+    <div class="topic-head">
+      <h2>🧠 Philosophy</h2>
+      <span class="n">5 notes</span>
+      <span class="blurb">Work, meaning, and how to choose.</span>
+    </div>
+
+    <a class="card" href="notes/philosophy/pmarca-guide-to-career-planning.html">
+      <span class="arrow">→</span>
+      <h3>The Pmarca Guide to Career Planning</h3>
+      <p class="sub">Marc Andreessen · 2007 · 4-part series, consolidated</p>
+      <p class="desc">Don't plan your career — build skills and chase opportunities. Treat your working life as a portfolio of risks across decades, stack a "double/triple threat" of skills, and go where the action is: a young industry whose founders are still alive, its center, inside a high-growth company.</p>
+      <div class="tags"><span class="tag">Career</span><span class="tag">Opportunity &amp; Risk</span><span class="tag">Skills</span></div>
+    </a>
+
+    <a class="card" href="notes/philosophy/make-your-work-your-calling.html">
+      <span class="arrow">→</span>
+      <h3>Make Your Work Your Calling</h3>
+      <p class="sub">Arthur C. Brooks — The Atlantic · June 26 2025</p>
+      <p class="desc">"Chop wood, carry water" — a calling isn't a perfect job you discover but a way of working you create. Objective vs. subjective careers, and three steps to make any work a calling: look within (intrinsic reward), focus on fascination (interest), and be that person (serve others).</p>
+      <div class="tags"><span class="tag">Work &amp; Meaning</span><span class="tag">Calling</span><span class="tag">Purpose</span></div>
+    </a>
+
+    <a class="card" href="notes/philosophy/how-to-do-what-you-love.html">
+      <span class="arrow">→</span>
+      <h3>How to Do What You Love</h3>
+      <p class="sub">Paul Graham · January 2006</p>
+      <p class="desc">"Do what you love" is almost useless on its own — doing it is complicated. The three lies about work we learn as kids, the upper/lower bounds of how much to like your job, the sirens of prestige and money, the unpaid test, "always produce," and the organic vs. two-job routes to getting paid for it.</p>
+      <div class="tags"><span class="tag">Work &amp; Meaning</span><span class="tag">Career</span><span class="tag">Life Design</span></div>
+    </a>
+
+    <a class="card" href="notes/philosophy/how-to-pick-a-career.html">
+      <span class="arrow">→</span>
+      <h3>How to Pick a Career (That Actually Fits You)</h3>
+      <p class="sub">Tim Urban — Wait But Why · April 2018</p>
+      <p class="desc">Choose like a chef (first principles), not a cook (recipes). Audit your true desires with the "Yearning Octopus," strip out imposter wants, rank them on a priority shelf, and find where an honest Want Box overlaps an honest Reality Box. Then stop planning 40 years — plan only the next dot.</p>
+      <div class="tags"><span class="tag">Career</span><span class="tag">Decision-Making</span><span class="tag">First Principles</span></div>
+    </a>
+
+    <a class="card" href="notes/philosophy/hell-yeah-or-no.html">
+      <span class="arrow">→</span>
+      <h3>No "yes." Either "HELL YEAH!" or "no."</h3>
+      <p class="sub">Derek Sivers · Aug 26 2009</p>
+      <p class="desc">A filter for the over-committed: if you're not saying "HELL YEAH!" about something, say no. Saying no to most things leaves room to throw yourself completely into the rare thing that's worth it. Saying yes to less is the way out.</p>
+      <div class="tags"><span class="tag">Decisions</span><span class="tag">Priorities</span><span class="tag">Focus</span></div>
+    </a>
+  </section>
+
+  <!-- ============ BUSINESS & MONEY ============ -->
+  <section class="topic" id="business-money">
+    <div class="topic-head">
+      <h2>💼 Business &amp; Money</h2>
+      <span class="n">4 notes</span>
+      <span class="blurb">Business models, online income, and AI-built ventures.</span>
+    </div>
+
+    <a class="card" href="notes/business-money/what-ai-cant-kill.html">
+      <span class="arrow">→</span>
+      <h3>What AI Can't Kill</h3>
+      <p class="sub">Jon C. Phillips (@joncphillips) · Apr 1 2026</p>
+      <p class="desc">A founder's essay on durable moats after getting outcompeted by a model update. If your product is a thin wrapper on an AI capability, you're in the "kill zone." Four layers survive every model update because they're built on human trust, not features: infrastructure, distribution, personal brand, and community.</p>
+      <div class="tags"><span class="tag">Moats</span><span class="tag">Distribution</span><span class="tag">AI Strategy</span></div>
+    </a>
+
+    <a class="card" href="notes/business-money/passive-income-with-ai-tool-sites.html">
+      <span class="arrow">→</span>
+      <h3>A $10K/Month Passive Income Machine With AI</h3>
+      <p class="sub">Rahul (@sairahul1) · Jun 6 2026</p>
+      <p class="desc">The "boring tool website" model — hundreds of tiny free utilities (calculators, converters, formatters), each ranking for a low-competition keyword, monetized with ads. An 11-agent AI swarm does the research, SEO, and build. Includes the RPM tiers, the compounding growth curve, and the launch order. (Marketing-flavored; figures are the author's, captured as-is.)</p>
+      <div class="tags"><span class="tag">Passive Income</span><span class="tag">SEO</span><span class="tag">AI Agents</span></div>
+    </a>
+
+    <a class="card" href="notes/business-money/claude-skills-service-business.html">
+      <span class="arrow">→</span>
+      <h3>7 Claude Skills That Sell for $2,000–$5,000/Month</h3>
+      <p class="sub">Nav Toor (@heynavtoor) · Apr 9 2026 · ⚠ marketing-flavored</p>
+      <p class="desc">A "productized service" playbook: 7 Claude Skills (Brand Clone, Content Atomizer, Proposal Machine, Client Radar, Support Shield…) with what each sells for, three no-build monetization paths, and the income math. Captured with a disclaimer — figures are the author's, unverified.</p>
+      <div class="tags"><span class="tag">AI Side Income</span><span class="tag">Productized Service</span><span class="tag">Claude Skills</span></div>
+    </a>
+
+    <a class="card" href="notes/business-money/17-claude-skills-income.html">
+      <span class="arrow">→</span>
+      <h3>17 Claude Skills → $500/Day → $10K/Month</h3>
+      <p class="sub">CyrilXBT (@cyrilXBT) · Apr 14 2026 · ⚠ marketing-flavored</p>
+      <p class="desc">17 Claude consulting skills companies reportedly pay $50–500/hr for (prompt architecture, API/MCP integration, agent builds, legal/finance/support…), the "3 skills → $312/day" math, and a 5-day client-getting sprint. Captured with a disclaimer — figures are the author's, unverified.</p>
+      <div class="tags"><span class="tag">AI Side Income</span><span class="tag">Freelancing</span><span class="tag">Consulting</span></div>
+    </a>
+  </section>
+
+  <!-- ============ CULTURE ============ -->
+  <section class="topic" id="culture">
+    <div class="topic-head">
+      <h2>🎭 Culture</h2>
+      <span class="n">0 notes</span>
+    </div>
+    <div class="empty">No notes yet — drop articles here as <code>notes/culture/&lt;slug&gt;.html</code>.</div>
+  </section>
+
+  <div class="footer">
+    Stored locally in <code>~/Documents/projects/LearningNotes</code>. Each topic is a folder under <code>notes/</code>; add a note as an HTML file there and link it in its section above. New area of life? Add a new <code>&lt;section class="topic"&gt;</code> and a chip in the nav.
+  </div>
+</div>
+</body>
+</html>

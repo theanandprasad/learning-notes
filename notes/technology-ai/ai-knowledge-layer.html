@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The AI Knowledge Layer — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>The AI Knowledge Layer</h1>
+  <div class="meta">
+    By <strong>Shann</strong> (@shannholmberg)
+    <span class="dot">·</span> Published Apr 14, 2026
+    <span class="dot">·</span> Saved Jun 6, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">AI Agents</span>
+    <span class="tag">Knowledge Management</span>
+    <span class="tag">Context Engineering</span>
+    <span class="tag">Open Source</span>
+  </div>
+</header>
+
+<p class="lede">Why your agents are useless without it — a two-layer system that makes every agent you run smarter. 20-minute setup, compounds daily, fully open source.</p>
+
+<div class="callout key">
+  <h4>The core idea</h4>
+  <p>The knowledge layer is <strong>infrastructure that sits between you and your agents</strong> — what they read before they do anything. Two parts: the <strong>Knowledge Base Layer (KBL)</strong>, dynamic and agent-maintained, and the <strong>Brand Foundation (BF)</strong>, static and human-edited. Without it, agents <em>guess</em>. With it, they <em>know</em>.</p>
+</div>
+
+<h2>What it is — two layers</h2>
+<p>Every conversation with an agent normally starts from zero. You re-explain your business, your voice, your goals, your context — and the output is generic because the input has no memory. The knowledge layer fixes that by giving agents something to read first.</p>
+
+<p><strong>Knowledge Base Layer (KBL) — dynamic.</strong> Dump raw sources into a folder: tweets, articles, bookmarks, PDFs, notes, voice memos. An agent reads all of it, classifies each source by type, builds structured wiki pages with cross-references, and maintains a master index of one-line TLDRs for fast scanning. Every question you ask gets filed back as a new page, so the wiki gets richer over time.</p>
+
+<p><strong>Brand Foundation (BF) — static.</strong> The layer only <em>you</em> edit: voice rules, visual style, positioning, audience definition, banned words. Agents read it before producing anything but never rewrite it. It's the anchor that keeps everything sounding like you.</p>
+
+<figure class="diagram">
+  <div class="dtitle">The two-layer architecture</div>
+  <div class="col">
+    <div class="node accent" style="min-width:320px">
+      <div class="nh">YOUR AGENTS</div>
+      <div class="ns">writer · researcher · strategist · analyst</div>
+    </div>
+    <div class="arrowlbl">read before doing anything</div>
+    <div class="arrow">▼</div>
+    <div class="row" style="width:100%">
+      <div class="node accent2" style="flex:1;min-width:200px">
+        <div class="nh">KBL — Knowledge Base Layer</div>
+        <div class="ns">dynamic · agent-maintained · grows over time<br>wiki pages · sources · master index of TLDRs</div>
+      </div>
+      <div class="node purple" style="flex:1;min-width:200px">
+        <div class="nh">BF — Brand Foundation</div>
+        <div class="ns">static · human-edited<br>your voice · rules · positioning</div>
+      </div>
+    </div>
+    <div class="arrow">▲</div>
+    <div class="arrowlbl">KBL compiles from</div>
+    <div class="node" style="min-width:320px">
+      <div class="nh">raw/ inbox</div>
+      <div class="ns">tweets · articles · bookmarks · PDFs · notes · ideas · voice memos</div>
+    </div>
+  </div>
+  <figcaption>Agents read from both layers; the KBL is continuously compiled from a raw inbox, while the BF is edited only by you. (HTML/CSS reconstruction of the original ASCII diagram.)</figcaption>
+</figure>
+
+<p class="muted">Shann tested approaches over two weeks, simplified to the one that works, and loaded his own data — notes, ideas, tweets, articles, bookmarks. The agent compiled <strong>230+ structured wiki pages</strong>, cross-linked with concepts, entities, and sources he can query anytime. Karpathy had recently described shifting most of his token spend from code to knowledge management.</p>
+
+<h2>Why not RAG?</h2>
+<p>RAG re-derives answers at query time by chunking documents and searching. The knowledge layer instead <strong>compiles once</strong>, cross-references, and stays current. At roughly <strong>100 articles, Karpathy found the compiled approach outperforms RAG for Q&A</strong>. The <strong>graphify</strong> project measured <strong>71.5× fewer tokens per query</strong> versus searching raw files.</p>
+
+<figure class="diagram">
+  <div class="dtitle">The evolution toward context engineering</div>
+  <div class="row grow">
+    <div class="node accent">
+      <div class="nh">One-shot RAG</div>
+      <div class="ns">2020–2023<br>chunk + search at query time</div>
+    </div>
+    <div class="arrow" style="align-self:center">→</div>
+    <div class="node accent2">
+      <div class="nh">Agentic RAG</div>
+      <div class="ns">2023–2024<br>multi-hop retrieval</div>
+    </div>
+    <div class="arrow" style="align-self:center">→</div>
+    <div class="node ok">
+      <div class="nh">Context engineering</div>
+      <div class="ns">2025+<br>agent builds its own context</div>
+    </div>
+  </div>
+  <figcaption>The knowledge layer is the infrastructure for that third phase — where the agent assembles its own context from multiple compiled sources.</figcaption>
+</figure>
+
+<h2>Why most people won't build one</h2>
+<p>Same reason most people won't meal prep on Sunday: <strong>one hour upfront saves ten over the week</strong>, but the friction lands today and the payoff lands later. About <strong>90% of people using AI just prompt, accept, and ship</strong> — no judgment, no taste. The layer is how you leave that 90%: it encodes <em>your</em> taste, data, and patterns, so agents produce output that sounds like you wrote it instead of AI slop.</p>
+<p>The catch is curation. <strong>Garbage in = garbage out.</strong> If a source isn't <strong>80%+ relevant, skip it</strong>. High-signal inputs make better output; noise in is noise out.</p>
+
+<h2>The folder structure</h2>
+<p>Everything lives in a single vault. <code>raw/</code> is the messy inbox; <code>wiki/</code> is the compiled output; <code>CLAUDE.md</code> is the schema that controls everything.</p>
+
+<div class="codeblk">my-wiki/
+├── raw/                  # messy inbox — drop anything here
+│   ├── clippings/        # ← Obsidian Web Clipper drops here
+│   ├── ideas/
+│   ├── bookmarks/
+│   ├── articles/
+│   ├── papers/
+│   ├── x-archive/
+│   └── assets/images/
+├── wiki/                 # compiled, cross-referenced pages
+│   ├── index.md          # master index — one-line TLDRs
+│   ├── log.md            # append-only changelog
+│   ├── concepts/
+│   ├── entities/
+│   ├── sources/          # one summary per raw source
+│   ├── outputs/          # filed answers
+│   ├── sops/
+│   ├── syntheses/
+│   └── templates/
+└── CLAUDE.md             # the schema that controls everything</div>
+
+<p>The <strong>Obsidian Web Clipper</strong> drops pages into <code>raw/clippings/</code> with the source URL in frontmatter. Then <code>/wiki-ingest</code> reads the URL, detects the type (tweet / article / PDF / video), sorts it to the right subfolder, fetches the full content, downloads images, and compiles it into the wiki. Clip during the day, ingest overnight, wake to a richer base.</p>
+
+<h2>How agents plug in</h2>
+<ul>
+  <li><strong>Writer agent</strong> — reads the BF for voice, queries the wiki for research, checks performance data to pick the format.</li>
+  <li><strong>Researcher agent</strong> — monitors X / Reddit / YouTube, feeds <code>raw/</code>, expands topics.</li>
+  <li><strong>Content strategist</strong> — cross-references what's performing against existing coverage to find content gaps.</li>
+</ul>
+<div class="callout">
+  <p>"Each agent is only as good as the knowledge layer it reads from." Same agent + a thin KB = slop. Same agent + 200 structured pages carrying your voice, data, and history = work that sounds like you. (Shann tested <em>Helena</em>, an AI marketer that profiles a brand from a URL — the brand read was accurate, but content alone was "a whole month of marketing slop in a minute." You need the knowledge layer on top.)</p>
+</div>
+
+<h2>The 5 levels of AI</h2>
+<figure class="diagram">
+  <div class="dtitle">From custom prompts to autonomous teams</div>
+  <div class="col" style="align-items:stretch">
+    <div class="node" style="margin-left:0%"><div class="nh">L1 · Custom prompts</div><div class="ns">no layer</div></div>
+    <div class="node" style="margin-left:8%"><div class="nh">L2 · Manual skills</div><div class="ns">thin layer</div></div>
+    <div class="node accent" style="margin-left:16%"><div class="nh">L3 · Skills + Brand Foundation</div><div class="ns">voice/rules encoded</div></div>
+    <div class="node accent2" style="margin-left:24%"><div class="nh">L4 · Agents reading compiled knowledge</div><div class="ns">KBL + BF together</div></div>
+    <div class="node ok" style="margin-left:32%"><div class="nh">L5 · Autonomous agent teams</div><div class="ns">full compounding layer</div></div>
+  </div>
+  <figcaption>Most people sit at L1–L2. The knowledge layer is what gets you to L4–L5.</figcaption>
+</figure>
+
+<h2>Scales from personal → team → org</h2>
+<p>The architecture is identical at every scale; only the number of people reading and writing the layer changes.</p>
+<div class="row grow">
+  <div class="node accent"><div class="nh">Personal</div><div class="ns">one person, one wiki</div></div>
+  <div class="arrow" style="align-self:center">→</div>
+  <div class="node accent2"><div class="nh">Team</div><div class="ns">5–10 people, shared base</div></div>
+  <div class="arrow" style="align-self:center">→</div>
+  <div class="node purple"><div class="nh">Org</div><div class="ns">50+, role-tuned agents on a "central brain"</div></div>
+</div>
+<p>Raw in → agents compile → cross-refs build → <strong>humans validate via exploration gates</strong> (every page starts unreviewed; only a human marks it confirmed). <strong>Git version-controls everything</strong> — synced, reversible. New members point their agent at the base and are productive day one.</p>
+<p class="muted">The name varies by who's describing it: Karpathy calls it an <strong>"LLM wiki"</strong>; Eric Osiu calls it a <strong>"shared brain"</strong> ("a personal assistant has a ceiling; the unlock is role-tuned agents sharing context through a central brain"); Cody Schneider built a 10-capability GTM agent swarm on a <strong>"data warehouse"</strong> ("without it, agents can't make good decisions"). Greg Isenberg's <strong>"ambient businesses"</strong> run primarily on agents, with Medvi cited as proof ($1.8B revenue run rate, 2 employees). The label doesn't matter — agents need compiled, structured knowledge.</p>
+
+<h2>The 20-minute setup</h2>
+<div class="steps">
+  <div class="step"><b>1 · Clone the repo (2 min).</b> <code>git clone github.com/shannhk/llm-wikid my-wiki</code>, then open it as an Obsidian vault.</div>
+  <div class="step"><b>2 · Run your agent.</b> Point Claude Code (or any agent that reads markdown + runs bash) at the folder. It reads <code>CLAUDE.md</code> — the schema — and scaffolds the wiki structure. Key operations: <code>/wiki-ingest</code> (process raw into pages), <code>/wiki-query</code> (ask, get cited answers), <code>/wiki-explore</code> (browse + validate), <code>/wiki-lint</code> (catch contradictions, stale content).</div>
+  <div class="step"><b>3 · Fill it up (10 min).</b> Request your X archive, grab the Obsidian Web Clipper, brain-dump for 10 minutes, dump your bookmarks. Anything <strong>80%+ relevant only</strong> goes into <code>raw/</code>.</div>
+  <div class="step"><b>4 · Run <code>/wiki-ingest</code> (5 min).</b> It sorts clippings, fetches full content from URLs, downloads &amp; analyzes images, classifies by type, builds pages with cross-refs <em>plus counter-arguments and data gaps on every page</em>, and updates the master index.</div>
+  <div class="step"><b>5 · Open Obsidian graph view and start querying</b> with <code>/wiki-query</code>.</div>
+</div>
+
+<p>Example query — <code>/wiki-query "what content formats get the most bookmarks?"</code> reads the index TLDRs plus relevant pages and returns a cited answer ("Threads with numbered lists get 3.2× more bookmarks…") with sources, filed back as a new page.</p>
+
+<div class="callout">
+  <h4>Quality controls</h4>
+  <ul>
+    <li><strong>Bias checks</strong> — force counter-arguments and data gaps on every page; if 10 articles all agree, it flags what's missing.</li>
+    <li><strong>Validation gate</strong> — every AI-built page starts <code>explored:false</code> until a human reviews it.</li>
+    <li><strong>Confidence levels</strong> — high / medium / low / uncertain.</li>
+  </ul>
+  <p class="muted" style="margin-bottom:0"><strong>The 80/20 rule:</strong> let AI do 80% of the organization, compilation, and cross-referencing; apply your taste to the last 20% — curation, validation, and the connections only you can see.</p>
+</div>
+
+<p class="muted">What to do next: schedule a trigger (Claude Dispatch or cron) to run <code>/wiki-ingest</code> each morning on yesterday's clips; run <code>/wiki-lint</code> every week or two; at 300+ pages install <strong>qmd</strong> (by Tobi Lutke) for local hybrid search (BM25 + vector + LLM re-rank, with an MCP server); then connect the layer to your writer / researcher / strategist agents.</p>
+
+<h2>The window</h2>
+<p>The demand is obvious: Karpathy's post hit <strong>99,000+ bookmarks</strong>; graphify shipped in 48 hours and got <strong>27,000+ more</strong>; multiple implementations went viral the same week. Most people will bookmark and never build one. The ones who spend <strong>20 minutes today</strong> get a compounding base by next month that knows their voice, data, and taste — something no search engine or generic prompt can replicate.</p>
+
+<hr class="soft">
+<p class="src">Source: <a href="https://x.com/shannholmberg/status/2044111115878326444">The AI Knowledge Layer (and why your agents are useless without it)</a> — Shann (@shannholmberg), X article, Apr 14 2026. The framework is open source: <strong>"LLM Wikid"</strong> (github.com/shannhk/llm-wikid). References Andrej Karpathy, graphify, Obsidian Web Clipper, qmd (Tobi Lutke), Eric Osiu, Cody Schneider, Greg Isenberg, and Medvi. The original also has a service/money angle (setting up a knowledge layer as a $1,500–3,000 service + $300–500/mo retainer). Diagrams here are HTML/CSS reconstructions, including of the original's ASCII two-layer diagram.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-06 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

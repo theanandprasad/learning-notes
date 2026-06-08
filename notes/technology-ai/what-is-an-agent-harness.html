@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What is an Agent Harness — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:880px;margin:0 auto;padding:48px 24px 96px;}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:42px;line-height:1.1;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+
+  h2{font-size:27px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:19px;margin:30px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px}
+  li{margin:7px 0}
+  strong{color:#16181d}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.88em;color:var(--accent2)}
+
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+  @media(max-width:680px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .vs h4{margin:0 0 8px;font-size:15px}
+  .vs.no{border-top:3px solid var(--warn)}
+  .vs.yes{border-top:3px solid var(--ok)}
+
+  /* ---- Diagram framework ---- */
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);
+    text-align:center;margin-bottom:20px;font-weight:600}
+
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent);box-shadow:0 0 0 1px rgba(124,156,255,.25) inset}
+  .node.accent2{border-color:var(--accent2)}
+  .node.warn{border-color:var(--warn)}
+  .node.ok{border-color:var(--ok)}
+
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+
+  .loopgrid{display:grid;grid-template-columns:1fr;gap:10px;justify-items:center}
+  .loopgrid .node{max-width:480px;width:100%}
+
+  .stack{display:flex;flex-direction:column;gap:8px}
+  .stack .node{width:100%}
+
+  .badge{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
+    background:#f0f1f4;color:var(--muted);margin:2px 2px 0 0}
+
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>What is an Agent Harness?</h1>
+    <div class="meta">
+      <span>By <strong>Aparna Dhinakaran</strong> — Co-founder &amp; CPO, Arize AI</span>
+      <span class="dot">•</span>
+      <span>Published Apr 24, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved May 31, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">AI Agents</span>
+      <span class="tag">LLM Infrastructure</span>
+      <span class="tag">Architecture</span>
+      <span class="tag">Agent Engineering</span>
+    </div>
+  </header>
+
+  <p class="lede">"Can anyone actually tell me what a harness really is?" — asked, with real skepticism, at a hacker event. We all use the word; few can define it. Here is the answer.</p>
+
+  <div class="callout key">
+    <h4>The one-line definition</h4>
+    <p style="margin:0">A <strong>harness</strong> is the fixed, out-of-the-box architecture — born from real coding agents — that wraps a language model in a feedback loop so it can <strong>act, observe the consequences, and adjust</strong> until a problem is actually solved. A model alone is a one-shot text generator; a model in a harness is an <em>agent</em>.</p>
+  </div>
+
+  <h2>What a harness is <em>not</em></h2>
+  <p>Frameworks like <strong>LangChain</strong> and <strong>LangGraph</strong> are <em>not</em> harnesses. They are tools <strong>designed for humans to build agents</strong>: abstractions, configuration options, dozens of knobs, and a lot of rope. You wire together chains, define state graphs, pick a retriever, configure memory. The fundamental assumption is that a <strong>human architect</strong> will configure these pieces correctly.</p>
+  <p>The article pushes back on the framing "if you're not the model, you're the harness" — calling it a weak attempt to re-label earlier 1.0 agent frameworks with the new "harness" terminology.</p>
+
+  <div class="twocol">
+    <div class="vs no">
+      <h4>Framework (e.g. LangGraph)</h4>
+      <ul style="margin:0">
+        <li>Built <strong>top-down</strong> from abstractions</li>
+        <li>A <strong>human</strong> assembles the agent</li>
+        <li>Needs configuration to exist</li>
+        <li>A human-configured <strong>state graph</strong></li>
+      </ul>
+    </div>
+    <div class="vs yes">
+      <h4>Harness (e.g. Claude Code, Cursor)</h4>
+      <ul style="margin:0">
+        <li>Born <strong>bottom-up</strong> from real coding agents</li>
+        <li>The <strong>agent</strong> accomplishes the task</li>
+        <li><strong>Works out of the box</strong>, no assembly</li>
+        <li>A <strong>while-loop over tools</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>What an agent harness <em>is</em></h2>
+  <p>The modern harness was born <strong>bottom-up</strong>, out of coding agents solving real problems. <strong>Cursor, Claude Code, Windsurf, and Codex</strong> are all harnesses. Each started from one concrete problem — make an LLM write and edit real code across real repos — and independently <strong>converged on remarkably similar architectures</strong>: a while loop that calls tools, a context manager that compresses history, a permission layer that keeps things safe. Arize hit the same patterns building <em>Alyx</em>, their in-product agent. Different domains, same bones. <span class="muted">That convergence is the signal.</span></p>
+
+  <div class="callout">
+    <h4>Two things make a harness fundamentally different</h4>
+    <p style="margin:6px 0"><strong>1. It works out of the box.</strong> You don't configure a harness into existence — it ships as a working agent with a fixed architecture (loop + context management + tool registry + permission layer), all wired together and already running. No assembly step.</p>
+    <p style="margin:6px 0"><strong>2. It is not for humans to build agents.</strong> It is designed for <em>the agent</em> to accomplish almost any task. The model reads instruction files, discovers and composes tools, writes its own skills, and spawns subagents. The human provides the goal; the harness figures out the rest.</p>
+  </div>
+
+  <!-- DIAGRAM 1: Harness 1.0 Architecture -->
+  <figure class="diagram">
+    <div class="dtitle">Diagram 1 · Harness 1.0 Architecture</div>
+    <div class="col">
+      <div class="node accent" style="max-width:560px;width:100%">
+        <div class="nh">System Prompt Assembly</div>
+        <div class="ns">CLAUDE.md · Git context · environment · tool list</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="arrowlbl">iteration loop — components interact bidirectionally</div>
+      <div class="row grow" style="max-width:620px">
+        <div class="node"><div class="nh">Context Management</div><div class="ns">token budgets · auto-compact · window mgmt</div></div>
+        <div class="node"><div class="nh">Tools &amp; Skills Registry</div><div class="ns">built-in tools · SKILL.md · MCP · plugins</div></div>
+      </div>
+      <div class="row grow" style="max-width:620px">
+        <div class="node"><div class="nh">Permissions &amp; Hooks</div><div class="ns">allow/deny · approvals · pre/post hooks</div></div>
+        <div class="node"><div class="nh">SubAgent Management</div><div class="ns">isolated sessions · restricted tools</div></div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="node accent2" style="max-width:560px;width:100%">
+        <div class="nh">Session Persistence &amp; Recovery</div>
+        <div class="ns">JSONL state · resume · workspace validation · health probes</div>
+      </div>
+    </div>
+    <figcaption>The whole machine: a prompt is assembled, four components iterate together as a loop, and everything is persisted so a session can be resumed or recovered.</figcaption>
+  </figure>
+
+  <h2>The nine components of a modern harness</h2>
+  <p>Just as computer architectures matured in the 1980s, harness architectures are expected to mature over the next couple of years. The "Harness 1.0" architecture has nine component areas:</p>
+  <ol>
+    <li>Outer iteration loop</li>
+    <li>Context management &amp; compression</li>
+    <li>Managing Agent Skills and tools</li>
+    <li>Managing subagents</li>
+    <li>Built-in / prepackaged skills</li>
+    <li>Session persistence and recovery</li>
+    <li>System prompt assembly &amp; project context injection</li>
+    <li>Lifecycle hooks</li>
+    <li>Permission &amp; safety layer</li>
+  </ol>
+
+  <h2>1 · Outer iteration loop</h2>
+  <p>The core architectural foundation is the <strong>while loop</strong>. Using the system prompt, the model decides — based on the data — which tools to call, then keeps composing tool after tool, execution after execution, until the job is done. This loop over tools is precisely what a human-configured state graph (LangGraph) is <em>not</em>.</p>
+
+  <!-- DIAGRAM 2: Iteration Loop -->
+  <figure class="diagram">
+    <div class="dtitle">Diagram 2 · The Iteration Loop</div>
+    <div class="loopgrid">
+      <div class="node accent"><div class="nh">User types a message</div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="nh">Call LLM with assembled context</div></div>
+      <div class="arrow">↓</div>
+      <div class="node warn"><div class="nh">Decision: "Should I call a tool?"</div></div>
+      <div class="row" style="width:100%;max-width:480px;justify-content:space-between">
+        <div class="node ok" style="flex:1"><div class="nh">NO →</div><div class="ns">Text-only response · break loop</div></div>
+        <div class="node accent2" style="flex:1"><div class="nh">YES ↓</div><div class="ns">read_file · edit_file · bash · grep/glob · sub-agent</div></div>
+      </div>
+      <div class="arrowlbl">tool results pushed back into the LLM ⟳ (machine-paced, capped by max iterations)</div>
+      <div class="arrow">↓</div>
+      <div class="node accent2"><div class="nh">Display + Persist session</div></div>
+    </div>
+    <figcaption>The loop is machine-paced and bounded by a maximum iteration count. The "yes" branch feeds tool results back in and continues; the "no" branch ends the turn.</figcaption>
+  </figure>
+
+  <h2>2 · Context management &amp; compression</h2>
+  <p>The hard questions: what do you pull <em>into</em> context, what do you simplify or compress, and how do you represent large data compactly? Context management decides how the growing session trajectory is filtered, truncated, and structured before it reaches the model.</p>
+
+  <!-- DIAGRAM 3: Context Management -->
+  <figure class="diagram">
+    <div class="dtitle">Diagram 3 · Context Management — How Data Reaches the LLM</div>
+    <div class="col">
+      <div class="node"><div class="nh">Session Trajectory</div><div class="ns">growing history: user msgs · assistant msgs · tool results</div></div>
+      <div class="row grow" style="max-width:620px">
+        <div class="node"><div class="nh">Inputs</div><div class="ns">files on disk · search (grep/glob/semantic) · command output (bash, tests)</div></div>
+        <div class="node warn"><div class="nh">Truncate &amp; Select</div><div class="ns">file reads 10 MB · grep 250 lines · glob 100 files · bash 16 KB</div></div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">Compact &amp; Select</div><div class="ns">triggers ~10K tokens · keep 4 recent messages · summarize older content heuristically</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent2" style="max-width:560px;width:100%">
+        <div class="nh">Context Window</div>
+        <div class="ns">System prompt (instructions, git status, env, tools &amp; permissions)<br>+ Messages (compacted summaries, recent msgs, recent tool results, current msg) within token budget</div>
+      </div>
+      <div class="arrow">↓ streaming API</div>
+      <div class="node"><div class="nh">LLM → response</div><div class="ns">text or tool-use blocks, fed back into the session</div></div>
+    </div>
+    <figcaption>Raw inputs are first truncated by hard limits, then compacted/summarized once the trajectory crosses ~10K tokens, keeping only the recent slice plus summaries within the token budget.</figcaption>
+  </figure>
+
+  <h2>3 · Managing Agent Skills and tools</h2>
+  <p>Every harness ships with a registry of <strong>built-in tools</strong> — read a file, edit a file, run a shell command, search code. These are the primitives. The harness knows what tools exist, what permission each requires, and how to dispatch a model's tool call to the right execution path.</p>
+  <p><strong>Skills are a layer on top of tools.</strong> The harness discovers skill files from well-known directories, and the model invokes them by name. This is where <em>organizational knowledge</em> is encoded.</p>
+  <div class="callout"><p style="margin:0"><strong>Tools are universal. Skills are specific</strong> to your team and your workflow.</p></div>
+
+  <h2>4 · Managing subagents</h2>
+  <p>At some point a task gets too big or too parallel for a single thread. Subagent management spawns child agents that work <strong>in isolation</strong> and report back. The key architectural decision is <strong>isolation</strong>: a subagent must not corrupt the parent's context or run tools the parent didn't authorize.</p>
+
+  <!-- DIAGRAM 4: SubAgent Management -->
+  <figure class="diagram">
+    <div class="dtitle">Diagram 4 · SubAgent Management Architecture</div>
+    <div class="col">
+      <div class="node accent" style="max-width:560px;width:100%">
+        <div class="nh">Parent Agent (main thread)</div>
+        <div class="ns">full session access · all tools · interactive permissions · invokes subagent with prompt + task type · polls for status (non-blocking)</div>
+      </div>
+      <div class="arrow">↓ spawn (async)</div>
+      <div class="row grow" style="max-width:680px">
+        <div class="node ok"><div class="nh">Explore</div><div class="ns">read-only<br>read · grep · glob · web</div></div>
+        <div class="node accent2"><div class="nh">General Purpose</div><div class="ns">full capabilities<br>bash · read · write · edit</div></div>
+        <div class="node warn"><div class="nh">Verification</div><div class="ns">execute + read<br>bash · read · grep · glob</div></div>
+      </div>
+      <div class="legend">each: fresh isolated session · iteration cap · no interactive permissions · cannot recursively spawn</div>
+      <div class="arrow">↓ write results</div>
+      <div class="node" style="max-width:560px;width:100%">
+        <div class="nh">Agent Results Store</div>
+        <div class="ns">agent-id.json / agent-id.md · status + output text · states: running → completed / failed</div>
+      </div>
+    </div>
+    <figcaption>The pattern is always: <strong>spawn, restrict, execute, collect</strong>. Today subagents run as isolated threads; tomorrow, fully isolated sandboxes or separate machines.</figcaption>
+  </figure>
+
+  <h2>5 · Built-in, prepackaged skills</h2>
+  <p>Every harness ships with baseline capabilities that work out of the box. The <strong>primitives are table stakes</strong>; the real differentiation comes from the quality of the <strong>higher-level skills</strong> the vendor has already figured out.</p>
+
+  <!-- DIAGRAM 5: Built-in Skills -->
+  <figure class="diagram">
+    <div class="dtitle">Diagram 5 · Built-in Prepackaged Skills</div>
+    <div class="col">
+      <div class="legend" style="color:var(--ok)">▼ Primitives — non-negotiable (table stakes)</div>
+      <div class="row grow" style="max-width:700px">
+        <div class="node ok"><div class="nh">File Operations</div><div class="ns">read · write · edit · search</div></div>
+        <div class="node ok"><div class="nh">Shell</div><div class="ns">bash · command execution</div></div>
+        <div class="node ok"><div class="nh">Code Navigation</div><div class="ns">grep · glob · semantic search</div></div>
+        <div class="node ok"><div class="nh">Web / Fetch</div><div class="ns">HTTP requests · web search</div></div>
+      </div>
+      <div class="arrow">↓ build on top of</div>
+      <div class="legend" style="color:var(--accent)">▼ Higher-level Skills — the differentiator</div>
+      <div class="row grow" style="max-width:760px">
+        <div class="node accent"><div class="nh">Git Workflow</div><div class="ns">commit · branch · stash · merge</div></div>
+        <div class="node accent"><div class="nh">Pull Requests</div><div class="ns">create · review · GitHub</div></div>
+        <div class="node accent"><div class="nh">Test Runner</div><div class="ns">run · interpret · fix failures</div></div>
+        <div class="node accent"><div class="nh">Lint / Fix</div><div class="ns">diagnostics · auto-repair</div></div>
+        <div class="node accent"><div class="nh">Sub-agents</div><div class="ns">delegate · parallelize</div></div>
+      </div>
+    </div>
+    <figcaption>If the agent can't read and edit files, it isn't a coding agent. Once primitives are assumed, vendors compete on the quality of the built-in higher-level skills.</figcaption>
+  </figure>
+
+  <h2>6 · Session persistence and recovery</h2>
+  <p>A long-running session is <strong>stateful</strong>. If the process crashes you lose everything — unless the harness persists state to disk. Modern harnesses write incrementally as <strong>append-only JSONL</strong>: each message, each tool result, each compaction event gets a line. That means you can <strong>resume a session exactly where you left off</strong>.</p>
+
+  <h2>7 · System prompt assembly &amp; project context injection</h2>
+  <p>The system prompt tells the model who it is, what it can do, and what it's working on. It is <strong>not a static string</strong> — it is assembled dynamically from multiple sources, stitched together within character/token budgets so it doesn't blow out the context window before the conversation even starts.</p>
+
+  <!-- DIAGRAM 6: System Prompt Assembly -->
+  <figure class="diagram">
+    <div class="dtitle">Diagram 6 · System Prompt Assembly</div>
+    <div class="col">
+      <div class="row grow" style="max-width:700px">
+        <div class="node"><div class="nh">Git Context</div><div class="ns">status · diff · log · branch</div></div>
+        <div class="node"><div class="nh">Instruction Files</div><div class="ns">searched up the dir tree · file + size limits</div></div>
+        <div class="node"><div class="nh">Environment</div><div class="ns">OS · cwd · date · model</div></div>
+        <div class="node"><div class="nh">Config Files</div><div class="ns">user + project + local merged</div></div>
+      </div>
+      <div class="arrow">↓ assembled into</div>
+      <div class="node accent2" style="max-width:580px;width:100%">
+        <div class="nh">Assembled System Prompt</div>
+        <div class="ns">
+          <span class="badge">Static Scaffold: intro · rules · task guidelines</span>
+          <span class="badge">— dynamic boundary —</span>
+          <span class="badge">Environment</span>
+          <span class="badge">Project Context: git status/diff/commits</span>
+          <span class="badge">Agent Instructions: CLAUDE.md · AGENTS.md · rules</span>
+          <span class="badge">Runtime Config (merged JSON)</span>
+        </div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">Sent to LLM as the system prompt</div></div>
+    </div>
+    <figcaption>The harness walks ancestor directories for instruction files, injects live git + environment data, appends the available tools and their permissions, and budgets the whole thing.</figcaption>
+  </figure>
+
+  <h2>8 · Lifecycle hooks</h2>
+  <p>Hooks are the <strong>extensibility seam</strong>. They let organizations inject custom logic before or after tool execution <em>without forking the harness</em>.</p>
+  <ul>
+    <li><strong>Pre-tool hook</strong> — fires before a tool runs; receives the tool name + input; can <strong>allow, deny, or modify</strong> the execution.</li>
+    <li><strong>Post-tool hook</strong> — fires after; can inspect the result.</li>
+  </ul>
+  <p>Hooks communicate via a structured protocol — <strong>JSON on stdin, exit codes for allow/deny</strong> — so they can be written in any language and enforce arbitrary policy: <code>never run rm -rf</code>, <code>log all file writes to our audit system</code>, <code>require approval for any bash command touching production</code>. This is <strong>how enterprises adopt harnesses</strong>: the vendor provides the architecture; hooks layer each org's safety, compliance, and workflow rules on top.</p>
+
+  <h2>9 · Permission &amp; safety layer</h2>
+  <p>This is the component that separates a useful tool from a dangerous one. The permission layer defines what the agent may do and <strong>enforces it at every tool execution</strong>.</p>
+
+  <!-- DIAGRAM 7: Permission Layer -->
+  <figure class="diagram">
+    <div class="dtitle">Diagram 7 · The Permission Layer</div>
+    <div class="col">
+      <div class="node accent"><div class="nh">Agent (LLM): "run this tool"</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent2" style="max-width:600px;width:100%">
+        <div class="nh">Permission Gate <span class="muted" style="font-weight:400">(checked at dispatch, before execution)</span></div>
+        <div class="ns" style="margin-top:8px">
+          <strong>Permission Modes:</strong> read-only · workspace-write · full access<br>
+          <strong>Dynamic Classify:</strong> ls → read-only · echo → write · rm → full<br>
+          <strong>Approval Layer:</strong> prompts "Should I run this?" with allow/deny rules
+        </div>
+      </div>
+      <div class="row" style="width:100%;max-width:520px;justify-content:space-between">
+        <div class="node ok" style="flex:1"><div class="nh">ALLOWED →</div><div class="ns">Tool executes<br><code>bash("ls src/")</code> auto-approved (read-only)</div></div>
+        <div class="node warn" style="flex:1"><div class="nh">DENIED →</div><div class="ns">Blocked / Error<br><code>bash("rm -rf /")</code> needs full → blocked</div></div>
+      </div>
+      <div class="legend">every tool declares a minimum permission level; the harness enforces it before execution</div>
+    </div>
+    <figcaption>Static modes + dynamic command classification + interactive approval + declarative allow/deny rules. This is the layer that makes it possible to hand an LLM real tools and still sleep at night.</figcaption>
+  </figure>
+
+  <h2>Take this with you</h2>
+  <p>These nine components are not a wishlist — they are what <strong>every successful harness converged on independently</strong>. That convergence is the signal.</p>
+  <div class="callout key">
+    <h4>The deeper pattern: where the decisions live</h4>
+    <p style="margin:6px 0">Early harnesses <strong>hardcoded everything</strong> — fixed truncation limits, static permission rules, predetermined context budgets. The harnesses winning now <strong>push decisions to the model</strong>:</p>
+    <ul style="margin:6px 0">
+      <li>Not sure what to keep in context? <strong>Let the LLM decide.</strong></li>
+      <li>Not sure which files matter? <strong>Let the LLM search.</strong></li>
+      <li>Not sure when to compact? <strong>Let the LLM manage its own memory.</strong></li>
+    </ul>
+  </div>
+  <p>The harness provides the <strong>feedback scaffolding</strong> that makes intelligence work. Without a harness a model is <strong>open loop</strong>. With a harness the model can act on feedback, take action, and extend its own skills — which is why it works where the original ReAct loops did not.</p>
+  <p>A model on its own is a one-shot text generator: it answers and stops. A model inside a harness can <strong>read a file, edit it, run the tests, see them fail, read the error, fix the code, and run the tests again.</strong> That closed loop — <strong>act, observe, adjust</strong> — is what turns a language model into an agent.</p>
+  <p class="muted" style="font-style:italic">"The next generation of tough technical problems in artificial intelligence are AI engineering systems problems. And we are solving them right now."</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Aparna Dhinakaran, <a href="https://x.com/aparnadhinak/status/2046980769747533830" target="_blank" rel="noopener">"What is an Agent Harness" (X article)</a> · also published on the <a href="https://arize.com/blog/what-is-an-agent-harness/" target="_blank" rel="noopener">Arize AI blog</a>. Diagrams above are faithful reconstructions of the article's seven infographics, redrawn in HTML/CSS.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-05-31 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

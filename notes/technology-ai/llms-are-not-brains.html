@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLMs Are Not Brains — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:38px;line-height:1.14;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>LLMs Are Not Brains, and What's Actually Missing for AGI</h1>
+  <div class="meta">
+    By <strong>Jyothi Venkat</strong> (@jyothiwrites)
+    <span class="dot">·</span> Published Apr 9, 2026
+    <span class="dot">·</span> Saved Jun 6, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">AGI</span>
+    <span class="tag">LLMs</span>
+    <span class="tag">Neuroscience</span>
+    <span class="tag">AI Research</span>
+  </div>
+</header>
+
+<p class="lede">Everyone says we're close to AGI. LLMs are incredible tools — but the gap between predicting the next word and actually understanding the world is wider than most realize. To see why, you have to look at how brains work, how LLMs work, and the five concrete things that stand between them.</p>
+
+<div class="callout key">
+  <h4>Core idea</h4>
+  <p>Brains aren't a tidy "layer cake." They're interconnected subsystems running in parallel. LLMs share <em>some</em> computational principles with brains, but differ fundamentally in how they're built and how they learn. Five concrete gaps stand between today's LLMs and AGI: <strong>no body, no memory, no causal reasoning, no world model, and backwards learning</strong>.</p>
+</div>
+
+<h2>Brains aren't a layer cake</h2>
+
+<p>The popular story goes: the brain evolved in layers. A "reptile brain" at the bottom for survival, a "mammal brain" in the middle for emotion, and a shiny "human brain" on top for thinking. It's neat, intuitive, and wrong.</p>
+
+<p>Cesario, Johnson &amp; Eisthen (2020), in a paper memorably titled <em>"Your Brain Is Not an Onion With a Tiny Reptile Inside,"</em> dismantled the myth. Mammals didn't evolve by stacking new parts on top of old ones. Mammals and reptiles <strong>branched from a common ancestor</strong>, and both lineages changed substantially since. There is no preserved lizard core running the basement.</p>
+
+<p>What you actually have is a set of interconnected subsystems, all talking to each other constantly:</p>
+
+<figure class="diagram">
+  <div class="dtitle">The brain is a city, not a pipeline</div>
+  <div class="row grow">
+    <div class="node accent">
+      <div class="nh">Neocortex</div>
+      <div class="ns">Six distinct layers of neurons. Perception, language, abstract reasoning — but never works alone.</div>
+    </div>
+    <div class="node accent2">
+      <div class="nh">Hippocampus</div>
+      <div class="ns">Records new experiences, replays them during sleep, consolidates them into long-term storage across the cortex.</div>
+    </div>
+    <div class="node purple">
+      <div class="nh">Prefrontal cortex</div>
+      <div class="ns">Planning, judgment, deciding between competing options. Damage destroys planning — not the senses.</div>
+    </div>
+  </div>
+  <div class="legend">↔ Every region connects to every other region. Constant traffic, all directions.</div>
+  <figcaption>Not stacked layers, but parallel subsystems wired into a dense mesh — like a city where every neighborhood links to every other.</figcaption>
+</figure>
+
+<p>This is why you sometimes wake up understanding something that confused you yesterday: the hippocampus has been quietly replaying and consolidating it overnight. The brain isn't a pipeline that hands work cleanly from one stage to the next. It's a city with constant traffic in all directions.</p>
+
+<h2>How LLMs actually work</h2>
+
+<p>At their core, large language models do one thing: <strong>predict the next word</strong>. You feed in a sequence of text; the model computes a probability over every possible next token, picks one (with a dash of randomness), and repeats. Every ChatGPT or Claude response is this loop run thousands of times.</p>
+
+<div class="steps">
+  <div class="step"><b>1. Read the sequence.</b> Take everything so far as context.</div>
+  <div class="step"><b>2. Score every candidate token.</b> Compute a probability distribution over the whole vocabulary.</div>
+  <div class="step"><b>3. Pick one.</b> Usually the likeliest, with some sampling randomness.</div>
+  <div class="step"><b>4. Append and repeat.</b> The chosen token becomes part of the input for the next step.</div>
+</div>
+
+<p>What makes this work so well is <strong>attention</strong>: instead of reading strictly left to right one word at a time, every word can look at every other word in the context and weigh how relevant it is.</p>
+
+<p>And scale matters — in a precise way. DeepMind's 2022 <strong>Chinchilla</strong> work (Hoffmann et al.) showed that a <strong>70B-parameter</strong> model trained on the right amount of data (~<strong>1.4 trillion words</strong>) beats models <strong>4× its size</strong> trained on too little data. More parameters <em>and</em> more data, balanced correctly, give better predictions — and these improvements fall on clean, predictable mathematical curves.</p>
+
+<div class="callout">
+  <h4>A surprising overlap</h4>
+  <p>Research comparing <strong>14 LLMs</strong> against human fMRI scans found that the <strong>middle layers</strong> of LLMs match human brain activity better than the final output layers. The intuition: final layers over-optimize for producing the answer, and in doing so they lose the brain-like, middle-of-the-network processing. So LLMs and brains share <em>some</em> computational principles — which is not the same as working the same way.</p>
+</div>
+
+<h2>The five gaps</h2>
+
+<p>Shared principles aside, here is what actually stands between a next-word predictor and a mind:</p>
+
+<figure class="diagram">
+  <div class="dtitle">Five gaps between LLMs and AGI</div>
+  <div class="row grow">
+    <div class="node warn"><div class="nh">1 · No Body</div><div class="ns">Grounding problem</div></div>
+    <div class="node warn"><div class="nh">2 · No Memory</div><div class="ns">Starts from scratch</div></div>
+    <div class="node warn"><div class="nh">3 · No Causal Reasoning</div><div class="ns">Pattern, not cause</div></div>
+    <div class="node warn"><div class="nh">4 · No World Model</div><div class="ns">Describes, can't simulate</div></div>
+    <div class="node warn"><div class="nh">5 · Backwards Learning</div><div class="ns">Global error, not local</div></div>
+  </div>
+  <figcaption>Each gap is concrete and well-documented. None is closed by simply making the model bigger.</figcaption>
+</figure>
+
+<h3>1 · No Body</h3>
+<p>You learned what <em>heavy</em> means by picking things up, and what <em>hot</em> means by touching a stove. An LLM learned those words from sentences about them. A 2025 <strong>Nature Human Behaviour</strong> study found that LLMs align well with humans in <strong>abstract domains</strong> (law, math) but <strong>diverge significantly in sensorimotor domains</strong> that require a body — the classic <em>grounding problem</em>. Without a body, an LLM's understanding of the physical world is entirely secondhand.</p>
+
+<h3>2 · No Memory</h3>
+<p>The hippocampus records experiences and consolidates them, especially during sleep, so a <strong>single event</strong> can teach you a lesson you carry for decades. LLMs have no equivalent. Every conversation starts from scratch; the model cannot learn from the interaction you just had with it. The only way to update it is to <strong>retrain the entire model</strong> on new data — millions of dollars and weeks of compute. There is no mechanism for a single experience to change the model.</p>
+
+<h3>3 · No Causal Reasoning</h3>
+<p>LLMs are excellent pattern matchers. <strong>GPT-4 scores ~97%</strong> on tasks asking it to identify causal relationships <em>described in text</em>. But that's pattern-matching on how causal <em>language</em> is used — not actual causal understanding. On genuinely novel scenarios that require <strong>intervention and counterfactual thinking</strong> ("what would happen if I changed this one thing?"), performance drops sharply. Researchers call it <em>shallow causal reasoning</em>: recognizing causal patterns from training data without reasoning about cause and effect from first principles.</p>
+
+<h3>4 · No World Model</h3>
+<p>Yann LeCun has argued for years that next-token prediction is fundamentally insufficient. His alternative is <strong>JEPA (Joint Embedding Predictive Architecture)</strong>: instead of predicting the next word or pixel, learn to predict <em>abstract representations</em> of what comes next.</p>
+<div class="callout">
+  <h4>The thrown-ball analogy</h4>
+  <p>If someone throws a ball, you don't predict every pixel of its trajectory — you have an internal physics model that tells you roughly where it lands. An LLM can describe a ball being thrown in perfect English, but has <strong>no internal representation of what throwing actually means</strong>.</p>
+</div>
+
+<h3>5 · Learning Is Backwards</h3>
+<p>LLMs learn via <strong>backpropagation</strong>: compute the error at the output, then send correction signals backward through every layer. This requires a global view of the whole system. Brains don't do this — synapses adjust on <strong>local activity</strong>, not global error. A synapse strengthens when the neurons on both sides fire together.</p>
+
+<div class="twocol">
+  <div class="vs b">
+    <h4>LLM — Backpropagation</h4>
+    <p class="muted" style="font-size:13.5px;margin:0">Error measured at the output, corrections pushed backward through every layer. Needs a global view of the entire network.</p>
+  </div>
+  <div class="vs good">
+    <h4>Brain — Local rules</h4>
+    <p class="muted" style="font-size:13.5px;margin:0">Synapses adjust on local signals — neurons that fire together wire together. No global error signal required.</p>
+  </div>
+</div>
+
+<p>The twist: a 2025 <strong>Nature</strong> paper found brains <em>do</em> use gradient-like optimization — but through local molecular mechanisms. <strong>NMDA receptors</strong> register local signals, and <strong>CaMKII</strong> acts as a kind of molecular memory. The brain achieves something <em>like</em> backprop, through a completely different and more efficient mechanism.</p>
+
+<h2>What would it take?</h2>
+
+<p>Three paths are being explored to close the gaps — none of them "just make it bigger."</p>
+
+<figure class="diagram">
+  <div class="dtitle">Three routes toward AGI</div>
+  <div class="row grow">
+    <div class="node accent">
+      <div class="nh">Neurosymbolic AI</div>
+      <div class="ns">Neural nets (pattern recognition) + symbolic reasoning (logic, rules). Gary Marcus: AGI is impossible without this hybrid. Amazon uses it in warehouse robots and its shopping assistant.</div>
+    </div>
+    <div class="node accent2">
+      <div class="nh">Embodied AI</div>
+      <div class="ns">Put models in robots that interact with the physical world. Meta's <strong>ELLMER</strong> uses force + visual feedback to complete long multi-step tasks a text-only model can't.</div>
+    </div>
+    <div class="node purple">
+      <div class="nh">Program Synthesis</div>
+      <div class="ns">Learn abstractions instead of memorizing patterns. François Chollet's <strong>ARC</strong> benchmark tests fluid intelligence — solving a puzzle you've never seen. Current LLMs struggle.</div>
+    </div>
+  </div>
+  <figcaption>Grounding, hybrid reasoning, and genuine abstraction — three angles on the same missing pieces.</figcaption>
+</figure>
+
+<p><strong>Neurosymbolic AI</strong> combines the pattern recognition of neural nets with the logic and rules of symbolic systems. <strong>Embodied AI</strong> grounds models in the physical world — Meta showed that an embodied LLM (ELLMER) can use force and visual feedback to finish tasks a text-only model cannot. <strong>Program synthesis</strong> aims at learning abstractions rather than memorizing: Chollet's ARC benchmark tests whether a system can solve a puzzle it has never seen, where today's LLMs lag despite excelling at recall.</p>
+
+<h3>Timelines</h3>
+<div class="scroll">
+<table>
+  <thead><tr><th>Researcher</th><th>Estimate</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td><span class="k">Yann LeCun</span></td><td>At least a decade away</td><td>Next-token prediction is insufficient; needs world models</td></tr>
+    <tr><td><span class="k">Geoffrey Hinton</span></td><td>Revised to 5–20 years</td><td>Stated with low confidence</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="muted" style="font-size:13.5px">Both agree on the important part: getting there requires <strong>conceptual breakthroughs, not just bigger models</strong>.</p>
+
+<h2>The honest close</h2>
+<p>LLMs are the best pattern matchers ever built, and they are genuinely useful. But AGI needs a body, a memory, a world model, causal reasoning, and a fundamentally different way to learn. On all five, today's systems fall short.</p>
+<div class="callout key">
+  <p style="margin:0;font-size:17px">We are not close. And that is okay. <strong>Knowing the gaps is how you close them.</strong></p>
+</div>
+
+<hr class="soft">
+<p class="src">
+  Source: <a href="https://x.com/jyothiwrites/status/2042023088167252162">LLMs Are Not Brains, and Here Is What Is Actually Missing for AGI</a> — Jyothi Venkat (@jyothiwrites), X article, Apr 9, 2026. A personal long-form essay that opens with the author's own "AI psychosis" — the anxiety of trying every AI tool and reading every lab announcement — before digging into the research.<br><br>
+  Key sources cited: Cesario, Johnson &amp; Eisthen 2020 (<em>Current Directions in Psychological Science</em>); Lei et al. 2026 brain-alignment across 14 LLMs via fMRI (AAAI); Hoffmann et al. 2022 — Chinchilla scaling laws (NeurIPS); <em>Nature Human Behaviour</em> 2025 (grounding); LeCun 2022 "A Path Towards Autonomous Machine Intelligence" / JEPA (Meta AI); Chollet 2019 "On the Measure of Intelligence" / ARC Prize; <em>Nature</em> 2025 (backprop in the brain, NMDA / CaMKII); Gary Marcus / neurosymbolic (IBM Research); Meta ELLMER 2024 (<em>Nature Machine Intelligence</em>). Diagrams are HTML/CSS reconstructions.
+</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-06 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

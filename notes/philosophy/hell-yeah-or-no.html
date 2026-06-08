@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hell Yeah or No — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.14;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:48px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.ok{border-color:var(--ok)} .node.warn{border-color:var(--warn)} .node.accent2{border-color:var(--accent2)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>No "yes." Either "HELL YEAH!" or "no."</h1>
+    <div class="meta">
+      <span>By <strong>Derek Sivers</strong></span>
+      <span class="dot">•</span>
+      <span>Published Aug 26, 2009</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 5, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Decisions</span>
+      <span class="tag">Priorities</span>
+      <span class="tag">Saying No</span>
+      <span class="tag">Focus</span>
+    </div>
+  </header>
+
+  <p class="lede">If you're often over-committed or too scattered, use this rule: if you're not saying "HELL YEAH!" about something, say no.</p>
+
+  <div class="callout key">
+    <h4>The rule</h4>
+    <p style="margin:0">When deciding whether to do something, if you feel anything less than <em>"Wow! That would be amazing! Absolutely! Hell yeah!"</em> — then say <strong>no</strong>. There is no lukewarm "yes."</p>
+  </div>
+
+  <h2>Why it works</h2>
+  <p>Saying no to <em>most</em> things leaves room in your life to throw yourself <strong>completely</strong> into the rare thing that makes you say "HELL YEAH!" Every event you're invited to, every request to start a new project — apply the same filter.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The one-question filter</div>
+    <div class="col">
+      <div class="node accent2"><div class="nh">An opportunity arrives</div><div class="ns">an invite · a request · a new project</div></div>
+      <div class="arrow">↓ "Is this a HELL YEAH?"</div>
+      <div class="row" style="max-width:520px;width:100%;justify-content:space-between">
+        <div class="node ok" style="flex:1"><div class="nh">HELL YEAH! →</div><div class="ns">do it — and throw yourself in completely</div></div>
+        <div class="node warn" style="flex:1"><div class="nh">Anything less →</div><div class="ns">say no</div></div>
+      </div>
+    </div>
+    <figcaption>A binary filter on purpose: the middle ("sure, I guess") is exactly what scatters you.</figcaption>
+  </figure>
+
+  <blockquote>We're all busy. We've all taken on too much. Saying yes to less is the way out.</blockquote>
+
+  <p class="muted">This short post later became the title of Sivers' book <em>Hell Yeah or No</em>. It pairs naturally with the prestige-and-overcommitment warnings in <a href="how-to-do-what-you-love.html">How to Do What You Love</a> and the priority "shelf system" in <a href="how-to-pick-a-career.html">How to Pick a Career</a>.</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Derek Sivers, <a href="https://sive.rs/hellyeah" target="_blank" rel="noopener">"No 'yes.' Either 'HELL YEAH!' or 'no.'"</a> (Aug 26, 2009). The diagram is an HTML/CSS visualization of the rule; the quoted lines are Sivers' own.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

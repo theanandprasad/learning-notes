@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Management in Agent Harnesses — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57;
+    --pi:#3858d6; --claw:#0e9e88; --cc:#d2562f; --letta:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:54px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px}
+  li{margin:7px 0}
+  strong{color:#16181d}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2);white-space:nowrap}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+
+  /* spectrum bar */
+  .spectrum{display:flex;align-items:center;gap:0;margin:8px 0;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+  .spectrum .seg{flex:1;padding:14px 10px;text-align:center;font-size:12.5px;color:#ffffff}
+  .spectrum .seg strong{color:#ffffff}
+
+  /* comparison table */
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:620px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+  thead th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  th.h-pi{color:var(--pi)} th.h-claw{color:var(--claw)} th.h-cc{color:var(--cc)} th.h-letta{color:var(--letta)}
+  td:first-child,th:first-child{color:var(--accent2);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;background:#f3f5f8;position:sticky;left:0}
+  tbody tr:hover td{background:rgba(124,156,255,.05)}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);margin:2px 3px 0 0;background:#f0f1f4;color:var(--muted)}
+
+  .chk{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--ok);border-radius:10px;padding:12px 14px;font-size:13.5px}
+  .chk b{color:#16181d}
+  .convgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  @media(max-width:680px){.convgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Context Management in Agent Harnesses</h1>
+    <div class="meta">
+      <span>By <strong>Aparna Dhinakaran</strong> — Co-founder &amp; CPO, Arize AI</span>
+      <span class="dot">•</span>
+      <span>Published Apr 27, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved May 31, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">AI Agents</span>
+      <span class="tag">Context Window</span>
+      <span class="tag">Compaction / Memory</span>
+      <span class="tag">Harness Internals</span>
+    </div>
+  </header>
+
+  <p class="lede">Every agent harness runs into the same limit: the context window is too small for everything the model might want to remember. The real question is no longer <em>what goes into the prompt</em> — it's <strong>how the harness manages context over time.</strong></p>
+
+  <div class="callout key">
+    <h4>The central bet</h4>
+    <p style="margin:0">Every context decision encodes an assumption about model behavior. The key question: should the harness <strong>proactively constrain</strong> context usage, or <strong>trust the model</strong> to manage its own budget? Pi, OpenClaw, Claude Code, and Letta make different choices — but are <strong>converging</strong> on the same underlying pattern.</p>
+  </div>
+
+  <p class="muted">A deep-dive into component #2 of <a href="what-is-an-agent-harness.html">What is an Agent Harness</a>. Drawn from two years building <strong>Alyx</strong>, Arize's in-product agent, plus a read of four real codebases.</p>
+
+  <!-- DIAGRAM 1: spectrum -->
+  <figure class="diagram">
+    <div class="dtitle">Diagram 1 · The Design Spectrum — who manages the budget?</div>
+    <div class="spectrum">
+      <div class="seg" style="background:linear-gradient(90deg,#3858d6,#3858d6)"><strong>Harness-first</strong><br>harness protects, then teaches the model to paginate</div>
+      <div class="seg" style="background:linear-gradient(90deg,#3858d6,#7b50d6)">defense in depth<br>layered caps</div>
+      <div class="seg" style="background:linear-gradient(90deg,#7b50d6,#7b50d6)"><strong>Model-managed</strong><br>model curates its own persistent memory</div>
+    </div>
+    <div class="row" style="justify-content:space-between;max-width:100%;margin-top:6px">
+      <span class="legend">◀ Pi · Claude Code (constrain proactively)</span>
+      <span class="legend">OpenClaw (both)</span>
+      <span class="legend">Letta + MemFS (trust the model) ▶</span>
+    </div>
+    <figcaption>The best systems don't treat context like a passive transcript buffer — they keep high-value state close, page through data on demand, build indexes (grep), and truncate in ways that <em>hint</em> at what else can be accessed.</figcaption>
+  </figure>
+
+  <h2>1 · Large file reads — what to keep when a file won't fit</h2>
+  <p>File reads make the problem concrete: when a file is larger than what fits in context, someone has to decide what to keep. All four support <code>offset</code>/<code>limit</code> pagination — but the caps and the layering differ.</p>
+
+  <div class="scroll">
+  <table>
+    <thead>
+      <tr><th>Aspect</th><th class="h-pi">Pi (pi-mono)</th><th class="h-claw">OpenClaw</th><th class="h-cc">Claude Code</th><th class="h-letta">Letta Code</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hard cap</td>
+        <td>2,000 lines or 50 KB (whichever first)</td>
+        <td>Inherits Pi's 2K / 50 KB</td>
+        <td>256 KB byte gate (pre-read <code>stat</code>) + 25,000-token gate (post-read)</td>
+        <td>10 MB <code>stat</code> gate; 2,000-line window</td>
+      </tr>
+      <tr>
+        <td>Truncation style</td>
+        <td>Head-truncate + continuation nudge: <code>Use offset=2001…</code></td>
+        <td>Head-truncate; bootstrap files use 75% head / 25% tail</td>
+        <td>First 2,000 lines; lines &gt;2,000 chars truncated</td>
+        <td>2,000-line window from offset; each line capped 2,000 chars</td>
+      </tr>
+      <tr>
+        <td>Extra layers</td>
+        <td>—</td>
+        <td>Bootstrap caps (12K/file, 60K total); tool results 16K chars or 30% window</td>
+        <td>Read <strong>dedup</strong> (stub on unchanged re-read); rich multi-paragraph tool prompt</td>
+        <td>Truncated content written to <strong>overflow file on disk</strong>; tool caps 30K bash, 10K grep</td>
+      </tr>
+      <tr>
+        <td>Tunability</td>
+        <td>Static</td>
+        <td>Static</td>
+        <td><strong>Remote</strong> via GrowthBook feature flags (no release needed)</td>
+        <td>Env-var configurable; <strong>fully open source (Apache 2.0)</strong></td>
+      </tr>
+      <tr>
+        <td>Distinct trait</td>
+        <td>"Harness-first": protect, then teach</td>
+        <td>"Defense in depth": stacked budgets</td>
+        <td>Two-gate defense + server-tunable everything</td>
+        <td><strong>MemFS</strong>: git-backed markdown memory; <code>system/</code> files pinned to prompt</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout">
+    <h4>Letta's MemFS — the standout</h4>
+    <p style="margin:0">A git-backed memory filesystem where the agent's persistent memory lives as markdown. Files in <code>system/</code> are <strong>pinned to the system prompt</strong>; files outside are visible by name+description in a tree but <strong>not loaded until read</strong>. The agent manages its own progressive disclosure — moving files in/out of <code>system/</code>, reorganizing, updating descriptions — and edits auto-commit to a git remote.</p>
+  </div>
+
+  <h2>2 · Session pruning — where the real engineering is</h2>
+  <p>As conversations grow, every harness must decide what to keep and what to throw away. Compaction policy determines whether long-running agents stay coherent or slowly degrade.</p>
+
+  <div class="scroll">
+  <table>
+    <thead>
+      <tr><th>Aspect</th><th class="h-pi">Pi</th><th class="h-claw">OpenClaw</th><th class="h-cc">Claude Code</th><th class="h-letta">Letta</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Trigger</td>
+        <td>Tokens &gt; <code>contextWindow − reserve</code> (reserve 16,384)</td>
+        <td>History &gt; 50% of window (<code>maxHistoryShare</code> 0.5)</td>
+        <td>Tokens &gt; window − 13K buffer (~167K on a 200K model)</td>
+        <td>Server-side (Letta API); client tracks via 4-bytes/token heuristic</td>
+      </tr>
+      <tr>
+        <td>What's kept</td>
+        <td>Walks back, keeps most recent ~20,000 tokens</td>
+        <td>Splits into equal-mass chunks; drops oldest chunk</td>
+        <td>Whole convo summarized via a structured <strong>9-section prompt</strong></td>
+        <td>Server decides; uses <code>letta/auto</code> model</td>
+      </tr>
+      <tr>
+        <td>Summary placement</td>
+        <td>Synthetic user message prepended to kept tail</td>
+        <td>Same as Pi (synthetic message + tail)</td>
+        <td>User message: "continued from a previous conversation…"</td>
+        <td>Streamed compaction event with summary + token stats</td>
+      </tr>
+      <tr>
+        <td>Tool-call safety</td>
+        <td>Never cuts an orphaned tool result; keeps call/result pairs</td>
+        <td><code>repairToolUseResultPairing</code> + token-share split</td>
+        <td>Scratchpad stripped before summary; head-drop fallback if compaction itself overflows</td>
+        <td>Handled server-side</td>
+      </tr>
+      <tr>
+        <td>Signature extra</td>
+        <td>Clean baseline compaction</td>
+        <td><strong>Pre-compaction flush</strong> (agent persists to memory first) + 5-min in-memory tool-result pruning</td>
+        <td><strong>Pre-query optimization every call</strong>: oversized tool results → disk, replaced w/ 2 KB previews (50K/tool, 200K/msg caps)</td>
+        <td><strong>Reflection subagents</strong> edit git-backed memory in a worktree, then recompile the system prompt</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>3 · Sub-agent context</h2>
+  <p>Sub-agents are generally <strong>isolated</strong> from the parent — none copies the full parent conversation by default. The question is what <em>workspace</em> context they inherit, and whether a "fork" path exists.</p>
+
+  <div class="scroll">
+  <table>
+    <thead>
+      <tr><th></th><th class="h-pi">Pi</th><th class="h-claw">OpenClaw</th><th class="h-cc">Claude Code</th><th class="h-letta">Letta</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Default isolation</td>
+        <td>New process; task string is the only user message</td>
+        <td>Fresh isolated session, no parent transcript</td>
+        <td>Blank conversation; delegated prompt = only message</td>
+        <td>Fresh headless instances for non-fork types</td>
+      </tr>
+      <tr>
+        <td>Fork (copy parent)</td>
+        <td>—</td>
+        <td>Fork mode copies transcript (same-agent only)</td>
+        <td>Fork path passes full parent history for prompt-cache sharing</td>
+        <td>Fork endpoint = server-side copy of full parent history</td>
+      </tr>
+      <tr>
+        <td>Workspace / extras</td>
+        <td>—</td>
+        <td>Minimal allowlist: <span class="pill">AGENTS.md</span><span class="pill">TOOLS.md</span><span class="pill">SOUL.md</span></td>
+        <td>Per-worker tools + permission mode; skills eagerly preloaded as user messages</td>
+        <td><strong>7 built-in subagent types</strong> (richest); results capped 30K chars; existing API agents deployable by ID</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Where the designs converge</h2>
+  <p>The most striking finding from comparing four codebases isn't how different they are — it's <strong>how much they agree.</strong> These aren't coincidences; they're convergent solutions to one problem: <em>a fixed-size working set that has to feel infinite.</em></p>
+
+  <figure class="diagram">
+    <div class="dtitle">Diagram 2 · All Four Converged On…</div>
+    <div class="convgrid">
+      <div class="chk"><b>✓ Hard-cap file reads</b></div>
+      <div class="chk"><b>✓ <code>offset</code>/<code>limit</code> pagination</b></div>
+      <div class="chk"><b>✓ Cap tool-result sizes</b></div>
+      <div class="chk"><b>✓ Isolate sub-agent sessions</b></div>
+      <div class="chk"><b>✓ LLM compaction on token threshold</b></div>
+      <div class="chk"><b>✓ Estimate usage &amp; detect pressure</b></div>
+    </div>
+    <div class="legend" style="margin-top:14px;text-align:left">And the <em>specific choices rhyme</em>: Pi &amp; OpenClaw both head-truncate + nudge · Claude Code &amp; OpenClaw both persist oversized tool results to disk · Pi, OpenClaw &amp; Claude Code all enforce tool-call/result boundary safety · 3 of 4 support forking parent transcripts into sub-agents.</div>
+    <figcaption>The harnesses are arriving at the same answers independently.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <h4>Same playbook, different domain: Alyx</h4>
+    <p style="margin:6px 0">Arize's <strong>Alyx</strong> (built for data exploration, not code) independently hit the same designs:</p>
+    <ul style="margin:6px 0">
+      <li>Caps tool results at a 10,000-token budget; <strong>binary-searches</strong> the largest dataset slice that fits</li>
+      <li>Deduplicates idempotent tool calls; keeps only the most recent preview</li>
+      <li>Splits big JSON into an LLM-visible preview + full server-side copy (drill in via <code>jq</code>) — same "persist outside context" pattern</li>
+      <li>Head+tail truncation with back-references to full content</li>
+      <li><code>char/4</code> token estimate; forces a checkpoint at 50,000 tokens where the model writes its own state summary before pruning</li>
+    </ul>
+    <p style="margin:6px 0">A product built for an entirely different domain converged on the same context-management playbook.</p>
+  </div>
+
+  <h2>The closing analogy</h2>
+  <figure class="diagram">
+    <div class="dtitle">Diagram 3 · 50 Years of Memory Management → Agent Context</div>
+    <div class="col">
+      <div class="row" style="max-width:760px">
+        <div class="node"><div class="nh">Registers</div></div>
+        <div class="node"><div class="nh">Cache lines</div></div>
+        <div class="node"><div class="nh">Page tables</div></div>
+        <div class="node"><div class="nh">Swap</div></div>
+      </div>
+      <div class="legend">each layer managed by the system · each invisible to the layer above · "the program just runs"</div>
+      <div class="arrow">↓ same direction</div>
+      <div class="row" style="max-width:760px">
+        <div class="node" style="border-color:var(--pi)"><div class="nh">Working set in context</div></div>
+        <div class="node" style="border-color:var(--claw)"><div class="nh">Compaction / summaries</div></div>
+        <div class="node" style="border-color:var(--cc)"><div class="nh">Tool results → disk</div></div>
+        <div class="node" style="border-color:var(--letta)"><div class="nh">Persistent memory files</div></div>
+      </div>
+    </div>
+    <figcaption>The best memory management is the kind the program never thinks about.</figcaption>
+  </figure>
+
+  <div class="callout key">
+    <p style="margin:0">The goal is <strong>not to show the model everything.</strong> It is to give it <strong>the right working set at the right time</strong> — and let it dynamically make decisions to manage its own context.</p>
+  </div>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Aparna Dhinakaran, <a href="https://x.com/aparnadhinak/status/2048492731929149929" target="_blank" rel="noopener">"Context Management in Agent Harnesses" (X article, Apr 27 2026)</a>. The original is prose comparing four codebases (Pi/pi-mono, OpenClaw, Claude Code, Letta); the tables and diagrams above organize its claims faithfully into HTML/CSS. Related: <a href="what-is-an-agent-harness.html">What is an Agent Harness</a>, <a href="hermes-harness-architecture.html">Hermes Harness Architecture</a>.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-05-31 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

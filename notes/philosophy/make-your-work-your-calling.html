@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Make Your Work Your Calling — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.14;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:17px;margin-right:8px}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Make Your Work Your Calling</h1>
+    <div class="meta">
+      <span>By <strong>Arthur C. Brooks</strong> — The Atlantic ("How to Build a Life")</span>
+      <span class="dot">•</span>
+      <span>Published June 26, 2025</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 5, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Work &amp; Meaning</span>
+      <span class="tag">Calling</span>
+      <span class="tag">Purpose</span>
+      <span class="tag">Intrinsic Motivation</span>
+    </div>
+  </header>
+
+  <p class="lede">Don't wait for your life's calling to find you with the perfect job. Turn whatever job you find into the way you seek that calling.</p>
+
+  <div class="callout key">
+    <h4>The core move</h4>
+    <p style="margin:0">A calling isn't a perfect job you discover — it's a <strong>way of working</strong> you create. The secret is to make your work, <em>whatever it is</em>, your calling, through three steps: <strong>look within</strong> (intrinsic reward), <strong>focus on fascination</strong> (interest), and <strong>be that person</strong> (serve others).</p>
+  </div>
+
+  <p class="muted">A companion to the work-and-meaning cluster: <a href="how-to-do-what-you-love.html">Paul Graham's "How to Do What You Love"</a> and <a href="how-to-pick-a-career.html">Tim Urban's "How to Pick a Career."</a></p>
+
+  <h2>Chop wood, carry water</h2>
+  <p>Brooks opens with a Zen story. A novice monk is told that before enlightenment he will "chop wood and carry water." For decades he does exactly that — backbreaking work — dreaming that once he becomes a master his calling will be something finer: teaching, contemplation, prayer. Finally he attains the rank of master and asks what his job will be now.</p>
+  <figure class="diagram">
+    <div class="dtitle">The Zen lesson</div>
+    <div class="row" style="align-items:center;max-width:680px;flex-wrap:nowrap">
+      <div class="node"><div class="nh">Before enlightenment</div><div class="ns">"chop wood, carry water"</div></div>
+      <div class="arrow">→ decades →</div>
+      <div class="node accent2"><div class="nh">After enlightenment</div><div class="ns">"chop wood, carry water"</div></div>
+    </div>
+    <div class="legend">The job is identical. What changes is the meaning he brings to it.</div>
+    <figcaption>The calling was never the destination — it was always available in the work itself.</figcaption>
+  </figure>
+  <p>Across traditions, work is framed as inherently meaningful: in Genesis, God places Adam in Eden "to dress it and to keep it" — designed to work, even in paradise; Hinduism teaches that "by performing one's natural occupation, one worships the Creator."</p>
+
+  <h2>Objective vs. subjective careers</h2>
+  <p>Brooks draws on research (a 2005 <em>Journal of Organizational Behavior</em> study) distinguishing two ways of holding a job:</p>
+  <figure class="diagram">
+    <div class="dtitle">Two kinds of career</div>
+    <div class="twocol">
+      <div class="vs bad"><h4>Objective career</h4><p style="margin:0;font-size:14px">Chosen for practical reasons (a paycheck). Success = money, power, prestige. On a bad day, you might quit it in anger.</p></div>
+      <div class="vs good"><h4>Subjective career</h4><p style="margin:0;font-size:14px">Chosen for a sense of <strong>calling</strong>. Deeper definition of success; greater satisfaction even in hard times. You don't quit your calling — "you didn't choose it, it chose you."</p></div>
+    </div>
+    <figcaption>A 2012 survey found: the more people understood their calling, the more meaning they felt in life — work as a <em>vehicle</em> for purpose, not the purpose itself (that would just be workaholism).</figcaption>
+  </figure>
+  <p>And knowing your calling early isn't the blessing it seems. Brooks spent a dozen years as a classical French-horn player — sure since age 8 it was his calling — and by 28 it "felt less like my vocation and more like a prison sentence."</p>
+
+  <h2>The three steps to make any work a calling</h2>
+
+  <figure class="diagram">
+    <div class="dtitle">Three steps</div>
+    <div class="row grow" style="max-width:720px">
+      <div class="node accent"><div class="nh">1 · Look within</div><div class="ns">intrinsic over extrinsic reward</div></div>
+      <div class="node accent"><div class="nh">2 · Focus on fascination</div><div class="ns">follow interest</div></div>
+      <div class="node accent"><div class="nh">3 · Be that person</div><div class="ns">serve others</div></div>
+    </div>
+  </figure>
+
+  <h2><span class="num">1</span>Look within</h2>
+  <p>Home in on <strong>intrinsic compensation</strong> — the psychological reward of the work itself — rather than only <strong>extrinsic compensation</strong> (wage, benefits, prestige). You need the extrinsic to pay rent, but the intrinsic is what gives meaning.</p>
+  <div class="twocol">
+    <div class="vs a"><h4>Intrinsic</h4><p style="margin:0;font-size:14px">The inherent reward of doing the work. People who are intrinsically motivated like their job more, work harder, and stick with it longer.</p></div>
+    <div class="vs b"><h4>Extrinsic</h4><p style="margin:0;font-size:14px">Wage, benefits, prestige — necessary, but not a source of meaning.</p></div>
+  </div>
+  <p class="muted">It generalizes beyond work: students do puzzles longer for fun than for course credit; a relationship is better when you do kind things out of love rather than to win favor.</p>
+
+  <h2><span class="num">2</span>Focus on fascination</h2>
+  <p>The intrinsic reward most tied to calling is <strong>interest</strong> — a basic positive emotion with an evolutionary root (curious ancestors explored, prospered, and passed on their genes). Seek work that is intrinsically interesting to you; interest is deeply personal (one of his sons loves data science, the other construction management — neither can imagine the other's work).</p>
+  <div class="callout">
+    <p style="margin:0">Even a job taken out of desperation has interesting facets. A musician friend working food service while auditioning made his work interesting by observing the people around him "as if he were an anthropologist," journaling his observations at night.</p>
+  </div>
+
+  <h2><span class="num">3</span>Be that person</h2>
+  <p>A second intrinsic reward is <strong>service to others</strong>. Workplaces with a strong culture of helping and reciprocity show the highest satisfaction and morale — and the impulse to help your co-workers raises <em>your own</em> job satisfaction. Help others, and the job becomes more like a calling.</p>
+  <p>To the young man who felt like a drudge in a cubicle farm, Brooks advised <strong>small, unbidden acts of kindness</strong>: bring the guy in the next cubicle a fresh coffee after lunch and notice his reaction; write an appreciation email for no reason. "Being that person" changes how you see your own role.</p>
+
+  <h2>The reframe</h2>
+  <p>Brooks feared that switching from music to social science would just reveal him as a chronic malcontent — but his current work genuinely feels like his calling. The deeper realization: had he applied these three steps as a young musician, he could have found meaning there too — appreciating the great music, taking interest in its history, lightening his fellow musicians' load.</p>
+  <blockquote>To find a calling is not about the actual work of chopping wood and carrying water. The sense of calling comes in how we make the act of chopping wood meaningful, and in how we serve others by the water we're carrying. That is the path to true enlightenment.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Arthur C. Brooks, <a href="https://www.theatlantic.com/ideas/archive/2025/06/make-your-work-your-calling/683330/" target="_blank" rel="noopener">"The Ultimate Career Advice: Make Your Work Your Calling"</a> — The Atlantic, "How to Build a Life" column, June 26 2025 (full text read via the Internet Archive, as the original is paywalled). Diagrams are HTML/CSS visualizations of the article's argument; quoted lines are Brooks's own. Related: <a href="how-to-do-what-you-love.html">How to Do What You Love</a>, <a href="how-to-pick-a-career.html">How to Pick a Career</a>, <a href="hell-yeah-or-no.html">Hell Yeah or No</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What AI Can't Kill — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>What AI Can't Kill</h1>
+  <div class="meta">
+    By <strong>Jon C. Phillips</strong> (@joncphillips)
+    <span class="dot">·</span> Published Apr 1, 2026
+    <span class="dot">·</span> Saved Jun 6, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">Moats</span>
+    <span class="tag">Indie Hacking</span>
+    <span class="tag">Distribution</span>
+    <span class="tag">AI Strategy</span>
+  </div>
+</header>
+
+<p class="lede">The four layers that survive every model update.</p>
+
+<div class="callout key">
+  <h4>Core idea</h4>
+  <p>If your product is a thin wrapper on an AI capability, you're building in the <strong>kill zone</strong>: the moment the underlying model improves, your value evaporates. Four layers survive — <strong>Infrastructure</strong>, <strong>Distribution</strong>, <strong>Personal Brand</strong>, and <strong>Community</strong> — because they're built on relationships and positioning, not features. A product can be cloned overnight; years of accumulated human trust can't. Each of these takes time a model update can't shortcut.</p>
+</div>
+
+<h2>The kill zone</h2>
+<p>The day Jon launched <strong>Hyperfocal</strong>, Adobe announced <strong>Firefly inside Lightroom</strong> — prompt-based photo editing built directly into the app his entire user base already pays for. Hyperfocal isn't dead, and for now the two do different things. But the trajectory is clear: it's only a matter of time before Adobe absorbs the functionality he spent months building, turning the feature into a checkbox in someone else's product rather than a standalone business. He got outcompeted by a model update at a company with thousands of engineers, and no indie hustle was going to change that. It forced him to rethink what's worth building.</p>
+
+<p>In early 2026, over <strong>$1 trillion in market cap was wiped from software stocks in a single week</strong> after investors realized AI agents are beginning to replace entire product categories — the <em>"SaaSpocalypse."</em> We've watched it play out: copywriting tools died when ChatGPT got good enough, image-generation startups cratered when Midjourney improved, and code-assistant companies now sweat every Claude Code release. <strong>Gartner predicts 35% of point-product SaaS tools will be replaced by AI agents by 2030.</strong></p>
+
+<p>If your product is a thin wrapper on an AI capability, you're building in the kill zone: the moment the underlying model gets better, your value proposition evaporates — and the cycle is accelerating. The window between <em>"viable product"</em> and <em>"a platform absorbed our functionality"</em> shrinks every quarter. This hits indie builders as hard as funded startups, maybe harder: no resources to pivot fast, no runway to survive a sudden irrelevance event. So the question becomes: what can you build that survives this?</p>
+
+<h2>The four layers that survive</h2>
+<p>Stripping away everything AI can replicate or absorb, four layers remain. Each requires time and human trust to build — which is exactly why a model update can't shortcut them into existence. They're about relationships and positioning rather than features. Think of them as a stack, with the most vulnerable layer at the bottom:</p>
+
+<figure class="diagram">
+  <div class="dtitle">The survival stack</div>
+  <div class="col" style="max-width:480px;margin:0 auto">
+    <div class="node ok" style="width:100%"><div class="nh">Community</div><div class="ns">Active participation · belonging · most durable</div></div>
+    <div class="arrow">▲</div>
+    <div class="node accent2" style="width:100%"><div class="nh">Personal Brand</div><div class="ns">Trust attaches to people, not logos</div></div>
+    <div class="arrow">▲</div>
+    <div class="node accent" style="width:100%"><div class="nh">Distribution</div><div class="ns">A direct line to humans · the scarce resource</div></div>
+    <div class="arrow">▲</div>
+    <div class="node accent" style="width:100%"><div class="nh">Infrastructure</div><div class="ns">The pipes everything (including AI) runs on</div></div>
+    <div class="arrow">▲</div>
+    <div class="node warn" style="width:100%"><div class="nh">Product</div><div class="ns">Most vulnerable · every model update is an existential threat</div></div>
+  </div>
+  <div class="legend">Read bottom-up: the product layer sits at the base because it's the easiest to absorb. The layers above it can't be cloned by a model release.</div>
+  <figcaption>The product layer is most exposed; the four durable layers above it are built on time and trust.</figcaption>
+</figure>
+
+<h3>1. Infrastructure</h3>
+<p>The plumbing of the internet isn't going anywhere — DNS, hosting, email delivery, payment processing, domains, servers. These are the roads and pipes everything runs on, <strong>including AI itself</strong>; the models need infrastructure to function. <strong>Cloudflare, Stripe, AWS, Vercel</strong> don't get disrupted by a new model release because the models depend on them.</p>
+<p>Not every indie builder should start a hosting company, but the principle scales down: if you own a piece of infrastructure other products and workflows depend on, you're in a fundamentally different position than someone building a feature a platform can absorb.</p>
+<blockquote>The closer you are to the pipes, the safer you are from the waves above.</blockquote>
+
+<h3>2. Distribution</h3>
+<p>This is the layer Jon has been building for 15+ years. With Brett, he runs <strong>DailyPhotoTips (27,000 subscribers)</strong> and <strong>TheDailyPreset (9,000)</strong>; with Marko, he runs <strong>DailyTips.dev</strong> for a growing developer audience. All 50/50 partnerships, all built on email — a direct line to real humans who chose to hear from them. No algorithm in between, no platform that can throttle reach, no AI update that can replicate the trust that 15 years of showing up daily has built.</p>
+<p>When anyone can build a product in a weekend, the person who can put it in front of the right audience wins. <strong>Building is now abundant; distribution is the scarce resource.</strong></p>
+<blockquote>AI can generate content and products, but it cannot generate the audience that consumes them.</blockquote>
+<p>The builders who spent years growing newsletters, email lists, social followings, and niche credibility are sitting on the most durable asset in the game. Big companies are figuring this out: <strong>HubSpot ($12B) acquired Starter Story (800,000 YouTube subscribers, a 275,000-person newsletter)</strong>, adding to a portfolio that already includes <em>The Hustle</em> and <em>My First Million</em>. A software company decided that owning an audience of founders was worth more than building another feature. As <strong>Greg Isenberg</strong> puts it: media is becoming the base layer of software companies — not as marketing, but as infrastructure. When AI makes products easy to replicate, the company that controls where attention flows controls where demand flows.</p>
+
+<h3>3. Personal Brand</h3>
+<p>Every founder who invested in a personal brand is in a fundamentally different position now. When an AI update kills your product, founders with a personal brand still have an audience that trusts them <em>as a person</em> — they can pivot and bring people along. Those who built behind a faceless company name start from zero each time. Brand accumulates across everything you do; trust attaches to real people, not logos.</p>
+<p>Jon's photography audience trusts <em>Jon</em>, not just DailyPhotoTips as a URL; the dev audience trusts him and Marko, not just a domain name. When he sold <strong>Contrastly</strong>, the brand changed hands but subscribers still recognized and trusted him, because the relationship was with a person, not a product.</p>
+<blockquote>AI can generate content that sounds like anyone, but it can't be anyone.</blockquote>
+<p>A real human with real experience, real skin in the game, and real opinions is something people connect with in a way no model output can replicate. Personal brand feeds directly into distribution and community.</p>
+
+<h3>4. Community</h3>
+<p>This is the bet Jon is making now — and maybe the most durable layer of all. Email is distribution (he's sent daily photography emails since 2012 and will keep going), but email is fundamentally <em>passive</em> consumption, mostly one-directional. <strong>Community is active participation</strong>: people talking to each other, helping each other, sharing what they're working on, forming relationships around shared interests. The real value extends beyond what you provide as a creator, because members provide value to each other in unpredictable ways.</p>
+<blockquote>You could use AI to generate a thousand forum posts, but you can't use it to generate the feeling of belonging.</blockquote>
+<p>That requires real humans spending real time together, with trust built slowly. Jon and Marko are building a developer community on <strong>Skool</strong> alongside DailyTips.dev because it's the layer most resistant to disruption. The tools and platforms will change; the human need to gather, learn, share, and connect won't. There's no scenario where a model updates and communities suddenly become irrelevant.</p>
+
+<h2>Moving up the stack</h2>
+<p>Think of the four as a stack, with the product layer at the bottom because it's the most vulnerable — if your entire business lives there, every model improvement is an existential threat. This isn't an argument to stop building products; products create value and revenue. But products should sit <strong>on top of</strong> distribution you own, a brand people trust, and a community that gives people a reason to stick around even when the product landscape shifts.</p>
+
+<div class="twocol">
+  <div class="vs good">
+    <h4>Builders who thrive</h4>
+    <p class="muted">Own the layers underneath their products. The product is just the top of a stack they control — audience, brand, and community absorb the shock when any single product gets absorbed.</p>
+  </div>
+  <div class="vs bad">
+    <h4>Builders who struggle</h4>
+    <p class="muted">Built a feature, wrapped it in a landing page, and hoped the product itself was enough. When the model improves, there's nothing underneath to fall back on.</p>
+  </div>
+</div>
+
+<h2>The bet</h2>
+<p>Hyperfocal might survive, or it might not. Adobe might build exactly what Jon built into Lightroom and make his product redundant overnight. He's made peace with that — individual products come and go.</p>
+<blockquote>Adobe can't build my newsletter list. They can't replicate the trust Brett and I built with our photography audience over a decade, or what Marko and I are building with our developer community, or the personal brands that hold it all together. The products will change, but the layers underneath won't.</blockquote>
+<p>That's the bet — and a decade-plus of building newsletters says it's worth taking.</p>
+
+<hr class="soft">
+<p class="src">Source: <a href="https://x.com/joncphillips/status/2039329025487753568">What AI Can't Kill</a> by Jon C. Phillips (@joncphillips), X article, Apr 1 2026. The essay draws on his own products and newsletters — <strong>Hyperfocal</strong>, <strong>DailyPhotoTips</strong>, <strong>TheDailyPreset</strong>, <strong>DailyTips.dev</strong>, and <strong>Contrastly</strong> — and references <strong>Gartner</strong>, <strong>Greg Isenberg</strong>, and <strong>HubSpot's acquisition of Starter Story</strong>. The diagrams here are HTML/CSS reconstructions of the article's argument; quoted lines are the author's own.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-06 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

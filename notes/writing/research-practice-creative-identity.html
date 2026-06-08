@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Research Practice Is Your Creative Identity — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  h3{font-size:18px;margin:28px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#16181d}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .rulecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .rulecard .rn{font-family:var(--serif);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .rulecard h3{margin:4px 0 8px;font-size:18px}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>Your Research Practice Is Your Creative Identity</h1>
+  <div class="meta">
+    By <strong>Zoë Yasemin</strong> (Art Direction)
+    <span class="dot">·</span> Published Feb 21, 2026
+    <span class="dot">·</span> Saved Jun 5, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">Art Direction</span>
+    <span class="tag">Research</span>
+    <span class="tag">Taste</span>
+    <span class="tag">Creativity</span>
+  </div>
+</header>
+
+<p class="lede">In an age of aesthetic flattening — when polished images are near-infinite and everyone draws from the same water — your research practice is the one thing that can't be replicated. It is what sets your work apart, or keeps it running in place.</p>
+
+<div class="callout key">
+  <h4>The core idea</h4>
+  <p>The most valuable thing a creative offers is not output but a <strong>point of view</strong> — a specific way of seeing built over years of inquiry. That point of view is forged by a real research practice. As the author puts it: <em>the research is not feeding the work, it is the work.</em></p>
+</div>
+
+<h2><span class="num">01</span>The visual sameness crisis</h2>
+<p>While building a reference deck for a campaign, the author realised almost everything she had saved was already familiar — pulled from the same ecosystem of circulating images. Technically strong, but not hers; no stamp on them. That moment raised a sharper question about what research even means in 2026, when image volume is unprecedented.</p>
+<p>We are living through what researcher <strong>Kate Crawford</strong> calls <em>"aesthetic flattening"</em> — everyone drawing from the same water. The problem isn't a lack of images but an excess of the <em>same</em> ones, plus endless variations of them. Two forces drive it:</p>
+<ul>
+  <li><strong>AI generation</strong> made polished visuals near-infinite and near-free.</li>
+  <li><strong>Social platforms optimise for engagement</strong>, surfacing images already proven to resonate — a feedback loop that rewards familiarity and punishes originality.</li>
+</ul>
+<p>The challenge: it has never been easier to make work that looks competent but says nothing. The opportunity: work with a genuine, research-backed point of view has never been more visible by contrast, precisely because it is so rare. The creatives building real authority aren't producing the most content — their work carries a specific visual intelligence that comes from a research practice with depth.</p>
+
+<h2><span class="num">02</span>Collecting vs. research</h2>
+<p>The author spent a long time believing she was doing research when she was only <em>collecting</em>. The distinction is the hinge of the whole essay: a folder of thousands of saved images is a database, not a research practice.</p>
+
+<div class="twocol">
+  <div class="vs bad">
+    <h4>Collecting</h4>
+    <ul>
+      <li><strong>Passive.</strong> Saving images because they're beautiful or might be useful someday.</li>
+      <li>Lets the image speak without asking it questions.</li>
+      <li>Accumulates volume — a growing archive that never produces ideas.</li>
+      <li>You respond emotionally and move on.</li>
+    </ul>
+  </div>
+  <div class="vs good">
+    <h4>Research</h4>
+    <ul>
+      <li><strong>Active.</strong> Looking that starts producing ideas.</li>
+      <li>Makes connections across unrelated fields; notices patterns; builds a visual argument.</li>
+      <li>A 1970s Italian architecture magazine changes how you think about negative space; a Susan Sontag paragraph clarifies casting direction.</li>
+      <li>You slow down, take notes, ask what an image is actually <em>doing</em>.</li>
+    </ul>
+  </div>
+</div>
+
+<figure class="diagram">
+  <div class="dtitle">From a database to a visual argument</div>
+  <div class="row grow">
+    <div class="node warn">
+      <div class="nh">Collecting</div>
+      <div class="ns">Passive saving · beautiful or "useful someday"</div>
+    </div>
+    <div class="col" style="justify-content:center">
+      <div class="arrow">→</div>
+      <div class="arrowlbl">rigour: slow down,<br>take notes, ask "what is it doing?"</div>
+    </div>
+    <div class="node ok">
+      <div class="nh">Research</div>
+      <div class="ns">Active connection-making · a visual argument</div>
+    </div>
+  </div>
+  <div class="legend">A thousand saved images is a database. Research is when looking begins to produce ideas.</div>
+  <figcaption>The shift is about rigour — not how you feel about an image, but what it is actually doing.</figcaption>
+</figure>
+
+<blockquote>
+  The research is not feeding the work, it is the work.
+  <cite>— Zoë Yasemin</cite>
+</blockquote>
+
+<h2><span class="num">03</span>Where distinctive research lives</h2>
+<p>Images that carry genuine authority come from sources <em>not yet absorbed</em> into the industry's shared visual language. Once a reference enters the moodboard canon, it produces sameness. So the author deliberately works outside fashion's own archive.</p>
+
+<figure class="diagram">
+  <div class="dtitle">Sources outside the canon</div>
+  <div class="row grow">
+    <div class="node accent"><div class="nh">Print &amp; archive</div><div class="ns">Architecture monographs · 1960s scientific illustration · mid-century cookbook food photography · industrial catalogues · instruction manuals · vintage sci-fi</div></div>
+    <div class="node accent2"><div class="nh">Physical / undigitised</div><div class="ns">Bookshops · secondhand magazine stores · undigitised print archives — an image that exists only in a physical object is less contaminated</div></div>
+    <div class="node"><div class="nh">Film</div><div class="ns">Agnès Varda's early documentary cinematography · 1980s Eastern European production design born of constraint · costume logic in never-prestigious films</div></div>
+  </div>
+  <div class="legend">Once a reference enters the shared ecosystem it stops differentiating. Authority lives where the canon hasn't reached.</div>
+  <figcaption>The further a source sits from the circulating image pool, the more it can give your work a stamp that is yours.</figcaption>
+</figure>
+
+<h2><span class="num">04</span>Research as a way of seeing</h2>
+<p>Research isn't a preparatory step before the "real" work — it is the practice that builds your eye over time. Two examples make the point:</p>
+<ul>
+  <li><strong>Wolfgang Tillmans</strong> sequences images by intuition — which only works if your archive is rich enough to generate surprise.</li>
+  <li><strong>Lynne Ramsay</strong> builds film references from sound cues, old magazine scans, and junk-shop postcards — objects that hold <em>atmosphere</em> rather than instructions.</li>
+</ul>
+<p>The result is work that feels like it comes from a specific interior world rather than a shared external one. A deep practice develops a <strong>subconscious visual language</strong> — instincts, references, connections genuinely yours. On set this shows up as faster, better decisions: the frame you move to, the object you reach for, the casting quality you recognise. A creative with a deep research practice is less dependent on the brief.</p>
+
+<h2><span class="num">05</span>What research builds over time</h2>
+<p>When AI can generate a competent image from a prompt in seconds, what human creative intelligence offers is a point of view — a specific way of seeing built through years of inquiry, real-world experience, and research beyond what an algorithm can surface. It is the long game.</p>
+
+<figure class="diagram">
+  <div class="dtitle">Research compounds into a visual signature</div>
+  <div class="row grow">
+    <div class="node accent2"><div class="nh">Years of inquiry</div><div class="ns">Reading, looking, connecting across fields</div></div>
+    <div class="arrow" style="align-self:center">→</div>
+    <div class="node accent"><div class="nh">A point of view AI can't surface</div><div class="ns">An interior world, not a shared external one</div></div>
+    <div class="arrow" style="align-self:center">→</div>
+    <div class="node ok"><div class="nh">A visual signature</div><div class="ns">Shows up consistently · clients recognise it · the right collaborations come</div></div>
+  </div>
+  <div class="legend">The author is expanding into non-Western archives — 1990s Japanese independent magazines, hometown studio portraiture, zine culture. The effort to find them is what makes them useful.</div>
+  <figcaption>What can't be prompted is the long accumulation of attention behind your eye.</figcaption>
+</figure>
+
+<h2><span class="num">06</span>A few things worth starting with</h2>
+<div class="steps">
+  <div class="step"><b>1. Build one non-visual research source into your next project.</b> A text, a film, a conversation in a different field. Notice what it changes about the brief.</div>
+  <div class="step"><b>2. Keep written notes alongside image research.</b> Not captions — observations about what something is doing and why it holds your attention. Articulation forces what images let you skip.</div>
+  <div class="step"><b>3. Spend time with images that create friction.</b> Ones you can't immediately place. That mild disorientation means your thinking is being stretched.</div>
+  <div class="step"><b>4. Notice what recurs across your archive.</b> Recurring motifs, qualities of light, mood, gesture — those patterns are your visual intelligence making itself visible.</div>
+</div>
+
+<blockquote>
+  The real archive is your eye. And your eye is built entirely by the depth and quality of what you have taken the time to actually look at.
+  <cite>— Zoë Yasemin. In 2026, that is the creative advantage that genuinely matters.</cite>
+</blockquote>
+
+<hr class="soft">
+<p class="src">Source: Zoë Yasemin, <a href="https://artdirection.substack.com/p/your-research-practice-is-your-creative">Your Research Practice Is Your Creative Identity</a>, <em>Art Direction</em> on Substack, Feb 21 2026. Diagrams here are HTML/CSS illustrations of the article's ideas, not from the original. The original also references a companion Substack, <em>Art Direction Library</em>.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

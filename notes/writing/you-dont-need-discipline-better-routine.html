@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You Don't Need More Discipline — You Need a Better Writing Routine — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  h3{font-size:18px;margin:28px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#16181d}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .rulecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .rulecard .rn{font-family:var(--serif);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .rulecard h3{margin:4px 0 8px;font-size:18px}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>You Don't Need More Discipline; You Need a Better Writing Routine</h1>
+  <div class="meta">
+    By <strong>Elin</strong> (In It For The Plot)
+    <span class="dot">·</span> Published Jan 6, 2026
+    <span class="dot">·</span> Saved Jun 5, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">Writing Routine</span>
+    <span class="tag">Consistency</span>
+    <span class="tag">Friction</span>
+    <span class="tag">Practical</span>
+  </div>
+</header>
+
+<p class="lede">It was never a willpower issue. She was forcing a routine that didn't fit her life — early mornings, a Pinterest-worthy desk, a printed draft — and no amount of willpower fixes that.</p>
+
+<div class="callout key">
+  <h4>The core idea</h4>
+  <p>A routine isn't there to <strong>force</strong> you to write. It's there to make writing a natural part of your life by <strong>reducing friction</strong>. So the question to ask isn't <em>"How do I become more disciplined?"</em> — it's <em>"How do I reduce friction between me and what I want to do?"</em> Momentum is built through <strong>consistency, not intensity</strong>.</p>
+</div>
+
+<h2><span class="num">01</span>Stop equating routine with discipline</h2>
+<p>For a long time she thought she struggled with discipline. She'd fall into a story idea, write obsessively for four days, then lose momentum just as quickly. The excitement faded, life caught up, she stopped — and she told herself it was a willpower issue.</p>
+<p>It wasn't. She was forcing a routine that didn't fit her life: the early mornings, the Pinterest-worthy desk, the coffee, the printed finished draft — writing as a lifestyle aesthetic. Every failure to stick felt like proof she wasn't serious or good enough. But most of her <em>actual</em> writing happens in bed, late at night, on her phone, between work, life, and being tired. A routine that ignores all of that was never going to hold, no matter how hard she tried.</p>
+
+<figure class="diagram">
+  <div class="dtitle">The reframe</div>
+  <div class="row">
+    <div class="col" style="flex:1">
+      <div class="node warn">
+        <div class="nh">"How do I become more disciplined?"</div>
+        <div class="ns">Relies on motivation, perfect timing, the right mood — breaks the moment life gets busy</div>
+      </div>
+    </div>
+    <div class="arrow" style="align-self:center">→</div>
+    <div class="col" style="flex:1">
+      <div class="node accent2">
+        <div class="nh">"How do I reduce friction between me and what I want to do?"</div>
+        <div class="ns">"Where does writing already fit — and how can I protect that space?"</div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Don't ask how to try harder. Ask how to make trying unnecessary.</figcaption>
+</figure>
+
+<h2><span class="num">02</span>Start from your actual life</h2>
+<p>Before deciding when or how often you'll write, be honest about the life you actually have. Ask:</p>
+<ul>
+  <li>When do I actually have mental space?</li>
+  <li>When am I least distracted — <em>not</em> most motivated?</li>
+  <li>Where do I already open notes, documents, or drafts?</li>
+</ul>
+<p>For her, the answer was: in bed, late at night, on her phone — something she'd long dismissed as "not real writing." Instead of <em>"How much should I write?"</em>, the better questions are <em>"When does it come naturally to me?"</em> and <em>"Where do I enjoy writing?"</em></p>
+<p>Then let the starts be tiny enough to count:</p>
+<div class="steps">
+  <div class="step"><b>Opening the document.</b> That's it. That's a session.</div>
+  <div class="step"><b>Writing one paragraph.</b> Not a chapter — a paragraph.</div>
+  <div class="step"><b>Sitting with the story for 10 minutes.</b> No output required.</div>
+  <div class="step"><b>Adding notes instead of prose.</b> Thinking on the page still counts.</div>
+</div>
+<p>Your routine should be easy enough to keep even on low-energy days. That's the whole point.</p>
+<blockquote>Momentum is built through consistency — not intensity.</blockquote>
+
+<h2><span class="num">03</span>You need to be bored</h2>
+<p>She realised she was almost always consuming something: a podcast while cooking, scrolling on the commute, filling the thirty seconds while waiting for anything. There was barely a moment when she wasn't either consuming or working.</p>
+<p>So she took a walk — no headphones, no doing anything — and it was surreal how quickly her mind started to wander and brainstorm. Creatives need to be bored. They need mental rest, and space for thoughts to wander. Try a phone-free commute, or a walk without listening to anything. You'll be surprised by what surfaces.</p>
+
+<h2><span class="num">04</span>Choose time over output</h2>
+<p>Word counts can be motivating — or paralysing. If you tend to freeze, switch your unit from output to time: 15 minutes, 25 minutes, one short session three times a week. Your only commitment is to <strong>be there</strong>. Some days the words flow, some days they don't — and both still count.</p>
+
+<h2><span class="num">05</span>Not every session looks the same</h2>
+<p>A session doesn't have to produce pages to be worthwhile. Some are for moving the story forward; others are for figuring out where it's going.</p>
+<div class="twocol">
+  <div class="vs a">
+    <h4>Sessions for output</h4>
+    <ul>
+      <li>Drafting</li>
+      <li>Moving forward</li>
+      <li>Writing badly on purpose</li>
+    </ul>
+  </div>
+  <div class="vs b">
+    <h4>Sessions for thinking</h4>
+    <ul>
+      <li>Thinking</li>
+      <li>Outlining</li>
+      <li>Rereading</li>
+      <li>Making notes</li>
+    </ul>
+  </div>
+</div>
+<blockquote>Progress doesn't always look productive.</blockquote>
+
+<h2><span class="num">06</span>What a routine is really for</h2>
+<p>A routine won't make writing "easy." But it will do three quieter, more durable things:</p>
+<div class="row grow">
+  <div class="node accent2">
+    <div class="nh">Somewhere to grow</div>
+    <div class="ns">Gives your ideas a place to develop instead of evaporating</div>
+  </div>
+  <div class="node accent">
+    <div class="nh">Keeps work concrete</div>
+    <div class="ns">Stops your project from turning abstract</div>
+  </div>
+  <div class="node ok">
+    <div class="nh">Builds trust</div>
+    <div class="ns">With yourself, that you'll keep showing up</div>
+  </div>
+</div>
+<p>And that trust is what finishes books.</p>
+<div class="callout">
+  <p>If you're struggling to build a routine, you're not failing — you're learning how to meet yourself where you are. That, too, is part of becoming a writer.</p>
+</div>
+
+<hr class="soft">
+<p class="src">Source: Elin, <a href="https://notetrail.substack.com/p/you-dont-need-more-discipline-you">You don't need more discipline; you need a better writing routine</a>, "In It For The Plot" (NoteTrail) on Substack, Jan 6 2026. Diagrams are HTML/CSS illustrations of the article's ideas.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You Want to Be Special, But You're Just Average — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  h3{font-size:18px;margin:28px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#16181d}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .rulecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .rulecard .rn{font-family:var(--serif);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .rulecard h3{margin:4px 0 8px;font-size:18px}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>You Want to Be Special, But You're Just Average</h1>
+  <div class="meta">
+    By <strong>chicgirlmoment</strong>
+    <span class="dot">·</span> Published Feb 14, 2026
+    <span class="dot">·</span> Saved Jun 5, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">Mindset</span>
+    <span class="tag">Perfectionism</span>
+    <span class="tag">Ambition</span>
+    <span class="tag">Self-Growth</span>
+  </div>
+</header>
+
+<p class="lede">The fear of being merely average is what stops us from ever starting. But the way out isn't to be excellent at everything — it's to accept that you'll be average at some things precisely so you can be excellent at others.</p>
+
+<div class="callout key">
+  <h4>The core idea</h4>
+  <p>The demand to be <strong>above-average at everything</strong> is a form of self-sabotage. Sort your pursuits honestly into two piles: things you'll <strong>be average at</strong> (for fun and recreation) and things <strong>worth the sacrifice</strong> of becoming the best you can. Trying to give 100% to everything means you end up giving roughly 50% to each — and you turn out average at all of it anyway.</p>
+</div>
+
+<h2><span class="num">01</span>The fear that stops you starting</h2>
+<p>We carry a huge ambition to be special in everything — to be the specialist, the professional, the best in a field. And the simple possibility that we could begin something and turn out <em>average</em>, not as good as we expected, scares us so much that it becomes our biggest limitation in ever creating anything.</p>
+<p>So we won't write the essay, because we haven't discovered how to stop global warming — who would read it if it isn't "groundbreaking"? We won't start making music, or ceramic mugs, or learn to sew, because it feels "too late." We won't start the thing that recently caught our interest, because we won't be good at it.</p>
+<p>But we won't be good at it <em>because we never start</em>. It's an obstacle we set for ourselves and then can't climb over. We draw our own limits and then treat them as walls.</p>
+
+<h2><span class="num">02</span>You can't give 100% to everything</h2>
+<p>The real problem is that we can't divide our attention fairly. We fail to distinguish the things we genuinely want to <strong>improve</strong> from the things we just want to keep as a pleasant addition — entertainment, a calming side activity. We feel we must be above average in <em>both</em>, or else there's no point, even when we're having fun. We're ashamed when it doesn't work out, we can't show it off, it feels like a waste of time, not productive.</p>
+<p>So we end up believing that if we start something, we must give it 100%. Take two things: (1) something we're genuinely passionate about and want to develop, and (2) something that's just enjoyable, that we don't need to push further — yet think we must be the best at anyway. We want to pour 100% into both. But we only have so much of ourselves to give, so each gets about 50%. And the result is the very thing we were trying to avoid.</p>
+
+<figure class="diagram">
+  <div class="dtitle">The 100%-at-everything trap</div>
+  <div class="row grow">
+    <div class="node accent2">
+      <div class="nh">Real passion</div>
+      <div class="ns">Want to give 100%</div>
+    </div>
+    <div class="node purple" style="border-color:var(--purple)">
+      <div class="nh">Just-for-fun hobby</div>
+      <div class="ns">Also demand 100%</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+  <div class="arrowlbl">but attention is finite — it splits</div>
+  <div class="arrow">↓</div>
+  <div class="row grow">
+    <div class="node warn">
+      <div class="nh">Passion → 50%</div>
+      <div class="ns">Underfed</div>
+    </div>
+    <div class="node warn">
+      <div class="nh">Hobby → 50%</div>
+      <div class="ns">Overfed for what it is</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+  <div class="row">
+    <div class="node warn" style="min-width:240px">
+      <div class="nh">Average at both</div>
+      <div class="ns">The exact outcome you feared</div>
+    </div>
+  </div>
+  <figcaption>"If you want to be special in everything, you will be average in everything."</figcaption>
+</figure>
+
+<h2><span class="num">03</span>Sort honestly: average vs best</h2>
+<p>The truth is that not everything will be a life's passion. We won't succeed at some things — but that doesn't mean we should give them up. It's natural. In some cases being average is genuinely <em>enough</em>, and there's no shame in it. You simply don't need more from it, and you respect your time. So go through your pursuits and honestly assign each one to a category.</p>
+
+<div class="twocol">
+  <div class="vs a">
+    <h4>Be average</h4>
+    <ul>
+      <li>It's recreation — you don't need to perfect it</li>
+      <li>You don't have to spend hours getting better</li>
+      <li>You can be irregular and return when you feel like it</li>
+      <li>You accept you won't be advanced; progress will be slower</li>
+      <li>It's a side activity, not your life's passion or big goal — so treat it that way</li>
+    </ul>
+  </div>
+  <div class="vs b">
+    <h4>Be the best</h4>
+    <ul>
+      <li>You know it's worth your sacrifices</li>
+      <li>You accept it needs real effort — one hour of learning won't be enough</li>
+      <li>You won't give up after a week</li>
+      <li>You'll be disciplined and improve a little every day</li>
+    </ul>
+  </div>
+</div>
+
+<p>The same activity can sit in either pile depending on what you actually want from it. Take learning a language: you can learn the basics, just enough to communicate with a foreigner — or you can aim to become a fluent, near-native speaker. Each demands a different level of effort, and it's up to you to prioritize. Not everything has to be at the highest level. You don't have to change the world and be an expert in every field. There's nothing wrong with being average at something that's just a fresh change, calming, or fun.</p>
+
+<h2><span class="num">04</span>The author's own split</h2>
+<p>For a while the author wanted to be good enough at everything — <em>if I start and I'm bad, how can I keep going?</em> But she found that doing different things helped her grow even without much success in them.</p>
+<p>She started <strong>painting</strong> and assumed she'd be better at it. Then she realized it isn't her life's passion — it's relaxation, a way of exercising her imagination and trying out art forms. She doesn't aspire to be a professional painter. She can do it simply because she likes it, and stay average. There's a liberating feeling in doing something with no high expectations — going with the flow, not worrying about the result.</p>
+<p><strong>Writing</strong>, on the other hand, is her lifelong passion. She wants to get better, to be regular and disciplined, to explore new forms and topics, do research, enrich her vocabulary, publish and get feedback. She's been writing regularly for a year. When she looks at old essays she sees work she could have done better — but she doesn't delete it. It's part of her progress: she wrote the best she could then, and she writes the best she can now. She wants to be consistent rather than wait for perfect. She doesn't want to be average here — she wants to be the best she can be — and she's willing to make sacrifices for it that she would never make for painting. That's why she gives different amounts of time to each: they aren't equally important, and she doesn't try to be perfect at everything.</p>
+
+<h2><span class="num">05</span>Don't make perfection the price of starting</h2>
+<p>Don't assume you must do everything perfectly or you'll quit. Don't demand that, from the very start, things go exactly as planned. When you do, you set limits you then can't overcome. Why give yourself reasons to reject things because "you're not good enough"?</p>
+<p>We set rules like <em>"either I'll get it right the first time, or I'll resign."</em> But if everyone lived by that rule, we would have nothing and know nothing.</p>
+
+<blockquote>
+  "You will be average at something in order to be perfect at something else."
+  <cite>— chicgirlmoment</cite>
+</blockquote>
+
+<hr class="soft">
+<p class="src">Source: chicgirlmoment, <a href="https://chicgirlmoment.substack.com/p/you-want-to-be-special-but-youre">"You Want to Be Special, But You're Just Average — and What Will You Do With It?"</a>, Substack, Feb 14 2026. Diagrams are HTML/CSS illustrations of the article's argument.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pmarca Guide to Career Planning — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.13;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .partsnav{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 4px}
+  .partsnav a{background:var(--chip);border:1px solid var(--line);color:#3f3a30;font-size:13px;padding:7px 13px;border-radius:999px;transition:border-color .15s}
+  .partsnav a:hover{border-color:var(--accent);text-decoration:none}
+  h2{font-family:var(--serif);font-size:27px;margin:54px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line);scroll-margin-top:16px}
+  h2 .pn{display:block;font-family:var(--sans);font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:4px}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>The Pmarca Guide to Career Planning</h1>
+    <div class="meta">
+      <span>By <strong>Marc Andreessen</strong> — blog.pmarca.com (via Pmarchive)</span>
+      <span class="dot">•</span>
+      <span>Published Sept–Oct 2007</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 5, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Career</span>
+      <span class="tag">Opportunity &amp; Risk</span>
+      <span class="tag">Skills</span>
+      <span class="tag">Silicon Valley</span>
+    </div>
+  </header>
+
+  <p class="lede">A four-part guide for high-potential people who want to make a significant impact — biased toward fast-moving, high-tech fields. Consolidated here from the original series.</p>
+
+  <nav class="partsnav">
+    <a href="#part0">0 · Introduction</a>
+    <a href="#part1">1 · Opportunity</a>
+    <a href="#part2">2 · Skills &amp; Education</a>
+    <a href="#part3">3 · Where to Go &amp; Why</a>
+  </nav>
+
+  <div class="callout key">
+    <h4>The guide in one breath</h4>
+    <p style="margin:0">Don't <em>plan</em> your career — <strong>build skills and chase opportunities</strong>. Treat your working life as a <strong>portfolio of risks</strong> taken across decades, not standalone bets. Make yourself rare by stacking a <strong>double/triple threat</strong> of skills. Then go where the action is: a young industry whose <strong>founders are still alive</strong>, the center of that industry, inside a <strong>high-growth company</strong>.</p>
+  </div>
+
+  <h2 id="part0"><span class="pn">Part 0</span>Introduction: who this is for</h2>
+  <p>Andreessen admits he dislikes giving career advice in real life — "most people who say they want career planning advice aren't actually looking for advice; they just want validation of the path they've already chosen." But he has opinions, so the series lays them out. The framing/disclaimers:</p>
+  <ul>
+    <li>Aimed at <strong>high-potential people who want to excel and make a significant impact</strong> — <em>not</em> for those whose top priority is work/life balance or lifestyle (plenty of other resources exist for that).</li>
+    <li>Biased toward <strong>high-tech / Silicon Valley</strong> and similar fields — fast-moving, rapidly changing, lots of new companies and opportunity.</li>
+    <li>Words like "ambition," "promotion," "advancement" apply equally to <strong>purely technical careers</strong> — read them as gaining latitude to lead bigger/more complex work, not just managing people.</li>
+    <li>It's all personal opinion — "the things I would want to know if I were entering college today."</li>
+  </ul>
+
+  <h2 id="part1"><span class="pn">Part 1</span>Opportunity</h2>
+  <blockquote>The first rule of career planning: Do not plan your career.<cite>— Marc Andreessen</cite></blockquote>
+  <p>The world is too complex and changes too fast to predict your industries, companies, roles, or contributions. Trying to plan only frustrates you and <strong>blinds you to the significant opportunities life throws your way</strong>. "Career planning = career limiting." The second rule: instead, <strong>focus on developing skills and pursuing opportunities.</strong></p>
+
+  <figure class="diagram">
+    <div class="dtitle">Two buckets of opportunity</div>
+    <div class="twocol">
+      <div class="vs a"><h4>Those that present themselves</h4><p style="margin:0;font-size:14px">Right place, right time — they arrive unexpectedly (often while you're busy with other things) and vanish fast. A senior leader needs someone hungry; an ex-manager calls from a hot startup; friends pitch a company at Denny's at 11pm. The people who say <em>yes</em> are the ones whose careers go up "like a rocket ship."</p></div>
+      <div class="vs b"><h4>Those you create</h4><p style="margin:0;font-size:14px">Sought out and built. "The world is a very malleable place. If you know what you want, and you go for it with maximum energy and drive and passion, the world will often reconfigure itself around you" faster than you'd think. Don't coast past what you know in your gut you want to do.</p></div>
+    </div>
+    <figcaption>Being "alert to opportunities that present themselves spontaneously" is most of what people mean by career planning.</figcaption>
+  </figure>
+
+  <h3>Your career is a portfolio</h3>
+  <p>Like an investor, don't judge each job in isolation — judge it as part of an overall <strong>portfolio</strong> of jobs/roles/opportunities across a 50+ year span. Each has a potential <strong>return</strong> (income, skills, experience, location…) and a <strong>risk</strong> profile (getting fired, a move, bankruptcy, opportunity cost). What matters is how the risks and returns combine, which means individual high-risk bets can be smart if the return is good enough. Most people don't think this way — they evaluate each opportunity standalone ("boy, that looks risky") instead of asking whether it <em>fits strategically</em> into the whole portfolio.</p>
+  <div class="callout">
+    <p style="margin:0">On risk (the financial, analyzable kind — not getting hit by an Escalade): "without taking risk, you can't exploit any opportunities." You can live a quiet, happy life — but you're unlikely to create something new or make your mark. The trader's test (Aaron Brown): hire the person who <em>wanted</em> something obtainable only by taking a risk — who knew the risk, respected it, and took it anyway.</p>
+  </div>
+
+  <h3>What risks to take, and when</h3>
+  <figure class="diagram">
+    <div class="dtitle">Calibrating risk by life stage</div>
+    <table>
+      <tr><th>Stage</th><th>Posture</th></tr>
+      <tr><td class="k">Just out of school<br><span class="muted" style="font-weight:400">low burn rate, mobile</span></td><td>Optimize for <strong>skill &amp; experience growth</strong>. Take <strong>income risk</strong> — take the job that develops you most, regardless of salary. Not the time to play safe.</td></tr>
+      <tr><td class="k">Family obligations</td><td>Crank back income risk — but it's not black &amp; white (in Silicon Valley a young parent can still risk a hot startup, since another job is easy to get if it fails).</td></tr>
+      <tr><td class="k">Dissatisfied with your field</td><td>Switching fields is risky (your skills/contacts are in the old one) but <strong>almost always worth it</strong> — staying unhappy has its own risks, and it's hard to excel at work you dislike.</td></tr>
+      <tr><td class="k">Geography</td><td>Moving to the heart of your industry is <strong>almost certainly worth</strong> the lost network and higher cost of living.</td></tr>
+    </table>
+    <div class="legend">Big companies are <strong>riskier than they look</strong>: impersonal layoffs + slower skill growth → in 5–10 years your experience only fits other big companies. And always weigh <strong>opportunity cost</strong> — doing one thing means not doing others.</div>
+    <figcaption>Tease apart each opportunity's risks, then judge them against your whole-career portfolio — they're rarely scary enough to justify passing.</figcaption>
+  </figure>
+  <p class="muted">Closing nudge (Taleb, paraphrased): opportunities are rarer than you think — when a real one opens, cancel your other plans; the window may not open again.</p>
+
+  <h2 id="part2"><span class="pn">Part 2</span>Skills &amp; Education</h2>
+  <h3>What to study</h3>
+  <p>Contrary to "college is your one chance to pursue your passion," Andreessen argues: if you intend to have an impact, <strong>start building concrete, real-world skills as fast as possible</strong> — pursue your passion <em>after</em> you're primed for success. A liberal-arts degree alone is "almost useless" for entering the workforce with impact; pair it with a useful graduate degree, or better, get a substantive undergrad degree.</p>
+  <div class="callout">
+    <p style="margin:6px 0"><strong>Useful undergrad degrees</strong> have a technical element: engineering, computer science, physics, chemistry, math, economics. They teach you to do something hard and useful, to <strong>think with reason, logic, and data</strong>, and they signal seriousness. "Like heading into the real world armed with an assault rifle instead of a dull knife."</p>
+    <p style="margin:6px 0"><strong>Graduate degrees:</strong> overrated <em>if</em> you have a useful undergrad degree (you can hit the workforce and progress on ability). If your undergrad isn't useful, a practical grad degree is a great idea. Best combo: an MBA <em>on top of</em> engineering/math. Most high-impact people (outside pure research) don't have PhDs.</p>
+  </div>
+  <p><strong>Where to study:</strong> try hard to attend one of the best schools <em>in the world for your field</em> — "always be in the best pond possible." Can't start there? Get great grades and transfer, or do a graduate degree at a top school. Even starting at community college, 4–6 years can vault you into the top tier. <strong>While in school:</strong> work during the year (research jobs, campus labs) and stack internships/co-ops at the best companies — graduate with real experience and a demonstrated work ethic.</p>
+
+  <h3>The double/triple threat</h3>
+  <blockquote>Capitalism rewards things that are both rare and valuable. You make yourself rare by combining two or more "pretty goods" until no one else has your mix.<cite>— Scott Adams (quoted by Andreessen), paraphrased framing</cite></blockquote>
+  <figure class="diagram">
+    <div class="dtitle">Two paths to extraordinary (Scott Adams)</div>
+    <div class="twocol">
+      <div class="vs bad"><h4>Be the best at one thing</h4><p style="margin:0;font-size:14px">Near-impossible — few play in the NBA or make a platinum album. Not recommended.</p></div>
+      <div class="vs good"><h4>Be top-25% at two or more</h4><p style="margin:0;font-size:14px">Fairly easy — the rare, valuable <em>combination</em> is the magic (e.g. Adams: drawing + jokes + business → Dilbert). Even the CEO formula: top-25% across a few skills, not best at any.</p></div>
+    </div>
+    <figcaption>Apply it to degrees (eng + MBA; CS + physics) and to skills you build after school.</figcaption>
+  </figure>
+  <p>Five post-school skills worth stacking onto your degree(s):</p>
+  <div class="steps">
+    <div class="step"><b>1 · Communication</b> — written or verbal; most people are terrible at it because they never treat it as a skill (especially engineers). Communication + another useful skill makes you "the boss of the people who have only one skill."</div>
+    <div class="step"><b>2 · Management</b> — learn from a great manager, then get responsibility for a team. Even if you won't manage much, you'll understand why companies and people work the way they do.</div>
+    <div class="step"><b>3 · Sales</b> — not steak knives: the art of getting people to do what's genuinely in their interest, predictably. Helps with recruiting, fundraising, partnerships, press — even marriage. (John Doerr called his year "carrying a bag" at Intel the most valuable of his life.)</div>
+    <div class="step"><b>4 · Finance</b> — financial statements, budgeting, how debt &amp; equity markets work. Helps your career, personal life, and any company you start. Read the FT and WSJ cover to cover.</div>
+    <div class="step"><b>5 · International</b> — time on the ground in other cultures pays off; lean toward younger, fast-growing economies. Almost every interesting business now has a strong international element.</div>
+  </div>
+
+  <h3>The "Organization Kid" warning</h3>
+  <p>Drawing on David Brooks's essay, Andreessen warns elite, over-orchestrated graduates: you may reach 22+ having worked hard your whole life but <strong>never truly challenged yourself</strong> — always inside a parental/educational safety net, never making tough decisions on incomplete information and living with the consequences. Get into the real world and risk <strong>visible failure</strong> — not a B or C, but a boss yelling at you, a product that tanks, a missed ship date, getting fired. Learning to get smacked by reality and <em>get right back up</em> "may be the most valuable skill you can ever learn."</p>
+
+  <h2 id="part3"><span class="pn">Part 3</span>Where to Go &amp; Why</h2>
+  <figure class="diagram">
+    <div class="dtitle">Rule of thumb: are the founders still alive?</div>
+    <div class="col">
+      <div class="node accent2" style="max-width:560px;width:100%"><div class="nh">Look at the CEOs, chairs &amp; boards of the major companies in the industry</div></div>
+      <div class="row" style="max-width:620px;width:100%;justify-content:space-between">
+        <div class="node ok" style="flex:1"><div class="nh">Founders still active →</div><div class="ns">young, vital industry · growth, change, opportunity everywhere · <strong>enter</strong></div></div>
+        <div class="node warn" style="flex:1"><div class="nh">Founders dead / out of touch →</div><div class="ns">run by caretaker heirs · ossified oligopoly · "soul-killing" · <strong>beware</strong></div></div>
+      </div>
+      <div class="legend">Exception: an industry so ossified it's ripe to be up-ended — then join the <strong>forces of radical change</strong> (with a real chance of winning).</div>
+    </div>
+    <figcaption>In tech and financial services this reinvention happens every 10–20 years; in some industries, seemingly never.</figcaption>
+  </figure>
+
+  <h3>Get to the center — fast</h3>
+  <p>Once you've picked an industry, <strong>head straight for its core</strong> of change and opportunity; don't detour for lucrative-but-peripheral roles. "Never worry about being a small fish in a big pond" — being a big fish in a small pond means hitting the ceiling fast while nobody cares. Apply this to <strong>company</strong> (go where the action is), to <strong>startup</strong> (aim at the largest, fastest-growing opportunity), and to <strong>city</strong>:</p>
+  <figure class="diagram">
+    <div class="dtitle">Go to the city where the action is</div>
+    <div class="row grow" style="max-width:720px">
+      <div class="node"><div class="nh">Tech</div><div class="ns">Silicon Valley</div></div>
+      <div class="node"><div class="nh">Entertainment</div><div class="ns">Los Angeles</div></div>
+      <div class="node"><div class="nh">Politics</div><div class="ns">Washington DC</div></div>
+      <div class="node"><div class="nh">Finance</div><div class="ns">New York (or London/HK/Shanghai)</div></div>
+    </div>
+    <div class="legend">Geographic locality still matters — even in the internet age — for access to the best companies, people, and opportunities. Nuance: "current importance" ≠ "greatest change," so you may choose an up-and-coming city/firm (Dubai, PayPal) over the incumbent.</div>
+    <figcaption>"Set the controls for the heart of the sun." Don't fart around in second- and third-tier companies without a clear mission to dominate.</figcaption>
+  </figure>
+
+  <h3>Start at a young, high-growth company</h3>
+  <p>In a fast-changing field, the best first job is a younger, high-growth company — not a big company (which teaches you only how big companies work) and usually not a raw startup yet (too variable when you're starting out). What you get:</p>
+  <ul>
+    <li><strong>You'll do lots of stuff</strong> → skills and experience fast.</li>
+    <li><strong>You'll get promoted quickly</strong> → growth creates a chronic shortage of leaders.</li>
+    <li><strong>You'll adapt to high energy and high expectations</strong> → "training for a marathon while wearing ankle weights."</li>
+    <li><strong>Reputational benefit</strong> → the right company on your résumé is "as valuable as any advanced degree."</li>
+  </ul>
+  <div class="callout">
+    <p style="margin:0">Caveat: don't be a "summertime soldier" who joins something successful then bails when it gets hard — hiring managers read that off your résumé dates forever. High-growth companies always hit potholes; gutting through them is key to your education. <strong>Then</strong> go to a startup (pick one where you get the product, see a large market, and respect the people) — or start your own. If it fails, try again; reset at a high-growth company if needed. "Repeat as necessary until you change the world."</p>
+  </div>
+
+  <h3>Every job is tactical and strategic</h3>
+  <div class="twocol">
+    <div class="vs a"><h4>Tactical</h4><p style="margin:0;font-size:14px">Kick ass: gain skills and experiences, and do it so well people sing your praises for decades.</p></div>
+    <div class="vs b"><h4>Strategic <span class="muted" style="font-weight:400">(often overlooked)</span></h4><p style="margin:0;font-size:14px">Learn how the business and the industry actually work. Ask: how would I start a firm like this today? What assumptions underlie everyone's behavior — and should they change? Who's underserved? What tech could change everything? "If the creators of this industry were starting out today, what would they be doing now?"</p></div>
+  </div>
+  <p class="muted">Andreessen ends with a line from <em>Damages</em>: a mentor advises the young attorney to learn everything she can from her ruthless boss — "then get the hell out of there before it's too late."</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Marc Andreessen, "The Pmarca Guide to Career Planning," Parts <a href="https://pmarchive.com/guide_to_career_planning_part0.html" target="_blank" rel="noopener">0</a> · <a href="https://pmarchive.com/guide_to_career_planning_part1.html" target="_blank" rel="noopener">1</a> · <a href="https://pmarchive.com/guide_to_career_planning_part2.html" target="_blank" rel="noopener">2</a> · <a href="https://pmarchive.com/guide_to_career_planning_part3.html" target="_blank" rel="noopener">3</a> (originally blog.pmarca.com, Sept–Oct 2007; preserved at Pmarchive). This note consolidates and distills the four-part series; diagrams/tables are HTML/CSS visualizations of Andreessen's arguments, and the short quoted lines are his (he in turn quotes Aaron Brown, Nassim Taleb, Scott Adams, David Brooks, and the show <em>Damages</em>). Related: <a href="how-to-do-what-you-love.html">How to Do What You Love</a>, <a href="how-to-pick-a-career.html">How to Pick a Career</a>, <a href="make-your-work-your-calling.html">Make Your Work Your Calling</a>, <a href="hell-yeah-or-no.html">Hell Yeah or No</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

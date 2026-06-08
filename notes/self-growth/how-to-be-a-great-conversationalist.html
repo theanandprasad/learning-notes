@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Be a Great Conversationalist — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  h3{font-size:18px;margin:28px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#16181d}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .rulecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .rulecard .rn{font-family:var(--serif);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .rulecard h3{margin:4px 0 8px;font-size:18px}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Be a Great Conversationalist</h1>
+    <div class="meta">
+      By <strong>Bella Dane</strong>
+      <span class="dot">·</span> Published Nov 21, 2025
+      <span class="dot">·</span> Saved Jun 5, 2026
+    </div>
+    <div class="tags">
+      <span class="tag">Communication</span>
+      <span class="tag">Social Skills</span>
+      <span class="tag">Listening</span>
+      <span class="tag">Charisma</span>
+    </div>
+  </header>
+
+  <p class="lede">If you can master communication, you're 10x closer to any goal you have. So many of us have lost the art of good conversation — and the whole art comes down to one thing: genuine curiosity.</p>
+
+  <div class="callout key">
+    <h4>The core idea</h4>
+    <p>Great conversation is mostly <strong>listening</strong>, <strong>genuine curiosity</strong>, and <strong>intention</strong> — not talking more. When you make the other person feel truly heard, you become the memorable one. Put all the focus on them, and the attention quietly comes back to you.</p>
+  </div>
+
+  <p>Below are the six specific things you can implement to set yourself apart.</p>
+
+  <h2><span class="num">1</span>The more you speak, the less is retained</h2>
+  <p>Let go of needing to say a lot. If you always have to give your opinion, put your two cents in, or contribute to everything, you actually lower your <strong>"contribution score"</strong> — the level of perceived value your contribution has.</p>
+  <p>If you're always talking, people glaze over when you start, because there's no way <em>everything</em> you say has that much value. The person who only speaks when they have something valuable is different: when they start, everyone shuts up and focuses, because they know it'll be worth hearing. That's a high contribution score.</p>
+  <blockquote>More exclusivity = higher perceived value.</blockquote>
+
+  <figure class="diagram">
+    <div class="dtitle">The contribution score</div>
+    <div class="row">
+      <div class="col" style="flex:1;min-width:200px">
+        <div class="node warn"><div class="nh">Always talking</div><div class="ns">Opinion on everything · two cents in constantly</div></div>
+        <div class="arrow">↓</div>
+        <div class="node"><div class="nh">People glaze over</div><div class="ns">No way it's all valuable</div></div>
+        <div class="arrow">↓</div>
+        <div class="node warn"><div class="nh">Low contribution score</div><div class="ns">Words discounted before you finish</div></div>
+      </div>
+      <div class="col" style="flex:1;min-width:200px">
+        <div class="node ok"><div class="nh">Speak only when valuable</div><div class="ns">Selective · intentional</div></div>
+        <div class="arrow">↓</div>
+        <div class="node"><div class="nh">Everyone focuses</div><div class="ns">They know it'll be worth it</div></div>
+        <div class="arrow">↓</div>
+        <div class="node ok"><div class="nh">High contribution score</div><div class="ns">More exclusivity = higher perceived value</div></div>
+      </div>
+    </div>
+    <figcaption>Same person, two strategies. Scarcity makes your words land harder.</figcaption>
+  </figure>
+
+  <h2><span class="num">2</span>Let them talk about themselves</h2>
+  <p>If you let someone talk about themselves for 30 minutes, they'll think they're in love with you. People love to talk about themselves and rarely get the chance — so let them.</p>
+  <p>The art of good conversation is <strong>genuine curiosity</strong>, and being a good listener is a skill very few people have. They'll like you more, <em>and</em> you actually connect. Here's the counterintuitive part:</p>
+  <div class="callout">
+    <p>When you put all the focus on <strong>them</strong>, all the attention goes back on <strong>you</strong>. You become truly memorable — not by performing, but by paying attention.</p>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">The attention loop</div>
+    <div class="row grow">
+      <div class="node accent2"><div class="nh">Focus on them</div><div class="ns">Listen · stay curious</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">They feel heard</div><div class="ns">Rare · disarming</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">They open up</div><div class="ns">Like you more · connect</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">You're memorable</div><div class="ns">Attention returns to you</div></div>
+    </div>
+    <div class="legend">Talk less, listen more — the spotlight loops back on its own.</div>
+  </figure>
+
+  <h2><span class="num">3</span>Ask more interesting + intentional questions</h2>
+  <p>Most default questions are flat. Small, intentional swaps make the same exchange come alive.</p>
+
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Boring default</h4>
+      <p>"what did you do last weekend?"</p>
+    </div>
+    <div class="vs good">
+      <h4>Intentional swap</h4>
+      <p>"do you have any exciting plans this weekend?"</p>
+    </div>
+  </div>
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Boring default</h4>
+      <p>"what do you do for work?"</p>
+    </div>
+    <div class="vs good">
+      <h4>Intentional swap</h4>
+      <p>"do you have any exciting projects you're working on?"</p>
+    </div>
+  </div>
+
+  <h3>Favourite career follow-ups</h3>
+  <ul>
+    <li>"do you like it?"</li>
+    <li>"what do you like about it?"</li>
+    <li>"if you could have any career, would it be this?"</li>
+  </ul>
+
+  <h3>And actually notice — reflect it back</h3>
+  <p>Reflecting back what you hear beats a dead "oh cool" every time:</p>
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Lazy</h4>
+      <p>"oh cool."</p>
+    </div>
+    <div class="vs good">
+      <h4>Noticing</h4>
+      <p>"ohhh okay, so you're really passionate about X"<br>"you seem really interested in X"</p>
+    </div>
+  </div>
+  <p><strong>Be intentional and notice!</strong></p>
+
+  <h2><span class="num">4</span>Don't go on autopilot</h2>
+  <p>Someone asks "how are you" and you go "good, how are you?" — that's the most useless, boring phrase of all time. It'd genuinely be more interesting to stand there silently. Every "how are you" is an opportunity to tell them something about you.</p>
+
+  <div class="vs bad" style="margin:18px 0">
+    <h4>Autopilot</h4>
+    <p>"good, how are you?"</p>
+  </div>
+  <div class="steps">
+    <div class="step"><b>"I'm great!</b> But I'm starving, I've heard the food here is really good — what are you going to get?"</div>
+    <div class="step"><b>"I'm exhausted honestly,</b> I didn't think I was going to come, but I'm so happy I did because of X."</div>
+    <div class="step"><b>"I'm fantastic,</b> I'm ready for another drink — I normally get this, what are you going to get?"</div>
+  </div>
+  <blockquote>Don't forget you have a pulse when someone asks how you are.</blockquote>
+
+  <h2><span class="num">5</span>Pause and breathe</h2>
+  <p>Take a breath before you answer a question. It shows the other person: <em>"wow, she's really thinking about my question, she actually gives a damn."</em></p>
+  <p>And think before you blurt. The pause is uncommon, so when you do it, it stands out as authentic — you're not a robot on autopilot. It signals you truly want a real conversation and to connect.</p>
+  <div class="callout">
+    <p><strong>The move:</strong> breath → think → answer. A single beat of silence does more for your presence than any clever line.</p>
+  </div>
+
+  <h2><span class="num">6</span>Let them tell their story first</h2>
+  <p>If someone is telling a story, let them tell their damn story — before you jump in with "omg same, let me tell you my story" and the whole conversation becomes about you.</p>
+  <p>Knowing someone can relate is powerful, so <strong>if you relate, relate</strong> — but let them talk first. Ask at least a few questions before you share your piece. You want them to feel safe and open, which only happens when you truly listen and give a damn.</p>
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Hijacking</h4>
+      <p>"omg same, let me tell you my story" — and now it's all about you.</p>
+    </div>
+    <div class="vs good">
+      <h4>Holding space</h4>
+      <p>Let them finish → ask a few questions → <em>then</em> share that you relate.</p>
+    </div>
+  </div>
+
+  <hr class="soft">
+  <p class="src">Source: Bella Dane, <a href="https://belladane.substack.com/p/how-to-be-a-great-conversationalist">how to be a great conversationalist</a>, Substack, Nov 21 2025. Diagrams are HTML/CSS illustrations of the article's ideas.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

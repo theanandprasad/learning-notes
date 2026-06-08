@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Actually Sit With Your Feelings — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  h3{font-size:18px;margin:28px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#16181d}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .rulecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .rulecard .rn{font-family:var(--serif);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .rulecard h3{margin:4px 0 8px;font-size:18px}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Actually Sit With Your Feelings</h1>
+    <div class="meta">
+      <span>By <strong>Farah</strong> (Voilà Farah)</span>
+      <span class="dot">·</span>
+      <span>Published Aug 20, 2025</span>
+      <span class="dot">·</span>
+      <span>Saved Jun 5, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Emotions</span>
+      <span class="tag">Self-Trust</span>
+      <span class="tag">Mindfulness</span>
+      <span class="tag">Mental Health</span>
+    </div>
+  </header>
+
+  <p class="lede">"Just feel it and let it go"… but <em>how?</em> The difference between people who move past things and people who stay stuck is often that the first group stops <em>delaying</em> the feeling — they feel it, then they act.</p>
+
+  <div class="callout key">
+    <h4>The core idea</h4>
+    <p>There's a small, repeatable routine you can run whenever an ambiguous feeling shows up: <strong>Name the feeling → Feel it in your body → Sit with it → Take action</strong> (or let it go), then repeat for whatever surfaces next.</p>
+    <p>The insight underneath it: taking days or weeks to "decide how you feel" is usually <strong>avoidance dressed up as processing</strong>. Actually feeling the thing and then acting on it — while staying detached from the outcome — is what signals <strong>self-trust</strong>.</p>
+  </div>
+
+  <h2>The friend who got over things instantly</h2>
+  <p>The author was once close friends with a girl she admired for one specific thing: she could get over almost anything almost instantly. Where the author would take days, sometimes weeks, to "decide how she felt," the friend processed in real time — decided how she felt, and acted on it at once.</p>
+  <p>For a long time this confused her. Was the friend really processing, or just acting impulsively? The answer came on an ordinary afternoon: the two of them sitting in a park on a sunny Vancouver summer day, talking about love lives and weekend plans. The friend had been seeing a guy who kept giving mixed signals. They traded perspectives, and then the friend simply made up her mind — and stuck with it.</p>
+  <blockquote>"What if we're wrong?"<br>"Then I'll do something else."</blockquote>
+  <p>That detachment from the outcome surprised the author. It wasn't recklessness; it was <strong>self-trust</strong> — a quiet confidence that whatever happened, she could handle the next step. And that's when it clicked:</p>
+  <blockquote>It's not that I need more days to feel my feelings; usually it's that I'm delaying feeling them — and delaying taking action.<cite>— the realisation in the park</cite></blockquote>
+
+  <h2>The 4-step routine</h2>
+  <p>What the friend did intuitively can be run deliberately as a loop. Whenever a murky feeling arrives, walk it through these four steps — and when new feelings surface (they will), run them through the same loop.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">A repeatable emotional loop</div>
+    <div class="row grow">
+      <div class="node accent"><div class="nh">1 · Name it</div><div class="ns">Find the actual word for the feeling</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">2 · Feel it in your body</div><div class="ns">Locate where it physically lives</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">3 · Sit with it</div><div class="ns">Stay with the discomfort</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">4 · Take action</div><div class="ns">Act, or genuinely let go</div></div>
+    </div>
+    <div class="arrowlbl" style="margin-top:14px">↺ repeat for any secondary / tertiary feelings the action stirs up</div>
+    <figcaption>The cycle isn't one-and-done — each action produces new feelings you run through the same four steps.</figcaption>
+  </figure>
+
+  <h3><span class="num">1</span>Name the feeling</h3>
+  <p>In her early therapy sessions, when asked how she felt, the author's whole vocabulary was about three words: <em>happy, sad, angry</em>. Most people are the same. But there are far more feelings than three, and putting the right word to one is a powerful starting place.</p>
+  <p>This is what a <strong>"feelings wheel"</strong> is for — a tool that helps you narrow a vague feeling down to something specific. You start from a broad core feeling and follow it outward to a more precise one. And you can land on a <em>mix</em>; you're rarely feeling just one thing.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Narrowing a core feeling (illustrative)</div>
+    <div class="row grow">
+      <div class="node accent"><div class="nh">Sad</div><div class="ns">broad core feeling</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Hurt</div><div class="ns">a more specific shade</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Embarrassed</div><div class="ns">the precise word</div></div>
+    </div>
+    <div class="legend">e.g. after making a mistake at work — "sad" is really "hurt," which is really "embarrassed."</div>
+    <figcaption>A simple branch from the broader wheel idea — move from a vague core feeling toward the exact one.</figcaption>
+  </figure>
+
+  <h3><span class="num">2</span>Feel it in your body</h3>
+  <p>Once you've narrowed the feeling (or feelings) down, the next move is to stop thinking about the feeling and instead <strong>feel it physically</strong>. Where in your body does it show up? Is your chest sinking? Is it sitting in your gut? Do your arms feel heavier?</p>
+  <p>Take the work example: <em>sad → hurt → embarrassed</em> about a mistake. Forget the label for a moment and pay attention to the body's reaction instead. For the author this was close to life-changing, because she almost never noticed her body — her instinct was to rationalize, intellectualize, and <em>think</em> about a feeling until she'd forgotten the body entirely.</p>
+
+  <h3><span class="num">3</span>Sit with it</h3>
+  <p>Then simply stay there. The first few times, this can be uncomfortable — and if it is, sit with that discomfort too. The point isn't to fix or flee the sensation; it's to let yourself be in it long enough that it stops running the show from underneath.</p>
+
+  <h3><span class="num">4</span>Take action</h3>
+  <p>The author's favourite part. Once you've named, felt, and sat with something, there are two broad ways to respond — one that keeps you stuck, and one that moves you. Take the example of a co-worker whose dirty looks you've come to dread when you walk in: it makes you <em>angry → aggressive → hostile</em>.</p>
+
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Avoid taking action</h4>
+      <ul>
+        <li>Ruminating on it</li>
+        <li>Asking why it happened <em>this</em> way instead of that</li>
+        <li>Constantly feeling sorry for yourself</li>
+        <li>Slowly building resentment</li>
+      </ul>
+      <p class="muted" style="margin-bottom:0">This <em>looks</em> like processing, but it's an avoidance trap.</p>
+    </div>
+    <div class="vs good">
+      <h4>Take action</h4>
+      <ul>
+        <li>Talk to her about it directly</li>
+        <li>Genuinely decide not to care — <em>only</em> if you're not ruminating</li>
+        <li>Find other solutions</li>
+      </ul>
+      <p class="muted" style="margin-bottom:0">Each of these closes the loop instead of looping forever.</p>
+    </div>
+  </div>
+  <p>The catch with "deciding not to care" is the honesty test: it only counts as action if you've actually stopped ruminating. Otherwise it's just avoidance with a calmer face.</p>
+
+  <h2>It's a habit</h2>
+  <p>None of this is a one-time fix. You run the loop again whenever another feeling arrives — and it takes consistency and conscious effort before it becomes second nature. It's a habit, and like any habit it takes time. But it's far more productive than overthinking your way to nowhere.</p>
+  <p>Expect the actions you take to bring up <strong>secondary and tertiary feelings</strong> of their own. That's normal — you handle those the same way, looping them back through the four steps. And the more you practice, the more you build the thing underneath it all: <strong>self-trust</strong>, the same quiet confidence the friend in the park had, which is what lets you navigate more complex feelings and genuinely hard times.</p>
+
+  <hr class="soft">
+  <p class="src">Source: Farah, <a href="https://voilafarah.substack.com/p/how-to-sit-with-your-feelings">How to actually feel your feelings</a>, Voilà Farah on Substack, Aug 20 2025. The original is a personal, anecdotal and experiential piece drawing on the author's therapy experience, and it embeds a "feelings wheel" image — reconstructed here in text rather than reproduced. All diagrams in this note are HTML/CSS illustrations.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

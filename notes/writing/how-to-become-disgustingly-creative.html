@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Become Disgustingly Creative — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  /* flow channel chart */
+  .flow{position:relative;height:230px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);margin:10px 20px 30px}
+  .flow .band{position:absolute;inset:0;background:linear-gradient(135deg,transparent 42%,rgba(126,200,169,.18) 42%,rgba(126,200,169,.18) 58%,transparent 58%)}
+  .flow .lab{position:absolute;font-size:12px;color:var(--muted)}
+  .flow .anx{top:14px;left:18px;color:var(--warn)} .flow .bor{bottom:14px;right:18px;color:var(--accent)}
+  .flow .fl{top:46%;left:46%;color:var(--ok);font-weight:600;transform:rotate(-37deg)}
+  .flow .yx{position:absolute;left:-6px;top:-22px;font-size:11px;color:var(--muted)}
+  .flow .xx{position:absolute;right:-2px;bottom:-22px;font-size:11px;color:var(--muted)}
+  .steps{counter-reset:s;display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Become Disgustingly Creative in 2026</h1>
+    <div class="meta">
+      <span>By <strong>Hussain Ibarra</strong> (The Profitable Micro Business)</span>
+      <span class="dot">•</span>
+      <span>Published Apr 20, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 5, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Creativity</span>
+      <span class="tag">Focus</span>
+      <span class="tag">Flow</span>
+      <span class="tag">Writing Business</span>
+    </div>
+  </header>
+
+  <p class="lede">Creativity is your ability to see what others can't — to connect two unrelated topics so they fit perfectly. It isn't a gift you're born with or without. It's a muscle built through focus and intentional practice.</p>
+
+  <div class="callout key">
+    <h4>The thesis in two moves</h4>
+    <p style="margin:0">(1) <strong>Focus is the greatest skill of the AI era</strong> — it's a trainable, limited resource (your mental "RAM"), and it determines what enters your consciousness. (2) <strong>Creativity is curation</strong>: chase genuine curiosity, consume with intention, run it through your own lived experience, and iterate. Original ideas are a result of curation, not invention.</p>
+  </div>
+
+  <h2>Your cognitive load is RAM</h2>
+  <p>Humans process ~185 million bits of information over a lifetime — but most people waste it, living on autopilot and numbing their minds with cheap dopamine. The problem isn't lack of motivation: scrolling, gaming, Netflix are "not nothing — they just <em>amount</em> to nothing." They spend a limited cognitive load on tasks that don't mean anything.</p>
+  <figure class="diagram">
+    <div class="dtitle">Cognitive load = your computer's RAM</div>
+    <div class="twocol" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="node warn"><div class="nh">A million tabs open</div><div class="ns">doomscroll · rumination · cheap dopamine → RAM full, nothing completed</div></div>
+      <div class="node ok"><div class="nh">One tab, full attention</div><div class="ns">finish the task → more creativity, novel discoveries, more output, less time</div></div>
+    </div>
+    <figcaption>Living only in the "known" feels safe but means living in imitation — and, per Krishnamurti, in fear.</figcaption>
+  </figure>
+
+  <h2>Focus is the greatest skill of the 21st century</h2>
+  <p>In an era where AI can write, code, and design almost anything, <strong>focus</strong> — knowing what to work on, how, and what to avoid — becomes the decisive skill. With this much leverage, decisions aren't 1:1 anymore; they're <strong>1,000× more crucial</strong>. You can build the right product, or spend 3 years building something nobody wants.</p>
+  <p>Focus is a <strong>limited resource</strong> — but it can be trained, like any sense:</p>
+  <figure class="diagram">
+    <div class="dtitle">Trained focus picks up what others can't</div>
+    <div class="row grow" style="max-width:720px">
+      <div class="node"><div class="nh">Musician</div><div class="ns">the subtlest sounds</div></div>
+      <div class="node"><div class="nh">Perfumer</div><div class="ns">the faintest scents</div></div>
+      <div class="node"><div class="nh">Goalkeeper</div><div class="ns">the shot from body language</div></div>
+      <div class="node"><div class="nh">Surfer</div><div class="ns">the smallest wave changes</div></div>
+      <div class="node"><div class="nh">Clinician</div><div class="ns">diagnosis from word choice</div></div>
+    </div>
+    <figcaption>The competitive advantage is seeing details the average person can't.</figcaption>
+  </figure>
+  <blockquote>Attention comes when you are deeply interested in something, for then you love to find out all about it; then your whole mind, your whole being is there.<cite>— Jiddu Krishnamurti</cite></blockquote>
+
+  <h2>What this has to do with creativity</h2>
+  <p>Everything. Creativity is seeing what others can't, connecting unrelated topics so they fit, articulating ideas that make people ask "how the hell did this person say it?" You <strong>cultivate it by chasing genuine curiosity and doing it for its own sake</strong> — not money, fame, or status. You do it because it's fun; the supporters follow without you trying.</p>
+  <div class="callout">
+    <h4>The NASA creativity study</h4>
+    <p style="margin:0">In the 1960s, NASA found <strong>98% of kids aged 4–5</strong> scored as creative geniuses. As adults, only <strong>2%</strong> did. Schools and society are built to produce obedient workers, not creatives — because, historically, the most creative people (artists, philosophers, writers) were the most dangerous: they challenged norms and refused to fit in.</p>
+  </div>
+  <p class="muted">Nobody can <em>teach</em> you to be creative — if they could, it would cease to exist. People can share methods and processes, but not how to think; if they did, the thoughts would be theirs, not yours.</p>
+
+  <h2>Flow: the challenge sweet spot</h2>
+  <p>Creativity comes from <strong>flow</strong> — effortless effort where hours feel like minutes — and flow only appears when you take on new, interesting challenges <strong>just outside your skill level</strong>. Too hard → anxiety. Too easy → boredom. The goal is to <strong>stretch, not snap.</strong></p>
+  <figure class="diagram">
+    <div class="dtitle">The flow channel — challenge vs. skill</div>
+    <div class="flow">
+      <div class="band"></div>
+      <span class="yx">challenge ↑</span>
+      <span class="xx">skill →</span>
+      <span class="lab anx">Too hard → anxiety</span>
+      <span class="lab fl">FLOW</span>
+      <span class="lab bor">Too easy → boredom</span>
+    </div>
+    <figcaption>Keep the challenge just above your current skill and creativity shines in the gap.</figcaption>
+  </figure>
+  <p>Dissected, creativity is using both modes of thinking: <strong>divergent</strong> (explore new knowledge and paths) and <strong>convergent</strong> (take what works and personalize it to your goals).</p>
+  <figure class="diagram">
+    <div class="dtitle">Divergent → Convergent</div>
+    <div class="row" style="align-items:center;max-width:620px;flex-wrap:nowrap">
+      <div class="node accent2"><div class="nh">Divergent</div><div class="ns">explore widely · gather new knowledge · try many paths</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Convergent</div><div class="ns">pick what works · personalize to your specific needs &amp; goals</div></div>
+    </div>
+    <figcaption>Open up to find raw material, then narrow down to make it yours.</figcaption>
+  </figure>
+
+  <h2>The 5-step framework</h2>
+  <p class="muted">Hussain's framework for generating ideas and writing content (the engine behind 86M+ views and 29k followers). Everyone starts at a different point and walks a different path.</p>
+  <figure class="diagram">
+    <div class="dtitle">The pipeline</div>
+    <div class="col">
+      <div class="node accent"><div class="nh">1 · Pick 2–3 topics you care about</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">2 · Go up one level &amp; dig deep</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">3 · Consume with intention</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">4 · Look for new experiences</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">5 · Refine &amp; iterate</div></div>
+    </div>
+  </figure>
+
+  <div class="steps">
+    <div class="step"><b>1 · Pick 2–3 topics or interests.</b> You don't need to be the best at any one. <strong>Combine all three and you can become the most qualified person in the world</strong> — nobody is as good as you at that exact intersection.</div>
+    <div class="step"><b>2 · Go up one level &amp; dig deep.</b> Don't be too niche ("molecular plant biology" bores people and runs dry). Go broad — ideas need space. (His "writing online" → the broader umbrella "one-person business," which opens sales, marketing, audience-building, psychology…) Then break into 3–5 subtopics, list people you admire, books, and podcasts per interest. He calls these <strong>Brand Domains</strong>.</div>
+    <div class="step"><b>3 · Consume with intention.</b> Most people consume for entertainment — "mental obesity." <strong>High-quality input = high-quality output.</strong> When you find a great idea, <em>stop consuming and start writing</em> about how it made you feel and why it caught you. (This very letter came from intersecting two books — <em>Flow</em> and <em>Think on These Things</em> — neither about creativity.) <strong>Original ideas are a result of curation.</strong></div>
+    <div class="step"><b>4 · Look for new experiences.</b> Your lived experience is the "original" part of your ideas — and <strong>AI can't fake it</strong>. Authenticity is rare currency. If your life feels boring, go <em>do</em> something: move abroad broke, quit with no plan, travel, start a business, launch a thing that'll fail, live in the woods. Collect experiences and reflect, so you have something to say.</div>
+    <div class="step"><b>5 · Refine &amp; iterate.</b> Stop hunting for the perfect idea — you need a <strong>bad idea first to have something to iterate on</strong>. Most of his newsletters feel incomplete when posted; you can always rewrite later. You don't become a painter watching tutorials — you pick up the brush. <strong>Creativity is a muscle; practice makes it stronger.</strong></div>
+  </div>
+
+  <blockquote>Original ideas are a result of curation. You consume from multiple sources, across different domains, pick ideas you're interested in, and tie them together with your perspective.</blockquote>
+
+  <div class="callout key">
+    <p style="margin:0">When everyone races toward volume and outsources their writing and thinking to AI, the people who <strong>leverage their unique experiences and trained focus</strong> will win. Chase curiosity for fun, curate with intention, and keep iterating.</p>
+  </div>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Hussain Ibarra, <a href="https://hussainibarra.substack.com/p/how-to-become-disgustingly-creative" target="_blank" rel="noopener">"How to become disgustingly creative in 2026"</a> — The Profitable Micro Business on Substack (Apr 20 2026). Quotes ascribed in the original to Jiddu Krishnamurti, Wilson Mizner, Mark Twain, and Dan Koe. The flow-channel and pipeline diagrams are HTML/CSS reconstructions of the article's concepts. The original closes promoting his "Passion &amp; Profit" community. Related: <a href="how-to-have-original-thoughts.html">How to Start Having Original Thoughts</a>, <a href="beginners-guide-to-personal-essays.html">Beginner's Guide to Personal Essays</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

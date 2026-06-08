@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Pick a Career (That Actually Fits You) — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.16;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:27px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:17px;margin-right:8px}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  /* venn */
+  .venn{position:relative;width:380px;max-width:100%;height:220px;margin:8px auto 4px}
+  .venn .circ{position:absolute;top:10px;width:200px;height:200px;border-radius:50%}
+  .venn .w{left:24px;background:rgba(224,168,104,.16);border:2px solid var(--accent)}
+  .venn .r{right:24px;background:rgba(126,200,169,.14);border:2px solid var(--accent2)}
+  .venn .lbl{position:absolute;text-align:center;font-size:11.5px;line-height:1.35;font-weight:700}
+  .venn .lbl span{font-weight:400;display:block;margin-top:2px}
+  .venn .lw{left:14px;top:80px;width:120px;color:#6b4a16}
+  .venn .lr{right:14px;top:80px;width:120px;color:#15614c}
+  .venn .lm{left:50%;top:84px;transform:translateX(-50%);width:96px;color:#16181d}
+  /* shelf */
+  .shelf{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:8px 0}
+  .shelf .lvl{padding:11px 16px;font-size:13.5px;border-bottom:1px solid var(--line)}
+  .shelf .lvl:last-child{border-bottom:none}
+  .shelf b{color:#16181d}
+  .shelf .nn{background:rgba(126,200,169,.14)}
+  .shelf .top{background:rgba(224,168,104,.12)}
+  .shelf .mids{background:rgba(0,0,0,.035)}
+  .shelf .bot{background:rgba(0,0,0,.02)}
+  .shelf .trash{background:rgba(224,138,107,.10);color:var(--muted)}
+  .eq{font-family:var(--serif);font-size:22px;text-align:center;color:#16181d;margin:6px 0}
+  .eq .op{color:var(--muted)}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Pick a Career (That Actually Fits You)</h1>
+    <div class="meta">
+      <span>By <strong>Tim Urban</strong> — Wait But Why</span>
+      <span class="dot">•</span>
+      <span>Published April 2018</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 5, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Career</span>
+      <span class="tag">Decision-Making</span>
+      <span class="tag">First Principles</span>
+      <span class="tag">Self-Knowledge</span>
+    </div>
+  </header>
+
+  <p class="lede">Your career will eat 20–60% of your waking adult life — yet most of us choose it on autopilot, guided by advice that's "your great uncle at the holidays… 45 years out of date." This is a framework for choosing like a chef, not a cook.</p>
+
+  <div class="callout key">
+    <h4>The whole framework in one breath</h4>
+    <p style="margin:0">Reason like a <strong>chef</strong> (from first principles), not a <strong>cook</strong> (copying recipes). Audit your true desires (the <strong>Yearning Octopus</strong>), strip out <strong>imposter</strong> wants, rank what's left on a <strong>priority shelf</strong>, and find where your honest <strong>Want Box</strong> overlaps your honest <strong>Reality Box</strong>. Then stop trying to plan 40 years — plan only the <strong>next dot</strong>, treat it as an experiment, and iterate.</p>
+  </div>
+
+  <p class="muted">A companion to <a href="how-to-do-what-you-love.html">Paul Graham's "How to Do What You Love"</a> and Derek Sivers' <a href="hell-yeah-or-no.html">"Hell Yeah or No"</a> — the three together cover why work matters, how to filter commitments, and how to actually choose.</p>
+
+  <h2>The starting problem: cook vs. chef</h2>
+  <p>Society hands you a <strong>recipe</strong> for careers — a snapshot of an old, now-outdated game. A <strong>cook</strong> follows that recipe (reasoning by analogy: copy, conform, tweak). A <strong>chef</strong> reasons from <strong>first principles</strong> — raw facts puzzled together independently, like a scientist. Career decisions demand chef-level thinking, because the world changes faster than the conventional wisdom describing it.</p>
+  <figure class="diagram">
+    <div class="dtitle">Cook vs. Chef</div>
+    <div class="twocol">
+      <div class="vs bad"><h4>🍳 The Cook</h4><p style="margin:0;font-size:14px">Reasons <strong>by analogy</strong> — copies an existing recipe with small tweaks. Conformity, copying. Follows a playbook written for a game that may no longer exist.</p></div>
+      <div class="vs good"><h4>👨‍🍳 The Chef</h4><p style="margin:0;font-size:14px">Reasons <strong>from first principles</strong> — combines core facts independently, experiments, observes, adjusts. Originality, creating. Reads the <em>current</em> game board.</p></div>
+    </div>
+    <figcaption>"Conventional wisdom" is a recipe from the past — useful only if the game hasn't changed. It has.</figcaption>
+  </figure>
+
+  <h2>Mapping the goal: Want Box ∩ Reality Box</h2>
+  <p>Your viable careers live where two circles overlap. The catch: both are drawn from your <em>perceived</em> reality, which is usually wrong on both sides.</p>
+  <figure class="diagram">
+    <div class="dtitle">The Option Pool</div>
+    <div class="venn">
+      <div class="circ w"></div>
+      <div class="circ r"></div>
+      <div class="lbl lw">WANT BOX<span>careers you truly desire</span></div>
+      <div class="lbl lm">OPTION POOL<span>your real options</span></div>
+      <div class="lbl lr">REALITY BOX<span>careers you could reach</span></div>
+    </div>
+    <div class="legend">Want Box is full of <strong>imposter</strong> desires installed by others; Reality Box is distorted by outdated beliefs about what's achievable. Fix both, and the overlap becomes real.</div>
+    <figcaption>Pick from the overlap — but first make each circle honest.</figcaption>
+  </figure>
+
+  <h2>Auditing the Want Box: the Yearning Octopus</h2>
+  <p>Your desires aren't one voice — they're an <strong>octopus</strong> of competing yearnings (and their fears), and no human satisfies all of it. Career is "a game of choices and sacrifices and compromise." The five tentacles:</p>
+  <figure class="diagram">
+    <div class="dtitle">The Yearning Octopus — 5 tentacles</div>
+    <div class="col">
+      <div class="row grow" style="max-width:720px">
+        <div class="node accent"><div class="nh">🧍 Personal</div><div class="ns">fulfillment, values, identity, self-actualization, meaning — "the ickiest to really go for," so often neglected</div></div>
+        <div class="node accent"><div class="nh">👥 Social</div><div class="ns">the "Social Survival Mammoth" (others' opinions), ego/recognition, an inner judge, the "loving little dog" wanting to please parents</div></div>
+        <div class="node accent"><div class="nh">🛋️ Lifestyle</div><div class="ns">wants "Tuesday to be a good day" — free time, comfort, fun, flexibility (often at war with ambition)</div></div>
+      </div>
+      <div class="row grow" style="max-width:480px">
+        <div class="node accent"><div class="nh">🌍 Moral</div><div class="ns">fix the world, help others; sees the other tentacles as self-indulgent</div></div>
+        <div class="node accent"><div class="nh">💰 Practical</div><div class="ns">survival — rent, food, security; "doesn't care how, just wants it to happen"</div></div>
+      </div>
+    </div>
+    <figcaption>Each tentacle holds many individual yearnings + fears that conflict even within themselves. The goal isn't to satisfy all of it — it's to know which voices are really yours.</figcaption>
+  </figure>
+
+  <h3>Unmasking imposters — the "Why Game" &amp; Denial Prison</h3>
+  <p>Many wants are <strong>imposters</strong> wearing a mask — installed by your mom, conventional wisdom, broader culture, famous philosophers, or "7-year-old you." Play the <strong>Why Game</strong>: ask "Why do I want this?" repeatedly and trace each answer to its origin.</p>
+  <div class="twocol">
+    <div class="vs a"><h4>Three outcomes</h4><p style="margin:0;font-size:14px"><strong>Authentic</strong> — a long chain of your own independent thought. <strong>Imposter</strong> — traces back to someone else's installation. <strong>Ambiguous</strong> — lost in haze.</p></div>
+    <div class="vs b"><h4>Denial Prison</h4><p style="margin:0;font-size:14px">The deepest level, where genuine yearnings get locked away — too painful to face, or imprisoned by a parent's values. (A real love of carpentry jailed by an installed belief that prestige matters.)</p></div>
+  </div>
+
+  <h3>Ranking what's left — the Priority Shelf</h3>
+  <p>Once the octopus holds only <em>authentic, current-you</em> yearnings, rank them. The fewer you put up top, the more likely those will thrive.</p>
+  <figure class="diagram">
+    <div class="dtitle">The Shelf System</div>
+    <div class="shelf">
+      <div class="lvl nn"><b>Non-Negotiable bowl</b> — sacrifice all others for it; use <em>very</em> sparingly (maybe one thing)</div>
+      <div class="lvl top"><b>Top shelf</b> — high-priority yearnings that drive the choice; use sparingly</div>
+      <div class="lvl mids"><b>Middle shelf</b> — accepted, lower-priority, deserve some attention</div>
+      <div class="lvl bot"><b>Bottom shelf</b> — acknowledged but deprioritized for now; revisit later</div>
+      <div class="lvl trash"><b>Trash can</b> — rejected as unworthy of your wisest self</div>
+    </div>
+    <figcaption>"The fewer yearnings you put on the top shelf, the more likely those on the top shelf will be to thrive."</figcaption>
+  </figure>
+
+  <h2>Auditing the Reality Box: the current game board</h2>
+  <p>To know what's actually reachable, study the <strong>current game board</strong> of a field — its real rules, players, and loopholes <em>now</em>, not in your uncle's era. Then estimate the distance from where you are (point A) to your "success star," and your speed of covering it:</p>
+  <figure class="diagram">
+    <div class="dtitle">Progress toward your star</div>
+    <div class="eq">Progress <span class="op">=</span> Pace <span class="op">×</span> Persistence</div>
+    <div class="row grow" style="max-width:720px">
+      <div class="node accent2"><div class="nh">Pace</div><div class="ns"><strong>Chefness</strong> (independent thinking — the biggest factor) · work ethic · natural abilities &amp; existing resources</div></div>
+      <div class="node accent2"><div class="nh">Persistence</div><div class="ns">how many years you'll commit before quitting</div></div>
+    </div>
+    <div class="legend">Reality-Box audit = landscape → specific game boards → your start point → your success point → your pace → your persistence.</div>
+    <figcaption>"A few years is just not enough time to traverse the typically long distances to the raddest success stars, no matter how impressive your pace."</figcaption>
+  </figure>
+
+  <h2>Stop planning the tunnel. Plan the next dot.</h2>
+  <p>The old model: a career is a <strong>40-year tunnel</strong> you commit to up front. The truth: it's "a massive, rapidly changing science laboratory" — a series of <strong>dots</strong> (jobs/phases), each a hypothesis test that teaches you about yourself and the world.</p>
+  <figure class="diagram">
+    <div class="dtitle">Tunnel → Dots</div>
+    <div class="col">
+      <div class="node warn"><div class="nh">❌ The tunnel</div><div class="ns">pick one 40-year commitment now, on near-zero information</div></div>
+      <div class="arrow">↓ reframe</div>
+      <div class="row" style="max-width:640px;flex-wrap:nowrap;align-items:center">
+        <div class="node ok"><div class="nh">Dot #1</div><div class="ns">"just a first date"</div></div>
+        <div class="arrow">→</div>
+        <div class="node ok"><div class="nh">Dot #2</div></div>
+        <div class="arrow">→</div>
+        <div class="node ok"><div class="nh">Dot #3</div></div>
+        <div class="arrow">→ …</div>
+      </div>
+      <div class="legend">You can only reasonably plan the <strong>next</strong> dot. (Median young-worker job tenure ≈ 3 years.) Like Steve Jobs said — you can only connect the dots looking backward.</div>
+    </div>
+    <figcaption>Reframing kills the tyranny of choice: you're not picking a life, just your next experiment.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <h4>Iterate with three loops</h4>
+    <p style="margin:0">After each dot, revise: the <strong>Want-Box loop</strong> (did my yearnings change?), the <strong>Reality-Box loop</strong> (what did I learn about what's achievable?), and occasionally the <strong>mission loop</strong> (rethink the whole direction). And mind the <strong>inertia spectrum</strong> — "cement feet" (too jump-shy) carry more regret risk than "wing feet."</p>
+  </div>
+
+  <h2>The takeaway</h2>
+  <blockquote>Be a chef. Make the Want Box and Reality Box honest. Throw out the recipe, run experiments, and let each dot teach you the next one.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Tim Urban, <a href="https://waitbutwhy.com/2018/04/picking-career.html" target="_blank" rel="noopener">"How to Pick a Career (That Actually Fits You)"</a> — Wait But Why, April 2018. This note distills a very long (≈30,000-word) illustrated essay; concept names (Yearning Octopus, Want/Reality Box, Denial Prison, the Shelf System, cook/chef, dots) are Urban's. Diagrams are HTML/CSS redraws standing in for the original cartoons. Related: <a href="how-to-do-what-you-love.html">How to Do What You Love</a>, <a href="hell-yeah-or-no.html">Hell Yeah or No</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Start Having Original Thoughts — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:140px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Start Having Original Thoughts</h1>
+    <div class="meta">
+      <span>By <strong>Feifei</strong> (Feifei's Substack)</span>
+      <span class="dot">•</span>
+      <span>Published Mar 9, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 5, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Thinking</span>
+      <span class="tag">Creativity</span>
+      <span class="tag">Attention</span>
+      <span class="tag">Self-Expression</span>
+    </div>
+  </header>
+
+  <p class="lede">You haven't lost your ability to think. You've just been outsourcing it so long the muscle has weakened. The fix isn't becoming a different person — it's practicing a different behavior.</p>
+
+  <div class="callout key">
+    <h4>The core idea</h4>
+    <p style="margin:0">Original thinking is a <strong>skill, not a trait</strong>, and it's <strong>synthesis, not invention from nothing</strong>. The reason you don't have original thoughts is that your environment produces <strong>zero friction</strong> between you and what you consume. Deliberately introducing friction <em>is</em> the practice.</p>
+  </div>
+
+  <h2>It's a skill, not a trait</h2>
+  <p>Original thinking isn't a personality type reserved for artists and contrarians with interesting glasses. It's a <strong>capacity</strong> — and like most capacities, it atrophies when unused and develops when used. The bad news: practicing it feels terrible at first. (The author is candid that she writes about this <em>because</em> she spent a long time not having original thoughts — "most people who write about original thinking have spent significant time not having any.")</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Original thinking is a muscle</div>
+    <div class="row">
+      <div class="node warn"><div class="nh">Outsourced</div><div class="ns">scroll · absorb · agree · share · repeat → the muscle weakens</div></div>
+      <div class="arrow" style="align-self:center">⇄ practice</div>
+      <div class="node ok"><div class="nh">Exercised</div><div class="ns">pause · react · push back · own it → the muscle develops</div></div>
+    </div>
+    <figcaption>This is good news: the solution isn't becoming someone else, just practicing a different behavior.</figcaption>
+  </figure>
+
+  <h2>It's synthesis, not invention from nothing</h2>
+  <p>People imagine original thinking is sitting alone and producing a fully-formed brilliant idea no one's had. It isn't. It's <strong>taking things you've encountered and running them through your own life until they come out changed.</strong> Nobody thinks in a vacuum.</p>
+  <p>The difference between original thinkers and regurgitators isn't that one never consumes others' ideas — it's that one group <em>does something</em> with them: pushes back, extends the argument somewhere the author didn't go, notices where it breaks down against their own experience, sits with it long enough that it gets <strong>fingerprints</strong> on it. Your fingerprints. That's what makes it yours.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The synthesis process</div>
+    <div class="col">
+      <div class="row" style="flex-wrap:nowrap;max-width:680px;align-items:center">
+        <div class="node"><div class="nh">Ideas you encounter</div><div class="ns">articles · videos · arguments · experiences</div></div>
+        <div class="arrow">→</div>
+        <div class="node accent"><div class="nh">Run through your own life</div><div class="ns">push back · extend · test against your experience · sit with it</div></div>
+        <div class="arrow">→</div>
+        <div class="node accent2"><div class="nh">Comes out changed</div><div class="ns">your fingerprints on it = yours</div></div>
+      </div>
+    </div>
+    <figcaption>Not invention from nothing — transformation through you.</figcaption>
+  </figure>
+
+  <h2>The practice: introduce friction</h2>
+  <p>Everything is smooth: you scroll, absorb, agree, share, move on — never required to <em>do</em> anything with what you took in. Original thinking requires friction.</p>
+  <div class="callout">
+    <h4>The central drill</h4>
+    <p style="margin:0">After you read / watch / listen to something — <strong>before you look at what anyone else thinks</strong> — write down what you actually thought. Not the smart take. Not what you're supposed to think. What you actually noticed, what bothered you, what you believed before and whether it changed. <strong>Catch your raw reaction before the internet gets to it.</strong></p>
+  </div>
+  <p>It doesn't have to be good or coherent. In fact, if it sounds polished and certain, you're probably still <em>performing</em> rather than thinking.</p>
+
+  <h2>Sit with not-knowing</h2>
+  <p>You'll often find you don't know what you think. That's not failure — <strong>that's exactly the right place to start.</strong> The discomfort of not knowing is where actual thought begins. Most people flee it instantly by reaching for their phone to find out what they're supposed to think. Don't. Sit there a little longer.</p>
+  <blockquote>Half-formed thoughts are not shameful thoughts. They're thoughts in progress.</blockquote>
+  <p>Start saying — out loud or in writing — <em>"I'm not sure why, but I don't think I agree with that."</em> Then try to figure out why. <strong>The trying is the thinking.</strong> The answer at the end is almost secondary.</p>
+
+  <h2>Right vs. persuasive</h2>
+  <p>When you watch a video essay and catch yourself nodding — stop. Ask whether you're nodding because the person is <strong>right</strong> or because they're <strong>persuasive</strong>. The only way to tell the difference is to know what you thought <em>before</em> they started talking.</p>
+  <figure class="diagram">
+    <div class="dtitle">Why are you nodding?</div>
+    <div class="twocol">
+      <div class="vs bad"><h4>Persuasive</h4><p style="margin:0;font-size:14px">Polished delivery sweeps you along. You can't trace the opinion back to anything you held before.</p></div>
+      <div class="vs good"><h4>Right</h4><p style="margin:0;font-size:14px">It survives contact with what you already thought. You can say why you agree.</p></div>
+    </div>
+    <figcaption>Persuasive people are often right — but not always. You have to be able to tell the difference.</figcaption>
+  </figure>
+
+  <h2>Why this is worth the discomfort</h2>
+  <p>Original thinking means putting forward something <strong>traceable back to you</strong> — so if it's wrong, unpopular, or half-baked, you own it. You can't shrug and say "that's what everyone was saying." That vulnerability is exactly what you've been avoiding — and exactly what makes real connection possible.</p>
+  <blockquote>People feel close to you when you say something unmistakably, recognizably <em>you</em> — a strange connection no one else would make, a real push-back, an honest "I don't know."</blockquote>
+  <p>The flat conversations — the ones where people weren't that interested — were probably flat because <strong>there was no resistance in you.</strong></p>
+
+  <h2>Read slower, read less</h2>
+  <p>One book genuinely wrestled with beats twenty consumed to say you'd read them. <strong>Annotation makes a text argue with you</strong>: write in the margins, "why do I agree or disagree?", "this reminds me of X and I'm not sure they're compatible." When you finish — <em>before</em> Goodreads, before reviews — write a paragraph: What did this change in how I see something? What did I think it would argue vs. what it actually argued? What would I push back on?</p>
+
+  <div class="callout key">
+    <h4>The long game</h4>
+    <p style="margin:0">Developing your own perspective is a <strong>years-long project</strong> — rebuilding a habit of mind that slowly eroded. There'll be stretches where you sit down to write what you think and come up empty, and it'll feel like proof there's nothing there. But there's something there. It's just rusty. You're not trying to become someone else — you're trying to find out who you already are underneath the borrowed opinions. <strong>Be quiet long enough to hear them. Keep going anyway.</strong></p>
+  </div>
+  <p class="muted" style="font-style:italic">PS — "for the love of God, stop opening the comments section of every video before you come to an opinion yourself."</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Feifei, <a href="https://feifeiwrites.substack.com/p/how-to-start-having-original-thoughts" target="_blank" rel="noopener">"How To Start Having Original Thoughts."</a> — Feifei's Substack (Mar 9 2026). A follow-up to her earlier piece "You Share Other People's Thoughts Because You Don't Have Any of Your Own." Diagrams are HTML/CSS illustrations of the article's argument. Related: <a href="how-to-become-disgustingly-creative.html">How to Become Disgustingly Creative</a>, <a href="beginners-guide-to-personal-essays.html">Beginner's Guide to Personal Essays</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

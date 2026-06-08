@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>How to Write Well — Learning Notes</title><style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  h3{font-size:18px;margin:28px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#16181d}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .rulecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .rulecard .rn{font-family:var(--serif);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .rulecard h3{margin:4px 0 8px;font-size:18px}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style></head><body><div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>How to Write Well</h1>
+  <div class="meta">
+    <span>By <strong>The Culturist</strong></span>
+    <span class="dot">•</span>
+    <span>Published May 28, 2025</span>
+    <span class="dot">•</span>
+    <span>Saved Jun 5, 2026</span>
+  </div>
+  <div class="tags">
+    <span class="tag">Writing</span>
+    <span class="tag">Clarity</span>
+    <span class="tag">Orwell</span>
+    <span class="tag">Style</span>
+  </div>
+</header>
+
+<p class="lede">Bad writing is rarely just bad style. It is a symptom — of vague thinking, evasiveness, and a quiet form of dishonesty. Orwell's six rules are a cure aimed at one target: making the truth more visible.</p>
+
+<div class="callout key">
+  <h4>The core idea</h4>
+  <p>In his 1946 essay <em>Politics and the English Language</em>, George Orwell argued that corrupted language is not an accident but a design — vague phrases and lifeless prose conceal action and dull moral response. His six rules push prose back toward <strong>honesty and precision</strong>. The sixth rule outranks the other five: break any of them sooner than say something outright barbarous, because no rule matters more than making the truth visible.</p>
+</div>
+
+<p>Bad writing signals something deeper than poor style. It reflects vague thinking, evasiveness, and in many cases, a quiet form of dishonesty. Orwell saw this clearly. Official government reports, press statements, and political speeches were filled with vague phrases and lifeless prose not by accident, but by design. Words became tools for concealing action and dulling moral response.</p>
+
+<blockquote>
+  "We killed civilians" could easily be transformed into "collateral damage was incurred."
+  <cite>— The article, paraphrasing Orwell's argument about euphemism</cite>
+</blockquote>
+
+<p>To resist this rhetorical decay, Orwell laid out six rules for writing. They were aimed at political language, but they apply to nearly all forms of prose.</p>
+
+<figure class="diagram">
+  <div class="dtitle">Orwell's Six Rules — A Writer's Checklist</div>
+  <div class="col" style="align-items:stretch;gap:10px">
+    <div class="node accent" style="text-align:left"><div class="nh">☐ Rule 1 — Kill the cliché</div><div class="ns">No metaphor or figure of speech you are used to seeing in print.</div></div>
+    <div class="node accent" style="text-align:left"><div class="nh">☐ Rule 2 — Short over long</div><div class="ns">Never a long word where a short one will do.</div></div>
+    <div class="node accent" style="text-align:left"><div class="nh">☐ Rule 3 — Cut the slack</div><div class="ns">If a word can be cut, always cut it out.</div></div>
+    <div class="node accent" style="text-align:left"><div class="nh">☐ Rule 4 — Active, not passive</div><div class="ns">Never the passive where the active will serve.</div></div>
+    <div class="node accent" style="text-align:left"><div class="nh">☐ Rule 5 — Plain English</div><div class="ns">No foreign, scientific, or jargon word with an everyday equivalent.</div></div>
+    <div class="node ok" style="text-align:left"><div class="nh">★ Rule 6 — The safeguard</div><div class="ns">Break any rule above sooner than say anything outright barbarous.</div></div>
+  </div>
+  <figcaption>The five craft rules sit under one governing principle (Rule 6). This is an HTML/CSS rendering of the article's list.</figcaption>
+</figure>
+
+<div class="rulecard">
+  <div class="rn">Rule 1</div>
+  <h3>Never use a metaphor, simile, or other figure of speech which you are used to seeing in print.</h3>
+  <p>Clichés seem helpful because they feel familiar. Phrases like <em>"Achilles' heel,"</em> <em>"grasping at straws,"</em> and <em>"walking on eggshells"</em> seem to illustrate exactly what you mean and are convenient to fall back on. But convenience is the problem — clichés replace original thought. They outsource the writer's creative process to <strong>dying metaphors</strong>: phrases that once evoked something vivid but are now unremarkable.</p>
+  <p><em>"Bite the bullet"</em> is a perfect example. It originally referred to soldiers biting a bullet during surgery without anesthesia, but is now just shorthand for doing something unpleasant — the visceral nature of the original is lost. Original images, even when simple, force the writer to think and help the reader to see.</p>
+</div>
+
+<div class="rulecard">
+  <div class="rn">Rule 2</div>
+  <h3>Never use a long word where a short one will do.</h3>
+  <p>Big words may look impressive, but they often serve the writer's ego more than the reader's needs. Terms like <code>utilize</code>, <code>commence</code>, or <code>ameliorate</code> are usually chosen because they sound more important, not because they're clearer.</p>
+  <p>The point of writing is to communicate ideas in the most direct way possible. This doesn't mean dumbing things down — it means removing barriers between your thought and the reader's understanding. Short, familiar words are easier to read and harder to misuse. Clarity is its own kind of elegance.</p>
+</div>
+
+<div class="rulecard">
+  <div class="rn">Rule 3</div>
+  <h3>If it is possible to cut a word out, always cut it out.</h3>
+  <p>Most writing suffers from too many words. Bad writers pile on extra clauses, repeat themselves, and pad sentences. If a word isn't doing useful work, delete it. The goal isn't to strip language bare, but to tighten it so every word pulls its weight.</p>
+  <p>Phrases like <em>"in order to,"</em> <em>"due to the fact that,"</em> or <em>"at this point in time"</em> can almost always be trimmed — making writing shorter, sharper, and more persuasive.</p>
+</div>
+
+<div class="rulecard">
+  <div class="rn">Rule 4</div>
+  <h3>Never use the passive where you can use the active.</h3>
+  <p>Passive voice weakens writing by hiding the subject and softening the action. <em>"The window was broken"</em> tells you what happened but not who did it; <em>"He broke the window"</em> is more direct and more honest. In political language, passive constructions deflect responsibility — <em>"Mistakes were made"</em> admits something went wrong but avoids naming who. The active voice forces you to clarify agency.</p>
+</div>
+
+<figure class="diagram">
+  <div class="dtitle">Why the Active Voice Is More Honest</div>
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Passive — evasive</h4>
+      <p>"Collateral damage was incurred."</p>
+      <p>"Mistakes were made."</p>
+      <p>"The window was broken."</p>
+      <p class="muted" style="font-size:13px">No actor. Responsibility dissolves.</p>
+    </div>
+    <div class="vs good">
+      <h4>Active — honest</h4>
+      <p>"We killed civilians."</p>
+      <p>"He broke the window."</p>
+      <p class="muted" style="font-size:13px">Names the agent. The truth becomes visible.</p>
+    </div>
+  </div>
+  <figcaption>The same facts, rewritten. The passive column hides who acted; the active column forces it into the open. (HTML/CSS illustration of the article's examples.)</figcaption>
+</figure>
+
+<div class="rulecard">
+  <div class="rn">Rule 5</div>
+  <h3>Never use a foreign phrase, a scientific word, or a jargon word if you can think of an everyday English equivalent.</h3>
+  <p>Technical language, foreign phrases, and insider jargon masquerade as sophistication; writers use them to signal intelligence or authority, but the real effect is alienation. Choose the word your audience understands without hesitation.</p>
+  <p>Terms like <code>ameliorate</code>, <em>"quid pro quo,"</em> and <em>"pièce de résistance"</em> all have simpler substitutes. Writing in plain English is a virtue, not a limitation.</p>
+</div>
+
+<div class="rulecard">
+  <div class="rn">Rule 6</div>
+  <h3>Break any of these rules sooner than say anything outright barbarous.</h3>
+  <p>A safeguard against blind obedience. If strict adherence to a rule leads to confusion, awkwardness, or misrepresentation, break it. Sometimes a cliché works better than a strained original image, or passive voice is justified — but these should be exceptions, not habits.</p>
+  <p>Orwell's deeper principle: <strong>writing should always aim to make the truth more visible.</strong> If a rule gets in the way of that, discard it — honesty and precision matter more than any rhetorical convention.</p>
+</div>
+
+<hr class="soft">
+
+<p class="src">Source: The Culturist, <a href="https://www.theculturist.io/p/how-to-write-well">How to Write Well</a>, published May 28, 2025. Orwell's six rules come from his 1946 essay <em>Politics and the English Language</em>. The diagrams in this note are HTML/CSS illustrations of the article's own points — the rules checklist and the passive-vs-active examples — not decorative additions.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+
+</div></body></html>

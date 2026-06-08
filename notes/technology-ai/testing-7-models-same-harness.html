@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testing 7 Models Under the Same Harness — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57;
+    --sonnet:#3858d6; --gpt:#1f9d57; --gemini:#d2562f;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px}
+  li{margin:7px 0}
+  strong{color:#16181d}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.86em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)}
+  .node.accent2{border-color:var(--accent2)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+
+  /* ---- Bar chart ---- */
+  .chart{display:flex;flex-direction:column;gap:9px;margin:6px 0 4px}
+  .bar-row{display:grid;grid-template-columns:120px 1fr 64px;align-items:center;gap:10px;font-size:13px}
+  .bar-row .lbl{color:#222a36;text-align:right;white-space:nowrap;font-size:12.5px}
+  .bar-track{background:#f0f1f4;border:1px solid var(--line);border-radius:6px;height:22px;overflow:hidden;position:relative}
+  .bar-fill{height:100%;border-radius:5px 0 0 5px;transition:width .4s}
+  .bar-val{font-family:var(--mono);font-size:12.5px;color:#16181d;text-align:left}
+  .fam-sonnet{background:linear-gradient(90deg,#3858d6,var(--sonnet))}
+  .fam-gpt{background:linear-gradient(90deg,#2e9a52,var(--gpt))}
+  .fam-gemini{background:linear-gradient(90deg,#c25024,var(--gemini))}
+  .keyrow{display:flex;gap:16px;justify-content:center;font-size:12px;color:var(--muted);margin-top:10px;flex-wrap:wrap}
+  .keyrow span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+  /* ---- Data table ---- */
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px}
+  th,td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;position:sticky;top:0}
+  td .m{color:#16181d;font-weight:600}
+  tr.hl td{background:rgba(124,156,255,.07)}
+  .scroll{overflow-x:auto}
+  .dropbad{color:var(--warn);font-weight:600}
+  .dropok{color:var(--ok);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>What We Learned Testing 7 Models Under the Same Agent Harness</h1>
+    <div class="meta">
+      <span>By <strong>Nancy Chauhan</strong> — Arize AI</span>
+      <span class="dot">•</span>
+      <span>Published May 20, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved May 31, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">AI Agents</span>
+      <span class="tag">Evals &amp; Benchmarks</span>
+      <span class="tag">Model Migration</span>
+      <span class="tag">Harness</span>
+    </div>
+  </header>
+
+  <p class="lede">Model swaps look like configuration changes, but they behave more like product migrations. Change only the model — does the system still behave the way users expect?</p>
+
+  <div class="callout key">
+    <h4>The core lesson</h4>
+    <p style="margin:0">A model swap is <strong>not safe just because the final answer still looks right.</strong> Under a fixed harness, correctness stayed in a tight band (79.6%–85.1%) — but <strong>operational behavior moved much more</strong>: latency, tool calls, retries, and timeout risk. Two models can both get the right answer while imposing very different cost, latency, and fragility on the system.</p>
+  </div>
+
+  <p class="muted">Part of the same harness series as <a href="what-is-an-agent-harness.html">What is an Agent Harness</a> and <a href="hermes-harness-architecture.html">Hermes Harness Architecture</a> — here the harness is held <em>fixed</em> and the model is the variable.</p>
+
+  <h2>Why this matters for agents</h2>
+  <p>An agent is not just a model call. It is a model operating inside a harness: <strong>instructions, tools, schemas, state, retries, rate-limit handling, output expectations, and evals.</strong> From the outside a swap looks like changing a model name in a config file — but the product question is whether the whole system still behaves acceptably.</p>
+
+  <h2>The experiment</h2>
+  <p>A controlled <strong>GitHub-ops benchmark</strong> (<code>acme-agent-evals</code>) against a fictional "Acme SDK" repo seeded with issues, PRs, labels, milestones, and comments. Tasks were the kind a GitHub agent should handle: count open bugs, find issues with zero comments, identify PRs without reviews, compare milestone contents, audit labels and metadata.</p>
+  <p>Every model got the <strong>same task text, fixture repo, <code>gh</code> CLI access, pi.dev runner, GitHub CLI skill, and Arize evaluator suite.</strong> Only the model target changed.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Diagram 1 · The Controlled Sweep — freeze everything but the model</div>
+    <div class="col">
+      <div class="node accent2" style="max-width:620px;width:100%">
+        <div class="nh">FIXED harness</div>
+        <div class="ns">19 tasks · Acme SDK fixture repo · gh CLI · pi.dev runner · GitHub CLI skill · Arize evaluators</div>
+      </div>
+      <div class="arrow">↓ swap only the model ↓</div>
+      <div class="row grow" style="max-width:760px">
+        <div class="node" style="border-color:var(--sonnet)"><div class="nh">Sonnet 4.0</div></div>
+        <div class="node" style="border-color:var(--sonnet)"><div class="nh">Sonnet 4.5</div></div>
+        <div class="node" style="border-color:var(--sonnet)"><div class="nh">Sonnet 4.6</div></div>
+        <div class="node" style="border-color:var(--gpt)"><div class="nh">GPT-5</div></div>
+        <div class="node" style="border-color:var(--gpt)"><div class="nh">GPT-5.5</div></div>
+        <div class="node" style="border-color:var(--gemini)"><div class="nh">Gemini 3.1 Pro</div></div>
+        <div class="node" style="border-color:var(--gemini)"><div class="nh">Gemini 3 Flash</div></div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="node accent" style="max-width:420px"><div class="nh">19 tasks × 7 models × 10 runs<br>= 1,330 scored attempts</div><div class="ns">timeouts &amp; failures included, not removed</div></div>
+    </div>
+    <figcaption>Evaluators scored correctness (primary), output quality, efficiency, latency, and tool adherence.</figcaption>
+  </figure>
+
+  <h2>Result 1 — correctness moved, but stayed in a tight band</h2>
+  <p>The seven targets clustered between <strong>79.6% and 85.1%</strong> correctness — a <strong>5.5 percentage-point</strong> spread. Sonnet 4.6 was highest; GPT-5 lowest. Differences were measurable but contained enough to compare meaningfully.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Diagram 2 · Harnessed Correctness by Model (zero-based scale)</div>
+    <div class="chart">
+      <div class="bar-row"><span class="lbl">Sonnet 4.6</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:85.1%"></span></span><span class="bar-val">85.1%</span></div>
+      <div class="bar-row"><span class="lbl">Sonnet 4.0</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:83.5%"></span></span><span class="bar-val">83.5%</span></div>
+      <div class="bar-row"><span class="lbl">Sonnet 4.5</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:83.4%"></span></span><span class="bar-val">83.4%</span></div>
+      <div class="bar-row"><span class="lbl">Gemini 3 Flash</span><span class="bar-track"><span class="bar-fill fam-gemini" style="width:82.3%"></span></span><span class="bar-val">82.3%</span></div>
+      <div class="bar-row"><span class="lbl">Gemini 3.1 Pro</span><span class="bar-track"><span class="bar-fill fam-gemini" style="width:81.1%"></span></span><span class="bar-val">81.1%</span></div>
+      <div class="bar-row"><span class="lbl">GPT-5.5</span><span class="bar-track"><span class="bar-fill fam-gpt" style="width:80.5%"></span></span><span class="bar-val">80.5%</span></div>
+      <div class="bar-row"><span class="lbl">GPT-5</span><span class="bar-track"><span class="bar-fill fam-gpt" style="width:79.6%"></span></span><span class="bar-val">79.6%</span></div>
+    </div>
+    <div class="keyrow">
+      <span><span class="sw fam-sonnet"></span> Claude Sonnet</span>
+      <span><span class="sw fam-gpt"></span> GPT</span>
+      <span><span class="sw fam-gemini"></span> Gemini</span>
+    </div>
+    <figcaption>On a zero-based axis the bars look nearly equal — which is exactly the point: under a fixed harness, final-answer correctness barely separates the models.</figcaption>
+  </figure>
+
+  <h3>Full harnessed results (10 runs × 19 examples = 190 each)</h3>
+  <div class="scroll">
+  <table>
+    <thead>
+      <tr><th>Model</th><th>Correct.</th><th>Output qual.</th><th>Efficiency</th><th>Latency score</th><th>Tool adh.</th><th>Avg latency (s)</th><th>Avg tool calls</th></tr>
+    </thead>
+    <tbody>
+      <tr class="hl"><td>Sonnet 4.6</td><td class="m">85.1%</td><td>93.9%</td><td>98.2%</td><td>100.0%</td><td>100.0%</td><td class="m">9.5</td><td class="m">1.45</td></tr>
+      <tr><td>Sonnet 4.0</td><td class="m">83.5%</td><td>94.7%</td><td>97.6%</td><td>96.4%</td><td>100.0%</td><td>17.0</td><td>2.36</td></tr>
+      <tr><td>Sonnet 4.5</td><td class="m">83.4%</td><td>95.0%</td><td>98.1%</td><td>97.8%</td><td>100.0%</td><td>16.1</td><td>1.84</td></tr>
+      <tr><td>Gemini 3 Flash</td><td class="m">82.3%</td><td>94.8%</td><td>93.4%</td><td>96.1%</td><td>100.0%</td><td>20.2</td><td>5.82</td></tr>
+      <tr><td>Gemini 3.1 Pro</td><td class="m">81.1%</td><td>93.2%</td><td>95.2%</td><td>92.3%</td><td>100.0%</td><td>28.7</td><td>2.64</td></tr>
+      <tr><td>GPT-5.5</td><td class="m">80.5%</td><td>93.2%</td><td>93.0%</td><td>96.1%</td><td>100.0%</td><td>18.4</td><td>3.39</td></tr>
+      <tr><td>GPT-5</td><td class="m">79.6%</td><td>92.7%</td><td>93.1%</td><td>87.1%</td><td>100.0%</td><td>32.2</td><td>3.14</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Result 2 — correctness hid larger operational drift</h2>
+  <p>The big differences showed up in <strong>how</strong> models reached the answer. Sonnet 4.6 averaged <strong>9.5s / 1.45 tool calls</strong>; GPT-5 averaged <strong>32.2s / 3.14 calls</strong>; Gemini 3 Flash used the most tools at <strong>5.82 calls</strong>. A user may see the same final answer while the system absorbs very different latency, retry risk, and tool traffic.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Diagram 3 · Operational Signature — latency (left) &amp; tool calls (right)</div>
+    <div class="row" style="gap:28px;align-items:flex-start">
+      <div style="flex:1;min-width:280px">
+        <div class="legend" style="margin-bottom:10px;color:#16181d">Avg latency (seconds) — lower is better</div>
+        <div class="chart">
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Sonnet 4.6</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:29.5%"></span></span><span class="bar-val">9.5</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Sonnet 4.5</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:50%"></span></span><span class="bar-val">16.1</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Sonnet 4.0</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:52.8%"></span></span><span class="bar-val">17.0</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">GPT-5.5</span><span class="bar-track"><span class="bar-fill fam-gpt" style="width:57.1%"></span></span><span class="bar-val">18.4</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Gemini 3 Flash</span><span class="bar-track"><span class="bar-fill fam-gemini" style="width:62.7%"></span></span><span class="bar-val">20.2</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Gemini 3.1 Pro</span><span class="bar-track"><span class="bar-fill fam-gemini" style="width:89.1%"></span></span><span class="bar-val">28.7</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">GPT-5</span><span class="bar-track"><span class="bar-fill fam-gpt" style="width:100%"></span></span><span class="bar-val">32.2</span></div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:280px">
+        <div class="legend" style="margin-bottom:10px;color:#16181d">Avg tool calls per task — lower is leaner</div>
+        <div class="chart">
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Sonnet 4.6</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:24.9%"></span></span><span class="bar-val">1.45</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Sonnet 4.5</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:31.6%"></span></span><span class="bar-val">1.84</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Sonnet 4.0</span><span class="bar-track"><span class="bar-fill fam-sonnet" style="width:40.5%"></span></span><span class="bar-val">2.36</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Gemini 3.1 Pro</span><span class="bar-track"><span class="bar-fill fam-gemini" style="width:45.4%"></span></span><span class="bar-val">2.64</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">GPT-5</span><span class="bar-track"><span class="bar-fill fam-gpt" style="width:54%"></span></span><span class="bar-val">3.14</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">GPT-5.5</span><span class="bar-track"><span class="bar-fill fam-gpt" style="width:58.2%"></span></span><span class="bar-val">3.39</span></div>
+          <div class="bar-row" style="grid-template-columns:108px 1fr 44px"><span class="lbl">Gemini 3 Flash</span><span class="bar-track"><span class="bar-fill fam-gemini" style="width:100%"></span></span><span class="bar-val">5.82</span></div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Same tight correctness band, wildly different operational signatures. Sonnet 4.6 is ~3.4× faster than GPT-5 and uses ~4× fewer tool calls than Gemini 3 Flash.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <p style="margin:0">This is the part of model drift that's easy to miss. It doesn't always show up as <em>"the answer is wrong."</em> Sometimes it shows up as <strong>"the product is slower, more expensive, more fragile, or more dependent on retries."</strong></p>
+  </div>
+
+  <h2>Result 3 — tool adherence saturated</h2>
+  <p>Tool adherence hit <strong>100% across every model</strong> — good news (models stayed on the allowed tool path), but also a warning: once a metric saturates, a binary "did it use tools?" check stops telling you much. The next question is <strong>tool discipline</strong>:</p>
+  <ul>
+    <li>Did the model choose the smallest useful <code>gh</code> query?</li>
+    <li>Did it avoid unnecessary retries?</li>
+    <li>Did it handle pagination and empty states?</li>
+    <li>Did it transform JSON deterministically?</li>
+    <li>Did it use the tool when it should, instead of asking the user for help?</li>
+  </ul>
+  <p class="muted">Tool adherence is a guardrail, not the whole eval.</p>
+
+  <h2>Then we removed the harness</h2>
+  <p>To test whether the harness was doing useful work, the same 19 tasks ran through a <strong>raw baseline</strong>: direct API calls with a small JSON protocol for requesting safe read-only <code>gh</code> commands — less scaffolding around how to ask for tools. A stress test, not a product comparison.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Diagram 4 · Correctness Drop When the Harness Is Removed</div>
+    <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Model</th><th>Pi (harnessed)</th><th>Raw</th><th>Δ drop</th><th>Pi tool adh.</th><th>Raw tool adh.</th><th>Raw errors</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sonnet 4.6</td><td class="m">85.1%</td><td>77.2%</td><td class="dropbad">−7.9</td><td>100.0%</td><td>98.9%</td><td>0</td></tr>
+        <tr><td>Sonnet 4.0</td><td class="m">83.5%</td><td>80.4%</td><td class="dropok">−3.1</td><td>100.0%</td><td>96.8%</td><td>0</td></tr>
+        <tr><td>Sonnet 4.5</td><td class="m">83.4%</td><td>77.7%</td><td class="dropbad">−5.7</td><td>100.0%</td><td>92.6%</td><td>0</td></tr>
+        <tr><td>Gemini 3 Flash</td><td class="m">82.3%</td><td>73.6%</td><td class="dropbad">−8.7</td><td>100.0%</td><td>98.4%</td><td>8</td></tr>
+        <tr><td>Gemini 3.1 Pro</td><td class="m">81.1%</td><td>71.7%</td><td class="dropbad">−9.4</td><td>100.0%</td><td>90.5%</td><td>4</td></tr>
+        <tr><td>GPT-5.5</td><td class="m">80.5%</td><td>74.0%</td><td class="dropbad">−6.5</td><td>100.0%</td><td>94.7%</td><td>1</td></tr>
+        <tr><td>GPT-5</td><td class="m">79.6%</td><td>72.5%</td><td class="dropbad">−7.1</td><td>100.0%</td><td>99.5%</td><td>0</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <figcaption>Raw correctness was lower for <strong>every</strong> model. Smallest drop: Sonnet 4.0 (−3.1). Largest: Gemini 3.1 Pro (−9.4). The raw runner also exposed a new failure mode — 13 task attempts exceeded the 8 tool-round limit, mostly on Gemini.</figcaption>
+  </figure>
+
+  <p>This benchmark behaved <strong>more reliably inside a fuller harness.</strong> One likely reason: the harness reduced the amount of protocol design each model had to rediscover on every task. It's consistent with the <strong>"stable harness hypothesis"</strong> — though it doesn't <em>prove</em> the harness caused all the stability.</p>
+
+  <h2>What to do before you swap models</h2>
+  <p>Treat model swaps like <strong>migrations, not vibes</strong>:</p>
+  <ol>
+    <li><strong>Freeze the harness</strong> — same tools, prompts, fixture, dataset, and scoring.</li>
+    <li><strong>Run enough repeats</strong> to separate signal from noise.</li>
+    <li><strong>Score both</strong> final-answer quality <em>and</em> operational behavior.</li>
+    <li><strong>Inspect task-level failures</strong> instead of stopping at the average.</li>
+    <li><strong>Use the failures as the migration plan</strong> before changing production traffic.</li>
+  </ol>
+  <div class="callout key">
+    <h4>The useful view is both</h4>
+    <p style="margin:0">"Did the model get the job done — <em>and</em> what did the system have to do to make that happen?" If you measure only correctness, you may conclude the models are interchangeable. If you measure only latency, you may miss that a slower model is more complete. A model card tells you what changed in the model; <strong>your traces, evaluator results, and experiment comparisons tell you what changed in your product.</strong></p>
+  </div>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Nancy Chauhan, <a href="https://arize.com/blog/what-we-learned-testing-7-models-under-the-same-agent-harness/" target="_blank" rel="noopener">"What we learned testing 7 models under the same agent harness" — Arize AI blog</a> (May 20, 2026). All tables reproduce the article's data exactly; the bar charts are faithful HTML/CSS redraws of the article's figures (zero-based, family-colored). Benchmark code: <code>acme-agent-evals</code>.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-05-31 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

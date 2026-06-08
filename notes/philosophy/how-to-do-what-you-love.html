@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Do What You Love — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:42px;line-height:1.12;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:27px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  /* like-scale */
+  .scale{display:flex;flex-direction:column;gap:0;margin:8px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .scale .seg{padding:14px 16px}
+  .scale .top{background:rgba(224,138,107,.12);border-bottom:1px dashed var(--line)}
+  .scale .mid{background:rgba(143,208,138,.10);border-bottom:1px dashed var(--line)}
+  .scale .bot{background:rgba(224,138,107,.12)}
+  .scale b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Do What You Love</h1>
+    <div class="meta">
+      <span>By <strong>Paul Graham</strong></span>
+      <span class="dot">•</span>
+      <span>Published January 2006</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 5, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Work &amp; Meaning</span>
+      <span class="tag">Career</span>
+      <span class="tag">Prestige</span>
+      <span class="tag">Life Design</span>
+    </div>
+  </header>
+
+  <p class="lede">"Do what you love" is four words of advice that's almost useless on its own — because doing what you love is complicated. This essay is about the complications.</p>
+
+  <div class="callout key">
+    <h4>The throughline</h4>
+    <p style="margin:0">To do something well you have to like it — so the most successful people genuinely like their work. But most of us are <strong>misled in childhood</strong> (work = pain), then <strong>lured off course</strong> by prestige and money. Finding work you love is rare and hard; the discipline isn't in forcing the work, it's in the <strong>search</strong>. Keep "what you want" separate from "what seems possible," and <strong>always produce.</strong></p>
+  </div>
+
+  <h2>The trap: work was defined as not-fun</h2>
+  <p>As kids, work and fun seemed like opposites by definition. School was a "dilute version of work" meant to prepare us for the real thing, and teachers — for whom work mostly <em>wasn't</em> fun — implicitly taught that work isn't fun. By the time you're old enough to choose, you've absorbed the lesson and think: <em>"I am not like these people; I am not suited to this world."</em></p>
+  <p>Graham argues kids are actually told <strong>three lies</strong>:</p>
+  <figure class="diagram">
+    <div class="dtitle">The three lies about work</div>
+    <div class="col">
+      <div class="node warn"><div class="nh">1. School-work = real work</div><div class="ns">the busywork you're taught to call "work" isn't what real work is</div></div>
+      <div class="node warn"><div class="nh">2. Grown-up work is worse than school</div><div class="ns">not necessarily true</div></div>
+      <div class="node warn"><div class="nh">3. The adults like their jobs</div><div class="ns">many are lying — the most dangerous liars can be your own parents</div></div>
+    </div>
+    <figcaption>"What a recipe for alienation." A parent who modeled loving their work might help a kid more than an expensive house.</figcaption>
+  </figure>
+  <p>Even after work broke free from "making a living" for Graham in college, his idea of work still carried "a large component of pain" — the belief that hard problems can't be fun, so you must force yourself. <em>"If you think something's supposed to hurt, you're less likely to notice if you're doing it wrong."</em></p>
+
+  <h2>Bounds: how much should you like your work?</h2>
+  <p>If you don't know how much you're <em>supposed</em> to like your work, you'll stop searching too early — and end up with something chosen by your parents, by money, by prestige, or by inertia. Graham sets two bounds:</p>
+  <figure class="diagram">
+    <div class="dtitle">The bounds of "do what you love"</div>
+    <div class="scale">
+      <div class="seg top"><b>Upper bound</b> — NOT "what you'd most like to do this second." Even Einstein wanted coffee sometimes. It means happiest over a longer span (a week, a month) — because unproductive pleasures pall; lying on the beach gets old.</div>
+      <div class="seg mid"><b>The target</b> — work you not only enjoy but <b>admire</b>: at the end you can say "wow, that's pretty cool." There has to be a <b>test</b> (which is why merely reading books falls just short — no test of how well you read it). Best test (via Gino Lee): <b>do things that would make your friends say wow.</b></div>
+      <div class="seg bot"><b>Lower bound</b> — you must like the work more than any unproductive pleasure; enough that "spare time" seems a mistaken idea. Below this you hit terrible procrastination, and forced work gives inferior results.</div>
+    </div>
+    <figcaption>Not "happiest this second" — happiest over a week or a month, doing something with a test you can pass.</figcaption>
+  </figure>
+
+  <h2>Sirens: prestige and money</h2>
+  <p>Two forces warp your sense of what you enjoy. <strong>Prestige</strong> is the opinion of people whose judgment you have no reason to respect — yet it's "a powerful magnet that warps even your beliefs about what you enjoy," causing you to work not on what you like but on <em>what you'd like to like</em> (the would-be novelist who loves reading novels but not the actual work of "making up elaborate lies").</p>
+  <blockquote>Prestige is just fossilized inspiration. If you do anything well enough, you'll make it prestigious… So just do what you like, and let prestige take care of itself.</blockquote>
+  <div class="callout">
+    <p style="margin:0 0 6px"><strong>Two practical heuristics on prestige:</strong></p>
+    <ul style="margin:0">
+      <li>"It might be a good rule simply to avoid any prestigious task. If it didn't suck, they wouldn't have had to make it prestigious."</li>
+      <li>If you admire two kinds of work equally but one is more prestigious, choose <em>the other</em> — your admiration for the less prestigious one is probably more genuine.</li>
+    </ul>
+  </div>
+  <p><strong>Money</strong> alone isn't that dangerous (no one's tempted by well-paid but disdained work like telemarketing). The danger is <strong>money + prestige</strong> together — corporate law, medicine — "dangerously tempting to someone young, who hasn't thought much about what they really like."</p>
+  <figure class="diagram">
+    <div class="dtitle">The unpaid test</div>
+    <div class="node accent2" style="max-width:560px;width:100%"><div class="nh">Would you do it even if you weren't paid — even if you had to take a day job to support it?</div><div class="ns">"How many corporate lawyers would do their current work for free, in their spare time, waiting tables to survive?" Math would happen without math departments; most dreary English papers would not.</div></div>
+    <div class="legend">Tip: avoid any field whose practitioners say they're "just trying to make a living."</div>
+  </figure>
+  <p class="muted">Parents tend to err toward money — not because they're materialistic, but because, as parents, they "share risks more than rewards."</p>
+
+  <h2>Discipline: the real work is the search</h2>
+  <p>So few find work they love (Graham guesses a few hundred thousand out of billions) that you shouldn't underestimate the task — or feel bad if you haven't succeeded. Admitting you're discontented already puts you ahead of those still in denial. The paradox:</p>
+  <blockquote>Doing great work takes less discipline than people think — because the way to do great work is to find something you like so much that you don't have to force yourself. But <em>finding</em> work you love does usually require discipline.</blockquote>
+  <p>Careers more often have "the trajectory of a ping-pong ball" (study A, drop out to do B, become famous for C) than glide along railroad tracks. Two tests to stay honest:</p>
+  <div class="twocol">
+    <div class="vs a">
+      <h4>Do a good job anyway</h4>
+      <p style="margin:0;font-size:14px">Try to do well at whatever you're doing, even if you don't like it — so you know you're not using dissatisfaction as an excuse for laziness, and you build the habit of doing things well.</p>
+    </div>
+    <div class="vs b">
+      <h4>Always produce</h4>
+      <p style="margin:0;font-size:14px">Are you actually writing pages, however bad? Producing keeps you from using "the grand novel I'll write one day" as an opiate.</p>
+    </div>
+  </div>
+  <blockquote>"Always produce" will discover your life's work the way water, with the aid of gravity, finds the hole in your roof.</blockquote>
+  <p>And keep two questions <strong>separate</strong>: what you want to work on vs. what seems possible. It's painful to see the gap, so most people pre-emptively lower their expectations — "Oh, I can't draw" is a statement of intention ("I'm not going to try"), not fact.</p>
+
+  <h2>Two routes to getting paid for it</h2>
+  <p>Since it's hard to get paid for work you love, there are two routes:</p>
+  <figure class="diagram">
+    <div class="dtitle">Organic vs. Two-Job</div>
+    <div class="twocol">
+      <div class="vs good">
+        <h4>The organic route</h4>
+        <p style="margin:0;font-size:14px">As you become more eminent, gradually grow the parts of your job you like at the expense of those you don't. Common; happens naturally to anyone who does good work. <strong>Downside:</strong> slow and uncertain (even tenure isn't real freedom).</p>
+      </div>
+      <div class="vs a">
+        <h4>The two-job route</h4>
+        <p style="margin:0;font-size:14px">Work at things you don't like to fund the things you do — from a "day job" to working until you never need money again. <strong>Lets you jump walls</strong> between fields. <strong>Danger:</strong> life gets expensive, the money job can rot your brain, and it teaches you little about what you actually like.</p>
+      </div>
+    </div>
+    <figcaption>Which to take depends on how sure you are, how well you take orders, your risk tolerance, and the odds anyone will pay for what you want to do.</figcaption>
+  </figure>
+
+  <h2>Don't decide too soon</h2>
+  <p>Kids who know early what they want seem impressive — "but odds are it's wrong." Graham's cautionary example: the determined high-schooler who became a doctor, overcame every obstacle "including, unfortunately, not liking it," and now has "a life chosen for her by a high-school kid." You must decide on "ridiculously incomplete information," so use <strong>flexible media</strong>: pick work that could become either an organic or two-job career, and early on seek jobs that let you do many different things.</p>
+  <div class="callout">
+    <p style="margin:0">Beware the fantasy of "make money first, find meaning later." Constraints give life shape — look at lottery winners. "The happiest people are not those who have [financial security], but those who like what they do."</p>
+  </div>
+
+  <h2>The home stretch</h2>
+  <blockquote>Whichever route you take, expect a struggle… But if you have the destination in sight you'll be more likely to arrive at it. If you know you can love work, you're in the home stretch, and if you know what work you love, you're practically there.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Paul Graham, <a href="https://www.paulgraham.com/love.html" target="_blank" rel="noopener">"How to Do What You Love"</a> (January 2006). This note condenses and reorganizes a long essay; the diagrams are HTML/CSS visualizations of Graham's actual arguments. Quoted lines are his, verbatim. The essay credits Gino Lee for the "make your friends say wow" test and thanks several readers of early drafts.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-05 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
