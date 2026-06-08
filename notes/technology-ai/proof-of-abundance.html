@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proof of Abundance — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  .disclaimer{background:rgba(56,88,214,.07);border:1px solid #cfd8f2;border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#33405e}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  blockquote{font-style:italic;font-size:18px;color:#33405e;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.ok{border-color:var(--ok)} .node.warn{border-color:var(--warn)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .proofs{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  @media(max-width:720px){.proofs{grid-template-columns:1fr 1fr}}
+  .proof{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--ok);border-radius:10px;padding:12px 13px;text-align:center}
+  .proof .big{font-size:22px;font-weight:700;color:var(--accent);letter-spacing:-.02em}
+  .proof .lbl{font-size:12px;color:#16181d;font-weight:600;margin-top:4px}
+  .proof .sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .drop{display:flex;flex-direction:column;gap:9px;margin:6px 0}
+  .drow{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:12px;font-size:13px}
+  .drow .l{color:#16181d;text-align:right;font-weight:600}
+  .drow .b{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .drow .b b{color:var(--ok)}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Proof of Abundance… And How to Survive It</h1>
+    <div class="meta">
+      <span>By <strong>Peter H. Diamandis</strong> (@PeterDiamandis)</span>
+      <span class="dot">•</span>
+      <span>Published Apr 11, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 8, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Abundance</span>
+      <span class="tag">Exponential Tech</span>
+      <span class="tag">Energy</span>
+      <span class="tag">Optimism</span>
+    </div>
+  </header>
+
+  <p class="lede">We forget the world is getting better on so many levels. Abundance isn't coming — it's already in the data, right now.</p>
+
+  <div class="disclaimer">ℹ️ <strong>Context:</strong> This piece is adapted from a post promoting the author's new book <em>We Are As Gods: A Survival Guide for the Age of Abundance</em> (with Steven Kotler) and an event. The five statistics below are the figures Diamandis cites; captured here for the argument, not independently verified.</div>
+
+  <div class="callout key">
+    <h4>The thesis</h4>
+    <p style="margin:0">Across materials, manufacturing, employment, and computation, the same trajectory keeps repeating: <strong>exponential improvement → collapsing costs → expanding access.</strong> That's the signature of abundance. Technology creates it; the open question is whether our <strong>institutions</strong> can distribute it wisely.</p>
+  </div>
+
+  <p>Diamandis co-wrote <em>Abundance: The Future Is Better Than You Think</em> (2012) and is following it with <em>We Are As Gods</em> — taking its name from Stewart Brand's 1968 line: <em>"We are as gods — and we might as well get good at it."</em> On his Moonshots podcast he's started collecting recent breakthroughs as ongoing "proof of abundance." Five caught his attention this week — "not because they're flashy, because they're undeniable."</p>
+
+  <h2>Five proofs of abundance</h2>
+  <figure class="diagram">
+    <div class="dtitle">This week's data points</div>
+    <div class="proofs">
+      <div class="proof"><div class="big">49.4%</div><div class="lbl">Renewables</div><div class="sub">of global electricity capacity (5.15 TW); solar = 75% of new adds</div></div>
+      <div class="proof"><div class="big">−99%</div><div class="lbl">Batteries</div><div class="sub">lithium: $10,000 (1991) → &lt;$100 today</div></div>
+      <div class="proof"><div class="big">&lt;$1k</div><div class="lbl">Lab diamonds</div><div class="sub">2-carat, down 80% since Jan 2020 (vs $22–28k natural)</div></div>
+      <div class="proof"><div class="big">+640k</div><div class="lbl">AI jobs</div><div class="sub">created in the US, 2023–25 — mostly new categories</div></div>
+      <div class="proof"><div class="big">1/min</div><div class="lbl">Solar robots</div><div class="sub">4 Maximo robots laying 100 MW at one panel per minute</div></div>
+    </div>
+    <figcaption>Renewables · batteries · materials · employment · autonomous deployment — five domains, one direction.</figcaption>
+  </figure>
+
+  <h3>The cost collapses, in brief</h3>
+  <figure class="diagram">
+    <div class="dtitle">Costs in free-fall</div>
+    <div class="drop">
+      <div class="drow"><span class="l">Lithium battery</span><span class="b">$10,000 (1991) → <b>&lt;$100</b> &nbsp;·&nbsp; −99%</span></div>
+      <div class="drow"><span class="l">2-ct lab diamond</span><span class="b">~$5,000 → <b>&lt;$1,000</b> &nbsp;·&nbsp; −80% since 2020 (natural: $22–28k)</span></div>
+      <div class="drow"><span class="l">Solar (capacity)</span><span class="b">now <b>49.4%</b> of global electricity capacity, solar driving 75% of growth</span></div>
+    </div>
+    <figcaption>"Abundance doesn't require central planning. It requires innovation and competition." Scale and technology solved the battery question; marketing (De Beers' "three months' salary") can't beat chemistry.</figcaption>
+  </figure>
+
+  <h2>On AI and jobs</h2>
+  <p>The AI-jobs figure is the one Diamandis leans on hardest: <strong>640,000 new US jobs (2023–2025), mostly in categories that didn't exist three years ago</strong> — creating work, not just replacing it. He frames it as the recurring pattern of every major transition:</p>
+  <figure class="diagram">
+    <div class="dtitle">The transition pattern</div>
+    <div class="row" style="align-items:center;max-width:680px;flex-wrap:nowrap">
+      <div class="node warn"><div class="nh">Short-term disruption</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Long-term expansion</div><div class="ns">more opportunity than destroyed</div></div>
+    </div>
+    <div class="legend">Printing press · steam engine · electricity · the internet — each "supposed to end work," each created more.</div>
+    <figcaption>"The question isn't whether jobs will exist. It's whether you're building skills for the new categories or clinging to the old ones."</figcaption>
+  </figure>
+  <p>And the flywheel he loves most: <strong>robots + AI + energy reinforcing each other.</strong> Four Maximo robots autonomously installing solar in the California desert means "Abundance stops being theoretical. It becomes mechanical." It's global, too — Pakistan now generates most of its energy from solar; solar is exploding across Africa.</p>
+
+  <h2>The pattern — and the real question</h2>
+  <figure class="diagram">
+    <div class="dtitle">The signature of abundance</div>
+    <div class="col">
+      <div class="row" style="max-width:700px;flex-wrap:nowrap;align-items:center">
+        <div class="node accent"><div class="nh">Exponential improvement</div></div>
+        <div class="arrow">→</div>
+        <div class="node accent"><div class="nh">Collapsing costs</div></div>
+        <div class="arrow">→</div>
+        <div class="node accent2"><div class="nh">Expanding access</div></div>
+      </div>
+      <div class="legend">repeats across → Materials · Manufacturing · Employment · Computation</div>
+    </div>
+    <figcaption>Not coincidence — the signature of exponential times.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <h4>Technology vs. institutions</h4>
+    <div class="twocol" style="margin-top:8px">
+      <div class="vs a"><h4>Technology creates abundance</h4><p style="margin:0;font-size:14px">The curves are real and accelerating; the supply problem keeps getting solved by innovation + competition.</p></div>
+      <div class="vs b"><h4>Institutions decide who captures it</h4><p style="margin:0;font-size:14px">Markets, governments, legal frameworks determine whether abundance pools at the top or spreads broadly.</p></div>
+    </div>
+    <p style="margin:10px 0 0">"We have the technology. Do we have the <strong>wisdom</strong> to build institutions that match it?"</p>
+  </div>
+
+  <h2>The choice</h2>
+  <blockquote>Abundance isn't coming. It's in the data, right now… The only question is whether you see it — or whether you're still watching the Crisis News Network.</blockquote>
+  <p>Diamandis's close is a posture, not just a forecast: <em>choose to see it, choose to build for it.</em> The future, in his telling, is arriving ahead of schedule — and if you're paying attention, you can see it everywhere.</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Peter H. Diamandis, <a href="https://x.com/PeterDiamandis/status/2043024420231426412" target="_blank" rel="noopener">"Proof of Abundance… And How to Survive It"</a> (X article, Apr 11 2026). The post promotes his book <em>We Are As Gods</em> (with Steven Kotler) and references Stewart Brand and Ray Kurzweil; the five statistics are his cited figures, captured as-is and not independently verified. Diagrams are HTML/CSS visualizations of the article's points. Related: <a href="llms-are-not-brains.html">LLMs Are Not Brains</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-08 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
