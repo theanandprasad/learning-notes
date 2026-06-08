@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Being a Reply Guy Helped Me Gain 1,000 Followers in 2 Months — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How Being a Reply Guy Helped Me Gain 1,000 Followers in 2 Months</h1>
+    <div class="meta">
+      <span>By <strong>Ehsan</strong> (@acadictive)</span>
+      <span class="dot">•</span>
+      <span>Published Apr 10, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 8, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Audience Growth</span>
+      <span class="tag">X / Twitter</span>
+      <span class="tag">Replies</span>
+      <span class="tag">Consistency</span>
+    </div>
+  </header>
+
+  <p class="lede">Gained 1,000 followers in 2 months — without going viral and without posting more. The trick was becoming a "reply guy," but done with intention rather than spray-and-pray.</p>
+
+  <div class="disclaimer">ℹ️ <strong>Captured as-is.</strong> A personal X-growth playbook; the follower numbers and conversion rates are the author's own claims and based on his experience (some explicitly "not official documentation"). Archived for the method, not as guaranteed results.</div>
+
+  <div class="callout key">
+    <h4>The core idea</h4>
+    <p style="margin:0">Being a reply guy <strong>≠ replying randomly</strong>. The method rests on <strong>four pillars</strong> — <strong>Priority</strong> (roughly 80/20 in favor of replies over your own posts), <strong>Volume</strong> (100+ replies a day), <strong>Value</strong> (meaningful replies, not "nice" / "congrats"), and <strong>Intention</strong> (grow your network through real conversations). Miss any one and the whole thing falls apart.</p>
+  </div>
+
+  <h2>His numbers</h2>
+  <p>The shift is the whole story. For the first ~2 months he treated his account like most people do — posting hard. Then he flipped the ratio toward replies, and growth changed gear.</p>
+  <div class="twocol">
+    <div class="vs b">
+      <h4>Before — posting-led (first 57 days)</h4>
+      <p style="margin:0;font-size:14px">Posting <strong>3–4×/day</strong> plus only <strong>20–50 replies/day</strong>. Result: roughly <strong>200 followers</strong> over the whole stretch.</p>
+    </div>
+    <div class="vs good">
+      <h4>After — reply-led</h4>
+      <p style="margin:0;font-size:14px">Flipped to mostly replies, <strong>100–150/day</strong>. Result: <strong>15–20 followers/day</strong> (some days 30–50), reaching <strong>~1,200</strong>.</p>
+    </div>
+  </div>
+
+  <h2>The four pillars</h2>
+  <figure class="diagram">
+    <div class="dtitle">Miss one and it falls apart</div>
+    <div class="row grow" style="max-width:700px">
+      <div class="node accent2"><div class="nh">Priority</div><div class="ns">≈80/20 — replies over your own posts</div></div>
+      <div class="node accent"><div class="nh">Volume</div><div class="ns">100+ replies a day</div></div>
+      <div class="node ok"><div class="nh">Value</div><div class="ns">meaningful replies, not "nice / congrats"</div></div>
+      <div class="node"><div class="nh">Intention</div><div class="ns">grow your network through real conversations</div></div>
+    </div>
+    <figcaption>The four legs the whole method stands on.</figcaption>
+  </figure>
+
+  <h2>The principles that worked</h2>
+  <div class="steps">
+    <div class="step"><b>1 · Aim for ~100 replies/day.</b> Realistic and powerful — at this pace expect roughly 10–30 followers/day.</div>
+    <div class="step"><b>2 · Engage active users.</b> Sort by newest and reply while the post is fresh; live inside active niche communities where conversation is happening now.</div>
+    <div class="step"><b>3 · Engage smaller accounts.</b> They're more likely to reply, your reply is more visible, and the follow probability is higher. Large accounts need luck and timing.</div>
+    <div class="step"><b>4 · Ideally reply to verified users.</b> More impressions, more active, useful for future monetization — but don't ignore non-verified accounts entirely.</div>
+    <div class="step"><b>5 · Add real value.</b> Share your experience, give useful suggestions, ask thoughtful questions, review a product or landing page, answer questions, share resources — move the conversation forward.</div>
+    <div class="step"><b>6 · You don't need to fully understand the post.</b> Engage with the part you liked and ask "what's next?" — you can still contribute.</div>
+    <div class="step"><b>7 · Don't abandon conversations before they convert.</b> Reply → they respond → you respond again. After the 2nd–3rd exchange, sometimes suggest becoming mutuals.</div>
+    <div class="step"><b>8 · Reply quickly when someone responds.</b> Momentum matters. Do reply sessions in focused 45–60 minute blocks.</div>
+    <div class="step"><b>9 · Ask for a follow / follow-back politely, at the right time.</b> Never at the start. Organic follow runs about 1 in 20–30, but a polite ask at the right moment converts well.</div>
+    <div class="step"><b>10 · Avoid accounts that rarely follow back.</b> E.g. 1,000 followers but following only 50 → low odds. Look for balanced ratios.</div>
+    <div class="step"><b>11 · Stay inside your niche.</b> 2–3 topics, 2–3 communities. Off-niche followers won't stick, your audience gets confused, reach drops, and the algorithm loses clarity on who you are.</div>
+  </div>
+
+  <h2>How to do 100+ replies/day without getting restricted</h2>
+  <ul>
+    <li><strong>Respect platform limits.</strong> Typing too fast or repeating short replies can trigger temporary restrictions.</li>
+    <li><strong>Split the work into 3–4 sessions</strong> of 45–60 minutes each rather than one marathon.</li>
+    <li><strong>Avoid AI-generated replies.</strong> People and algorithms both notice — your reputation suffers.</li>
+    <li><strong>Avoid short / template responses.</strong> They kill conversations and read as low-quality engagement.</li>
+    <li><strong>Don't open with "Let's connect" or the 🤝 emoji at scale.</strong> It can trigger restrictions and rarely converts without a real connection first.</li>
+  </ul>
+
+  <h2>The numbers, roughly</h2>
+  <div class="callout">
+    <p style="margin:0 0 8px"><strong>The author's working figures (his experience, not official):</strong></p>
+    <ul style="margin:0">
+      <li>Reply → follower conversion runs about <strong>10–30%</strong> — so ~100 replies ≈ <strong>10–30 followers</strong>.</li>
+      <li>~100 replies takes roughly <strong>3 hours</strong>, best split into 3–4 sessions.</li>
+      <li>At an early stage, <strong>80–90%</strong> of new followers come from replies, not posts.</li>
+      <li><strong>Consistency beats volume.</strong> Busy day? 1 hr → 20–30 replies. Got the time? 3 hrs → 90–100. Showing up daily matters more than any single big session.</li>
+    </ul>
+  </div>
+
+  <h2>The mindset</h2>
+  <p>Don't chase easy followers. Find good people and good posts, start real conversations, build trust, and let the follow happen naturally. Over time those conversations turn into familiar names — people who follow your journey because they actually want to, not because you asked.</p>
+  <blockquote>Growth becomes a natural side effect of connection.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Ehsan (@acadictive — PhD, dev, indie builder; building 1 Minute Academy / ibuildinpublic.com), <a href="https://x.com/acadictive/status/2042521300766167403" target="_blank" rel="noopener">"How Being a Reply Guy Helped Me Gain 1,000 Followers in 2 Months"</a> (X article, Apr 10 2026). Conversion rates and follower numbers are the author's own experience (some explicitly not official documentation). The post ends by promoting his projects. Diagrams are HTML/CSS reconstructions of the article's points. Related: <a href="growing-on-crypto-twitter.html">The Real Reason You're Not Growing on CT</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-08 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
