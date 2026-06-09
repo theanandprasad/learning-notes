@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Burning All Your Bridges Is a Cheat Code to Success — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Burning All Your Bridges Is a Cheat Code to Success</h1>
+    <div class="meta">
+      By <strong>Tim Denning</strong> (@Tim_Denning)
+      <span class="dot">·</span> Published Apr 16, 2026
+      <span class="dot">·</span> Saved Jun 9, 2026
+    </div>
+    <div class="tags">
+      <span class="tag">Reinvention</span>
+      <span class="tag">Identity</span>
+      <span class="tag">Change</span>
+      <span class="tag">Decisiveness</span>
+    </div>
+  </header>
+
+  <p class="lede">Deliberately cutting off your past — "burning your bridges" — removes the option to retreat. With no way back, the decision is made for you, and you're forced forward into a rebirth.</p>
+
+  <div class="disclaimer">Note: A deliberately provocative manifesto by a creator who sells writing courses; it ends with a promo CTA and leans on personal anecdotes. Distilled and toned down here — the original is blunter. Captured for the idea, not as one-size-fits-all advice (cutting people off has real costs; use judgment).</div>
+
+  <div class="callout key">
+    <h4>The key idea</h4>
+    <p>"Don't burn your bridges" is the conventional wisdom; Denning argues the opposite. When you can't return to a past life, the decision is made <em>for</em> you — the only way is forward. Burning bridges is how you accept change, shed an old identity, and let yourself be "reborn." But do it <strong>without ego</strong>, via four rules.</p>
+  </div>
+
+  <h2>Why it works: it frees you from the past</h2>
+  <p>It's easy to get trapped by an old identity. Denning was a banker. He was a top Medium writer right up until that era faded. The temptation in both cases was to cling to a version of himself that the world had already moved past.</p>
+  <p>His framing: <em>"Those who win in life are reborn over and over."</em> Removing the option to return is what sets you free to do the reinventing. Eleven years ago he put his <strong>real name</strong> on LinkedIn precisely so there'd be no taking it back — burning that bridge committed him publicly to becoming the writer he eventually became. The lack of an exit was the whole point.</p>
+
+  <h2>It's an acceptance of change</h2>
+  <p>The only people who lose, he argues, are those who refuse to change. Being able to burn a bridge is really the same muscle as being able to embrace change — you can't do one without the other.</p>
+  <p>Identity is powerful, and becoming several different people across one life is a superpower, not a failure of consistency. His own arc: drummer → musician/producer → twenty-something entrepreneur → banker → writer → father → "still figuring out what's next." <em>"Being a chameleon means you can become anybody."</em></p>
+
+  <figure class="diagram">
+    <div class="dtitle">The mechanism</div>
+    <div class="row grow">
+      <div class="node accent2"><div class="nh">Old identity</div><div class="ns">who you were</div></div>
+      <div class="arrow">→</div>
+      <div class="node warn"><div class="nh">Burn the bridge</div><div class="ns">remove the way back</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">No retreat</div><div class="ns">decision made for you</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Reborn</div><div class="ns">forced forward</div></div>
+    </div>
+    <figcaption>Cutting off the past converts a hard choice into the only available path.</figcaption>
+  </figure>
+
+  <h2>The hardest bridge</h2>
+  <p>Sometimes the bridge isn't a job or a platform — it's your childhood, your hometown, or old friends. Denning describes cutting off a best friend who was struggling with addiction, along with some other connections, in order to heal and move on. He frames it as necessary self-preservation, handled with care rather than cruelty.</p>
+  <p>His observation: old connections often <em>"hold on to the person we were decades ago instead of who we are now."</em> Different phases of life simply need different people around you, and refusing to acknowledge that traps everyone in an outdated story.</p>
+
+  <h2>The four rules to do it right</h2>
+  <p>Burning a bridge well is not the same as torching it. The difference is ego. These four rules keep the act clean.</p>
+
+  <div class="steps">
+    <div class="step"><b>Rule 1 — No ego.</b> Ego is the enemy. Don't leave with a middle-finger, "I'm-out-because-this-place-sucks" farewell post. It's a waste of time and it quietly turns off future collaborators. Humility, by contrast, tends to bring more opportunities <em>after</em> the breakup, not fewer.</div>
+    <div class="step"><b>Rule 2 — Don't explain yourself.</b> Explaining invites argument, and argument lets people build a case for you to revert to the old you. When an angry reader demanded the "old" Tim back, his entire reply was: <em>"People change."</em> As he puts it, <em>"the only person you owe answers to is yourself."</em></div>
+    <div class="step"><b>Rule 3 — It's okay to ghost.</b> Normally ghosting is weak, but here it's a gift. Most people stop after one or two attempts, so silence spares you both the explaining and the pitch to come back. <em>"An email, call, or text is a request — not an obligation."</em></div>
+    <div class="step"><b>Rule 4 — Avoid temptation.</b> Right after burning a bridge, the pull to run back is strongest. Resist it. <em>"If it didn't work before, it's not going to work again."</em> A new path with no fallback is precisely what forces you to make the new thing work.</div>
+  </div>
+
+  <h2>The end is a new beginning</h2>
+  <p>Let one phase actually end so the next one can start. Make peace with the ending, embrace the chaos of the transition, and let calm take over once there's genuinely no way back. The discomfort isn't a sign you chose wrong — it's the cost of the rebirth.</p>
+
+  <blockquote>
+    "Bridges look spectacular as they burn."
+    <cite>— Tim Denning</cite>
+  </blockquote>
+
+  <hr class="soft">
+  <p class="src">Source: Tim Denning (@Tim_Denning), <a href="https://x.com/Tim_Denning/status/2044732912269230445">Burning All Your Bridges Is a Cheat Code to Success</a> (X article, Apr 16 2026). A provocative opinion piece ending with a promo/follow CTA; personal anecdotes are the author's. Distilled and toned down here. Related: <a href="../philosophy/outgrow-employment.html">When You Outgrow the Idea of Employment</a> (his companion manifesto).</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>
