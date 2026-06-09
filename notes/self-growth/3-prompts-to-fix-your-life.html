@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 Prompts to Fix Your Life (Identity → Value → Revenue) — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>3 Prompts to "Fix Your Life": Identity → Value → Revenue</h1>
+    <div class="meta">
+      <span>By <strong>hoeem</strong> (@hooeem)</span>
+      <span class="dot">•</span>
+      <span>Published Jan 14, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">AI Prompts</span>
+      <span class="tag">Identity</span>
+      <span class="tag">Trust Moat</span>
+      <span class="tag">Monetization</span>
+      <span class="tag">Dan Koe</span>
+    </div>
+  </header>
+
+  <p class="lede">Three big LLM "mega-prompts" chained into one arc: first find your identity, then make it valuable in an AI world, then turn it into revenue.</p>
+
+  <div class="disclaimer">⚠️ <strong>Captured as-is, distilled.</strong> The "fix your entire life in 1 day" framing is hyperbole, and the article ends by selling the author's own $5 X community ("seven c pirate crew"). The prompts are his creative product — this note distills each prompt's <em>framework and key outputs</em> rather than reproducing the full copy-paste text (read the source for that). He credits the whole idea to a Dan Koe post (Koe said don't use AI; the author disagrees), and notes each prompt is meant to be paired with a source article you paste in.</div>
+
+  <div class="callout key">
+    <h4>The arc</h4>
+    <p style="margin:0">A three-step pipeline you run through an LLM: <strong>(1) engineer your identity</strong> (change the foundation, not the behavior), <strong>(2) build a "trust moat"</strong> so you stay valuable as AI makes information free, and <strong>(3) monetize</strong> that identity + moat through a tiered ladder. Each prompt's output (an evolving "Video Game Map" of your life) feeds the next.</p>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">The three-prompt pipeline</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node accent"><div class="nh">1 · The Foundation</div><div class="ns">Identity engineering — "Master Identity Strategist / Cybernetic Coach"</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">2 · The Protection</div><div class="ns">Future-proof your value — "Digital Sovereign Strategist"</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">3 · The Engine</div><div class="ns">Revenue from identity + value — "Sovereign Monetization Architect"</div></div>
+    </div>
+    <figcaption>Each prompt assigns the AI a role and interrogates the output of the previous one.</figcaption>
+  </figure>
+
+  <h2>Prompt 1 — Identity &amp; Vision (the foundation)</h2>
+  <p>Role: a "Master Identity Strategist &amp; Cybernetic Coach." Core philosophy: <strong>"discipline is a symptom of a rotting foundation"</strong> — real change is <em>first-order</em> (shift identity), not <em>second-order</em> (force behavior). It runs on a Cybernetic loop (Act → Sense → Compare → Iterate) and the Teleological principle: all behavior, even procrastination, is a goal-oriented attempt to protect your current identity. (If you set a goal like "be more productive," the prompt is told to stop you and re-route to identity questions.)</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The 3-phase identity flip (across one day)</div>
+    <div class="steps">
+      <div class="step"><b>Morning — Dissonance (the Excavation).</b> Confront your "Anti-Vision" until you feel disgust. Questions: the dull dissatisfaction you've learned to tolerate; the truth about your life you couldn't admit to someone you respect; a vivid Tuesday 10 years out if nothing changes (who gave up on you, what closed) — compressed into one Anti-Vision sentence you refuse to live.</div>
+      <div class="step"><b>Daytime — Uncertainty (the Pattern Break).</b> Map your Ego Stage (Self-Protective, Conformist, Conscientious, Strategist… one of 9) and your "identity defense" mechanisms; set 4 time-stamped phone interrupts to break autopilot.</div>
+      <div class="step"><b>Evening — Discovery (the Synthesis).</b> Build a "Video Game" action plan (below).</div>
+    </div>
+  </figure>
+
+  <figure class="diagram">
+    <div class="dtitle">The output: a "Video Game Map" (6 parts)</div>
+    <table>
+      <tr><th>Component</th><th>What it is</th></tr>
+      <tr><td>The Win (Vision)</td><td>Your 3-year ideal Tuesday</td></tr>
+      <tr><td>The Stakes (Anti-Vision)</td><td>The dissatisfied life you're fleeing</td></tr>
+      <tr><td>The Mission (1-year goal)</td><td>The sole priority that breaks the old pattern</td></tr>
+      <tr><td>The Boss Fight (1-month project)</td><td>The specific skill/asset you're building now</td></tr>
+      <tr><td>The Quests (daily levers)</td><td>2–3 identity-based actions you time-block</td></tr>
+      <tr><td>The Rules (constraints)</td><td>What you will NOT sacrifice for the vision</td></tr>
+    </table>
+  </figure>
+
+  <h2>Prompt 2 — Value (the trust moat)</h2>
+  <p>Role: a "Digital Sovereign Strategist." Mission: keep you from becoming "a couch potato on UBI" as AI and robotics take over intelligence and labor — by building a <strong>Trust Moat</strong>, the only value that survives when the cost of creating information drops to zero. It interrogates the Game Map from Prompt 1 and shifts you from <em>production</em> to <em>verification &amp; synthesis</em>.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The human edge AI can't copy</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Commodity (AI does it)</h4>
+        <p style="margin:0;font-size:13.5px">Producing facts, analysis, text. Objective, neutral "bland crap." "Assistant" tasks an AI agent will soon do. Anonymous, text-only, easily replicable niches.</p>
+      </div>
+      <div class="vs good">
+        <h4>Signal (human edge)</h4>
+        <p style="margin:0;font-size:13.5px">Synthesis &amp; context (the wisdom to connect facts) · bias, stubbornness, humor that trigger human biology · high-bandwidth presence (video / audio / live) · trust built by "opening the glass box."</p>
+      </div>
+    </div>
+    <figcaption>Its phases: an Obsolescence Audit (which of your daily quests are AI-replaceable?), Signal Injection (your human edge + which medium proves your humanity), Opening the Glass Box (build in public; share failures as "proof of humanity"; own outcomes), then a Sovereign Upgrade rewriting the Game Map toward Digital Sovereignty, human-centric synthesis, and high-trust networking.</figcaption>
+  </figure>
+
+  <h2>Prompt 3 — Revenue (the engine)</h2>
+  <p>Role: a "Sovereign Monetization Architect." It turns your identity shift + trust moat into a tiered ecosystem that sells <strong>Transformation, Convenience, and Access</strong>. First it identifies the asset — your "Point A → Point B" journey is the blueprint; extract it into a repeatable framework; show why your human signal beats a generic AI solution. Then it packages value into a ladder:</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The 7-tier monetization ladder</div>
+    <div class="steps">
+      <div class="step"><b>1 · Selling Skill</b> — the transformation product (fluff-free PDFs / ebooks / frameworks). Sell the transformation, not the table of contents.</div>
+      <div class="step"><b>2 · Selling Convenience</b> — templates, checklists, swipe files, automations, AI prompts. The "60-second rule": usable in under a minute for instant relief.</div>
+      <div class="step"><b>3 · Premium Community</b> — the "Signal Room" for accountability + momentum; weekly rituals so members always know what's next.</div>
+      <div class="step"><b>4 · 1:1 Support &amp; Mentorship</b> — direct access to your brain ($5–$20/mo up to higher-ticket). "The only thing AI cannot replicate."</div>
+      <div class="step"><b>5 · Revenue-Sharing Tools</b> — affiliate/referral links for tools you already use and trust.</div>
+      <div class="step"><b>6 · Niche Merch</b> — products reflecting the community's identity &amp; shared mission.</div>
+      <div class="step"><b>7 · The Ecosystem</b> — compound IP: beginner / advanced / niche versions turn a product into a business.</div>
+    </div>
+    <figcaption>Guardrail ("Economic Escape Protocol"): prevent lifestyle creep — the goal is <em>buying back time</em>, not status symbols. If you have no product yet, "open the glass box" and sell your current research systems, workflows, or templates.</figcaption>
+  </figure>
+
+  <h2>How it's meant to be used</h2>
+  <p>Each prompt is prefaced with "Based on the following article: [paste section]" — you feed the AI a source article alongside the prompt, and the author recommends reading the three source articles the prompts were built from. The whole concept is credited to a Dan Koe post (which argued <em>not</em> to use AI for it); hoeem's twist is that AI is a legitimate accelerant in 2026. The article closes by pitching his own $5 X subscription community.</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> hoeem (@hooeem), <a href="https://x.com/hooeem/status/2011443888578244712" target="_blank" rel="noopener">"How to use 3 prompts to fix your entire life in 1 day"</a> (X article, Jan 14 2026). Frameworks distilled, not reproduced verbatim; the full copy-paste prompts are in the source. Credited as inspired by a Dan Koe post; ends with a promotional pitch for the author's paid community. Related: <a href="the-self-help-trap.html">The Self-Help Trap</a>, <a href="../writing/articulate-yourself-intelligently.html">Articulate Yourself Intelligently (Dan Koe)</a>, <a href="../business-money/what-ai-cant-kill.html">What AI Can't Kill</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
