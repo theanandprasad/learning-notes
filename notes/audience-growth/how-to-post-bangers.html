@@ -32,8 +32,6 @@
   ul,ol{padding-left:22px} li{margin:8px 0}
   strong{color:#16181d} em{color:#3f3a30}
   blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
-  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
-  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre-wrap;overflow-x:auto;margin:10px 0}
   .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
   .callout.key{border-left:3px solid var(--accent2)}
   .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
@@ -57,124 +55,87 @@
   .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
   .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
   .step b{color:#16181d}
-  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
-  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
-  td .k{color:#16181d;font-weight:600}
   hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
   .src{font-size:13px;color:var(--muted)}
   .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
-</style></head>
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+  .codeblk{background:#1f1b15;color:#f1ece2;border:1px solid #3a332a;border-radius:10px;padding:14px 16px;font-family:var(--mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;overflow-x:auto;margin:16px 0}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#d8a85f;margin-bottom:9px}
+</style>
+</head>
 <body>
 <div class="wrap">
-
   <a class="back" href="../../index.html">← All learning notes</a>
 
   <header class="post">
     <h1>How to Post Bangers Non-Stop</h1>
     <div class="meta">
-      By <strong>Medusa</strong> (@MedusaOnchain)
-      <span class="dot">·</span> Published Mar 19, 2026
-      <span class="dot">·</span> Saved Jun 8, 2026
+      <span>By <strong>Medusa</strong> (@MedusaOnchain)</span>
+      <span class="dot">•</span>
+      <span>Published Mar 19, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
     </div>
     <div class="tags">
-      <span class="tag">Content</span>
-      <span class="tag">Virality</span>
+      <span class="tag">X / Twitter Growth</span>
+      <span class="tag">Content System</span>
+      <span class="tag">Grok</span>
       <span class="tag">Repurposing</span>
-      <span class="tag">X / Twitter</span>
     </div>
   </header>
 
-  <p class="lede">Posting bangers is not that hard; you just need an effective system. The system: find what has already gone viral somewhere else, verify it is still fresh on X, and post it.</p>
+  <p class="lede">A content-sourcing system: mine proven "bangers" from Reddit, Threads and X, use a Grok prompt to confirm they haven't been posted on X recently, then post them. The author's words: "the easiest trick to post bangers non-stop is to steal bangers."</p>
 
-  <div class="disclaimer">
-    <strong>Captured as-is.</strong> The author's method is explicitly to repost others' already-viral content — they call it "stealing bangers." This note is archived to document the tactic, not as an endorsement. Reposting others' content as your own raises real originality, attribution, and platform-rules concerns. Read it as a window into how a slice of high-volume accounts operate, not as a recommended playbook.
-  </div>
+  <div class="disclaimer">⚠️ <strong>Captured with a strong caveat.</strong> This is an explicit <strong>"steal and repost other people's content"</strong> tactic — the author literally says to copy captions from Reddit/Threads/X and re-post them. Archived to document the method (and the Grok-as-freshness-checker trick), <em>not</em> as an endorsement; lifting others' work erodes trust and originality. The Grok prompt below is reproduced verbatim because it's the functional payload.</div>
 
   <div class="callout key">
-    <h4>The system in one breath</h4>
-    <p style="margin:0">It is a <strong>content-sourcing pipeline</strong>. Scan high-performing posts on Reddit, Threads, and X &rarr; check (via a reusable Grok prompt) whether the same idea has already blown up on X in the last ~30 days &rarr; if it is still fresh, post it. Optionally pair textual "bangers" with meme videos for extra reach.</p>
+    <h4>The system</h4>
+    <p style="margin:0">"Posting bangers is not that hard — you just need an effective system." That system: <strong>source proven posts from other platforms → check they're fresh on X with Grok → repost (optionally with a meme video).</strong> The whole engine is a recycling pipeline plus one originality/freshness guardrail.</p>
   </div>
-
-  <h2>The pipeline</h2>
 
   <figure class="diagram">
-    <div class="dtitle">Source → Freshness check → Post</div>
-    <div class="row grow">
-      <div class="node accent">
-        <div class="nh">Sources</div>
-        <div class="ns">Reddit (Top / This Week)<br>Threads (global feed)<br>X profiles (Most Liked)</div>
-      </div>
+    <div class="dtitle">The banger pipeline</div>
+    <div class="row grow" style="max-width:760px">
+      <div class="node"><div class="nh">Source</div><div class="ns">Reddit · Threads · X — copy proven captions</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Grok freshness check</div><div class="ns">has it been posted on X in the last 30 days?</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Post</div><div class="ns">if not (or none blew up), publish it</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">+ Meme video</div><div class="ns">optional add-on</div></div>
     </div>
-    <div class="arrow">↓</div>
-    <div class="row grow">
-      <div class="node accent2">
-        <div class="nh">Grok freshness check</div>
-        <div class="ns">"Has something similar been posted on X in the last ~30 days?" → returns top ~10 matches + stats + links</div>
-      </div>
-    </div>
-    <div class="arrow">↓</div>
-    <div class="row grow">
-      <div class="node warn">
-        <div class="nh">Match found?</div>
-        <div class="ns">Already viral on X recently → skip / rework</div>
-      </div>
-      <div class="node ok">
-        <div class="nh">Clear?</div>
-        <div class="ns">Nothing similar lately → it feels fresh → post it</div>
-      </div>
-    </div>
-    <figcaption>The recurring loop, repeated across every source platform. (HTML/CSS reconstruction.)</figcaption>
   </figure>
 
+  <h2>Step 1 — Set up Grok as your freshness checker</h2>
+  <p>Prime a Grok chat so that any caption you paste gets checked against the last 30 days of X. Paste this once to set it up:</p>
+  <div class="codeblk"><span class="lbl">▶ Grok setup prompt (verbatim)</span>this chat is to see if any messages i type from now on are for checking
+and searching whether those posts/tweets have been posted on X in
+the last 30 days
+
+and if so, list the stats of the top 10 posts in a table with the link to the
+posts
+
+confirm once understood</div>
+  <p class="muted">You can change the time period, but he prefers 30 days. From then on, paste any candidate caption and Grok returns whether it's recently been posted (and the top performers if so).</p>
+
+  <h2>Steps 2–4 — Where to mine the bangers</h2>
   <div class="steps">
-    <div class="step">
-      <b>Step 1 — Set up the Grok freshness check.</b>
-      Build one reusable Grok chat whose job is a single thing: given any post or caption you paste in, search X for whether something similar has already been posted in the last ~30 days, and if so return the top ~10 matching posts in a table — with their engagement stats and links. The time window is adjustable; the author recommends ~30 days as the default. You reuse this same chat for every candidate from every source below.
-      <div class="codeblk">[Paraphrase, not the original prompt]
-"For the post I paste, search X for similar posts in the last 30 days;
- if any, list the top ~10 with stats and links in a table."</div>
-    </div>
-
-    <div class="step">
-      <b>Step 2 — Mine Reddit.</b>
-      Open a relevant subreddit (e.g. <code>r/ClaudeAI</code>, <code>r/vibecoding</code>), sort by <strong>Top → This Week</strong>, and pick a banger. Run it through the Grok check. If nothing similar blew up on X recently, post it. An alternative for cross-niche hits: <code>r/popular</code> sorted by <strong>Top → Today</strong>.
-    </div>
-
-    <div class="step">
-      <b>Step 3 — Mine Threads.</b>
-      Ideally use a <em>fresh</em> Threads account, so the algorithm shows you globally-viral content unrestricted by your niche. Find a post you genuinely vibe with, run the same freshness check, and post if it is clear.
-    </div>
-
-    <div class="step">
-      <b>Step 4 — Mine X itself.</b>
-      Visit profiles that reliably post bangers, filter their posts by <strong>Most Liked</strong>, and pick ones older than ~30 days — old enough that they feel fresh again to today's feed. Run the check, and post if nothing similar surfaced recently.
-    </div>
-
-    <div class="step">
-      <b>Step 5 — (Optional) add meme videos.</b>
-      Pair the textual bangers with meme videos for additional reach. The author cites other creators (<a href="https://x.com/0xleegenz">@0xleegenz</a> and <a href="https://x.com/AtnsXBT">@AtnsXBT</a>) who lean on this video-pairing approach.
-    </div>
+    <div class="step"><b>2 · Reddit (targeted).</b> Go to a relevant subreddit (e.g. r/claudeai, r/vibecoding), sort by <strong>Top → This Week</strong>, pick a banger, copy its caption, feed it to Grok. If nothing on X matches — or a few do but none blew up — post it.</div>
+    <div class="step"><b>2b · Reddit (front page).</b> If you don't know which subreddits to mine, use <a href="https://www.reddit.com/r/popular/top/" target="_blank" rel="noopener">reddit.com/r/popular/top/</a>, sort by <strong>Top → Today</strong> (or any period), find a post you vibe with, and run the same Grok check.</div>
+    <div class="step"><b>3 · Threads.</b> Make a <em>new</em> Threads account so the algorithm shows globally-viral content unrestricted to any niche. Find a post you vibe with, copy the caption, run the same check, then post on X.</div>
+    <div class="step"><b>4 · X.</b> Visit a profile that regularly posts bangers → filter posts by <strong>"Most Liked"</strong> → choose posts <strong>older than 30 days</strong> (so it doesn't feel recently seen) → run the Grok check → if no one's posted it in the last 30 days, you're good to post.</div>
   </div>
 
-  <h2>The core move</h2>
-  <p>Strip away the platforms and it is the same three-beat loop every time: <strong>Source → Check freshness → Post</strong>. Reddit, Threads, and X are just different inlets feeding the same Grok gate. The whole "system" is really one habit repeated across surfaces.</p>
+  <h2>Step 5 — Meme videos (optional)</h2>
+  <p>Attach meme videos to the textual bangers you've collected — the way creators like @0xleegenz and @AtnsXBT do — to boost them further.</p>
 
-  <blockquote>"the easiest trick to post bangers non-stop is to steal bangers."</blockquote>
-
-  <h2>Why capture this?</h2>
-  <p>It is a candid look at how a lot of high-volume "banger" accounts actually operate — repurposing and arbitraging virality across platforms rather than generating it. Worth understanding even if you choose to create originally instead. Knowing the freshness-arbitrage move also helps you recognize it when you see the same post recycled across feeds.</p>
+  <blockquote>Remember: the easiest trick to post bangers non-stop is to steal bangers.</blockquote>
 
   <hr class="soft">
-
-  <p class="src">
-    Source: Medusa (<a href="https://x.com/MedusaOnchain/status/2034656884112904383">@MedusaOnchain — "How to post bangers non-stop"</a>, X article, Mar 19 2026), video creator. The Grok prompt here is paraphrased, not reproduced. The method is the author's; she cites <a href="https://x.com/0xleegenz">@0xleegenz</a> and <a href="https://x.com/AtnsXBT">@AtnsXBT</a> for the meme-video pairing. The diagram is an HTML/CSS reconstruction.
-    <br><br>
-    Related: <a href="30-day-x-routine-850-to-1400.html">The 30-Day X Reply Routine</a> · <a href="growing-on-crypto-twitter.html">The Real Reason You're Not Growing on CT</a> — which cites Medusa as a model. Note the contrast: that piece praises her <em>genuine</em> engagement, whereas this note documents a copy/repurpose tactic.
-  </p>
-
-  <div class="footer">Captured into Learning Notes · 2026-06-08 · <a href="../../index.html">Back to index</a></div>
-
+  <p class="src"><strong>Source:</strong> Medusa (@MedusaOnchain; "smol video creator"), <a href="https://x.com/MedusaOnchain/status/2034656884112904383" target="_blank" rel="noopener">"how to post bangers non-stop"</a> (X article, Mar 19 2026). The Grok prompt is reproduced verbatim as the functional artifact; the method is an explicit repost-others'-content tactic — captured to document, not endorse. Related: <a href="0-to-1000-followers-30-days.html">0 to 1,000 Followers in 30 Days</a>, <a href="fastest-way-to-10k-followers.html">The Fastest Way to 10K Followers</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
 </div>
 </body>
 </html>
