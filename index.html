@@ -55,9 +55,6 @@
   .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
   .chip .c{opacity:.55;margin-left:5px;font-size:.92em}
   .chip.active .c{opacity:.8}
-  .themetoggle{cursor:pointer;background:#fff;border:1px solid var(--line);color:var(--accent);font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px;font-family:inherit;margin-left:auto}
-  .themetoggle:hover{border-color:var(--accent)}
-  .themetoggle.open{background:var(--accent);color:#fff;border-color:var(--accent)}
   .themepanel{margin-top:12px;padding:15px 16px;border:1px solid var(--line);border-radius:var(--radius);background:#f7f9fc}
   .themepanel .ph{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 11px}
   .themechips{display:flex;flex-wrap:wrap;gap:8px}
@@ -95,10 +92,9 @@
       <button class="chip" data-topic="philosophy">🧠 Philosophy</button>
       <button class="chip" data-topic="business-money">💼 Business</button>
       <button class="chip" data-topic="audience-growth">📣 Audience</button>
-      <button class="themetoggle" id="themeToggle" aria-expanded="false">🕸️ Browse by theme</button>
     </div>
-    <div class="themepanel is-hidden" id="themePanel">
-      <p class="ph">Themes connect articles across topics — click one to see what falls under it</p>
+    <div class="themepanel" id="themePanel">
+      <p class="ph">🕸️ Browse by theme — themes connect articles across topics; click one to see what falls under it</p>
       <div class="themechips" id="themeChips"></div>
     </div>
     <div class="banner is-hidden" id="banner"></div>
@@ -626,8 +622,6 @@ const THEMES=[["i1","Agent harness architecture",["what-is-an-agent-harness","hi
   const q=document.getElementById('q');
   q.placeholder='Search '+N+' notes by title, author, or tag…';
   const topicFilter=document.getElementById('topicFilter');
-  const themeToggle=document.getElementById('themeToggle');
-  const themePanel=document.getElementById('themePanel');
   const themeChips=document.getElementById('themeChips');
   const banner=document.getElementById('banner');
   const resultbar=document.getElementById('resultbar');
@@ -653,7 +647,6 @@ const THEMES=[["i1","Agent harness architecture",["what-is-an-agent-harness","hi
     if(id){state.topic='all';}
     themeChips.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.theme===id));
     syncTopicChips();
-    if(id){themePanel.classList.remove('is-hidden');themeToggle.classList.add('open');themeToggle.setAttribute('aria-expanded','true');}
     apply();
   }
   function syncTopicChips(){
@@ -666,11 +659,6 @@ const THEMES=[["i1","Agent harness architecture",["what-is-an-agent-harness","hi
       if(state.theme){state.theme=null;themeChips.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));}
       syncTopicChips();apply();
     });
-  });
-  themeToggle.addEventListener('click',()=>{
-    const hidden=themePanel.classList.toggle('is-hidden');
-    themeToggle.classList.toggle('open',!hidden);
-    themeToggle.setAttribute('aria-expanded',String(!hidden));
   });
   q.addEventListener('input',()=>{state.q=q.value.trim().toLowerCase();apply();});
 
