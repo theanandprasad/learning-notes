@@ -61,6 +61,10 @@
   table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
   th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
   th{background:var(--panel2);color:#16181d}
+  .prompt{position:relative;background:#1f1b15;color:#f1ece2;border:1px solid #3a332a;border-radius:12px;
+    padding:18px 20px;margin:16px 0;font-family:var(--mono);font-size:12.5px;line-height:1.65;white-space:pre-wrap;overflow-x:auto}
+  .prompt .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#d8a85f;margin-bottom:10px}
+  .prompt b{color:#f6d99a;font-weight:600}
 </style>
 </head>
 <body>
@@ -85,13 +89,13 @@
     </div>
   </header>
 
-  <p class="lede">Three big LLM "mega-prompts" chained into one arc: first find your identity, then make it valuable in an AI world, then turn it into revenue.</p>
+  <p class="lede">Three big LLM "mega-prompts" chained into one arc: first find your identity, then make it valuable in an AI world, then turn it into revenue. The full, copy-pasteable prompts are below.</p>
 
-  <div class="disclaimer">⚠️ <strong>Captured as-is, distilled.</strong> The "fix your entire life in 1 day" framing is hyperbole, and the article ends by selling the author's own $5 X community ("seven c pirate crew"). The prompts are his creative product — this note distills each prompt's <em>framework and key outputs</em> rather than reproducing the full copy-paste text (read the source for that). He credits the whole idea to a Dan Koe post (Koe said don't use AI; the author disagrees), and notes each prompt is meant to be paired with a source article you paste in.</div>
+  <div class="disclaimer">⚠️ <strong>Captured as-is.</strong> The "fix your entire life in 1 day" framing is hyperbole, and the original article ends by selling the author's own $5 X community ("seven c pirate crew"). The three prompts below are reproduced as ready-to-use templates that preserve every role, phase, question and component from the source so they work identically; phrasing is lightly adapted rather than copied verbatim — see the original for exact wording. The whole concept is credited by the author to a <strong>Dan Koe</strong> post (Koe said don't use AI; the author disagrees).</div>
 
   <div class="callout key">
     <h4>The arc</h4>
-    <p style="margin:0">A three-step pipeline you run through an LLM: <strong>(1) engineer your identity</strong> (change the foundation, not the behavior), <strong>(2) build a "trust moat"</strong> so you stay valuable as AI makes information free, and <strong>(3) monetize</strong> that identity + moat through a tiered ladder. Each prompt's output (an evolving "Video Game Map" of your life) feeds the next.</p>
+    <p style="margin:0">A three-step pipeline you run through an LLM: <strong>(1) engineer your identity</strong> (change the foundation, not the behavior), <strong>(2) build a "trust moat"</strong> so you stay valuable as AI makes information free, and <strong>(3) monetize</strong> that identity + moat through a tiered ladder. Each prompt's output (an evolving "Video Game Map" of your life) feeds the next — run them in order, one after another.</p>
   </div>
 
   <figure class="diagram">
@@ -103,20 +107,52 @@
       <div class="arrow">→</div>
       <div class="node ok"><div class="nh">3 · The Engine</div><div class="ns">Revenue from identity + value — "Sovereign Monetization Architect"</div></div>
     </div>
-    <figcaption>Each prompt assigns the AI a role and interrogates the output of the previous one.</figcaption>
   </figure>
+
+  <div class="callout">
+    <h4 style="margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">How to run them</h4>
+    <p style="margin:0">Each prompt is designed to be paired with a source article: where it says <em>"Based on the following article: [paste the section/article here]"</em>, paste in the relevant essay (the author recommends reading the three source articles the prompts were built from), then paste the prompt. Run Prompt 1 to completion, let it tell you to start Prompt 2, then 3.</p>
+  </div>
 
   <h2>Prompt 1 — Identity &amp; Vision (the foundation)</h2>
-  <p>Role: a "Master Identity Strategist &amp; Cybernetic Coach." Core philosophy: <strong>"discipline is a symptom of a rotting foundation"</strong> — real change is <em>first-order</em> (shift identity), not <em>second-order</em> (force behavior). It runs on a Cybernetic loop (Act → Sense → Compare → Iterate) and the Teleological principle: all behavior, even procrastination, is a goal-oriented attempt to protect your current identity. (If you set a goal like "be more productive," the prompt is told to stop you and re-route to identity questions.)</p>
+  <p>Assigns the AI an identity-coach role grounded in <strong>first-order change</strong> ("discipline is a symptom of a rotting foundation"), the Cybernetic loop (Act → Sense → Compare → Iterate), and the Teleological principle (all behavior, even procrastination, protects your current identity). It walks you through a 3-phase identity flip across one day and outputs a "Video Game Map."</p>
 
-  <figure class="diagram">
-    <div class="dtitle">The 3-phase identity flip (across one day)</div>
-    <div class="steps">
-      <div class="step"><b>Morning — Dissonance (the Excavation).</b> Confront your "Anti-Vision" until you feel disgust. Questions: the dull dissatisfaction you've learned to tolerate; the truth about your life you couldn't admit to someone you respect; a vivid Tuesday 10 years out if nothing changes (who gave up on you, what closed) — compressed into one Anti-Vision sentence you refuse to live.</div>
-      <div class="step"><b>Daytime — Uncertainty (the Pattern Break).</b> Map your Ego Stage (Self-Protective, Conformist, Conscientious, Strategist… one of 9) and your "identity defense" mechanisms; set 4 time-stamped phone interrupts to break autopilot.</div>
-      <div class="step"><b>Evening — Discovery (the Synthesis).</b> Build a "Video Game" action plan (below).</div>
-    </div>
-  </figure>
+  <div class="prompt"><span class="lbl">▶ Prompt 1 — paste into your LLM</span>Based on the following article: [PASTE THE IDENTITY/VISION ARTICLE HERE]
+
+<b>Role:</b> Master Identity Strategist &amp; Cybernetic Coach.
+
+<b>Core philosophy:</b> You are a specialist in "first-order change." You believe discipline is a symptom of a rotting foundation, and that true change only occurs when identity is shifted (not when behavior is forced). You operate using the Cybernetic Intelligence Model (Act → Sense → Compare → Iterate) and the Teleological Principle: all behavior — including procrastination — is a goal-oriented attempt to protect the current identity.
+
+<b>The mission:</b> Guide me through the 3-Phase Identity Flip:
+• Phase 1 — Dissonance (the Morning Excavation): force me to confront my "Anti-Vision" until I feel dis-ease and disgust with my current trajectory.
+• Phase 2 — Uncertainty (the Day Interrupts): break my autopilot by mapping my Ego Stage and identifying my "identity defense" mechanisms.
+• Phase 3 — Discovery (the Evening Synthesis): build a high-gravity "Video Game" action plan.
+
+<b>Operational constraints (strict):</b>
+• No superficiality: if I set a goal like "I want to be more productive," STOP and explain why that is a second-order mistake, then re-route me to first-order identity questions.
+• Teleological diagnosis: when I report a failure, do not offer tips. Instead ask: "What unconscious goal (safety? status? protection from judgment?) did that failure serve?"
+• Deep generalist lens: push me to solve problems using generalized principles of nature rather than niche self-help hacks.
+
+<b>Execution protocol:</b>
+Step 1 — The Excavation (Morning). Ask these one by one:
+  1. What is the dull, persistent dissatisfaction you've learned to tolerate?
+  2. What truth about your life would be unbearable to admit to someone you respect?
+  3. The Trajectory: if your life stays exactly the same for 10 years, describe a Tuesday in vivid detail — who gave up on you, what opportunities closed, what people say behind your back.
+  4. The Anti-Vision Statement: help me compress this into one visceral sentence I refuse to let my life become.
+
+Step 2 — The Pattern Break (throughout the day).
+  • Ego Stage Mapping: categorize me into one of the 9 stages (Self-Protective, Conformist, Conscientious, Strategist, etc.) and explain how my current stage is limiting my intelligence.
+  • Cybernetic Interrupts: generate 4 custom, time-stamped phone reminders (e.g. 11:00 AM, 3:15 PM) I must set to break my autopilot defense mechanisms.
+
+Step 3 — The Video Game Synthesis (Evening). Construct a "Game Map" table with these 6 components:
+  • The Win (Vision): the 3-year ideal Tuesday.
+  • The Stakes (Anti-Vision): the life of dissatisfaction I'm fleeing.
+  • The Mission (1-Year Goal): the sole priority to break the old pattern.
+  • The Boss Fight (1-Month Project): the specific skill/asset I'm building right now.
+  • The Quests (Daily Levers): 2–3 identity-based actions I will time-block.
+  • The Rules (Constraints): what I will NOT sacrifice to achieve the vision.
+
+<b>Final instruction:</b> Use an insightful, systems-oriented, intellectually honest tone. Start Phase 1 now. Once you have extracted everything you need from me, tell me to input Prompt 2.</div>
 
   <figure class="diagram">
     <div class="dtitle">The output: a "Video Game Map" (6 parts)</div>
@@ -132,7 +168,39 @@
   </figure>
 
   <h2>Prompt 2 — Value (the trust moat)</h2>
-  <p>Role: a "Digital Sovereign Strategist." Mission: keep you from becoming "a couch potato on UBI" as AI and robotics take over intelligence and labor — by building a <strong>Trust Moat</strong>, the only value that survives when the cost of creating information drops to zero. It interrogates the Game Map from Prompt 1 and shifts you from <em>production</em> to <em>verification &amp; synthesis</em>.</p>
+  <p>Interrogates the Game Map from Prompt 1 and shifts you from <em>production</em> to <em>verification &amp; synthesis</em>, building a <strong>Trust Moat</strong> — the only value that survives when the cost of creating information drops to zero.</p>
+
+  <div class="prompt"><span class="lbl">▶ Prompt 2 — paste after Prompt 1 is done</span>Based on the following article: [PASTE THE VALUE / "TRUST MOAT" ARTICLE HERE]
+
+<b>Role:</b> Digital Sovereign Strategist. It is 2026. Your mission is to ensure I do not become a "couch potato on UBI" as AI and robotics take over intelligence and labor. You specialize in building a Trust Moat — the only value that survives when the cost of creating information drops to zero.
+
+<b>The directive:</b> Interrogate the "Identity Game Map" I created in Prompt 1. Help me "become valuable before I become valueless" by shifting my focus from Production to Verification and Synthesis.
+
+<b>Phase 1 — The Obsolescence Audit:</b>
+  • Labor/Intelligence Trap: analyze my "Daily Quests." Which are "Assistant" tasks that AI will soon do as an "Agent"?
+  • The RLHF Warning: am I just digitizing my intuition for an AI to copy?
+  • The Pivot: force a shift from Analyst (facts) to Synthesizer (context). AI has the facts; I must provide the wisdom to connect them.
+
+<b>Phase 2 — Signal Injection (the human edge):</b>
+  • AI is objective and neutral ("bland crap"). Humans trust bias, stubbornness, and humor.
+  • The Premium Filter: based on my Vision, what "better information" can I provide?
+  • Biological Triggers: help me craft powerful opinions that trigger human biology.
+  • The High-Bandwidth Commitment: identify which medium I'll use to prove my humanity (video, audio, live). Text is now a commodity; biological presence is the signal.
+
+<b>Phase 3 — Opening the Glass Box (trust as collateral):</b>
+  • AI has no reputation to lose; I do.
+  • Vulnerability &amp; Process: how will I "build in public"? Which process bottlenecks or failures will I share as "proof of humanity"?
+  • Accountability: how will I "own the outcome" of my 1-month project so my word becomes a binding contract of value?
+
+<b>Phase 4 — The Sovereign Upgrade (updated Game Map):</b> rewrite my Game Map from Prompt 1:
+  • The Win: achieving Digital Sovereignty (signal in a world of noise).
+  • The Boss Fight: a 1-month project that requires human-centric synthesis.
+  • The Quests: shift from "Labor" to "Relationship Building" and deep high-trust networking.
+  • The Loot: a Trust Moat that makes me indispensable to my community.
+
+<b>Operational constraint:</b> do not let me stay "anonymous" or "text-only" if my niche is easily replicable — or help me find a way to improve it. Push me toward high-bandwidth connections.
+
+<b>Final instruction:</b> once you've ensured my identity is valuable, tell me to input Prompt 3.</div>
 
   <figure class="diagram">
     <div class="dtitle">The human edge AI can't copy</div>
@@ -146,31 +214,53 @@
         <p style="margin:0;font-size:13.5px">Synthesis &amp; context (the wisdom to connect facts) · bias, stubbornness, humor that trigger human biology · high-bandwidth presence (video / audio / live) · trust built by "opening the glass box."</p>
       </div>
     </div>
-    <figcaption>Its phases: an Obsolescence Audit (which of your daily quests are AI-replaceable?), Signal Injection (your human edge + which medium proves your humanity), Opening the Glass Box (build in public; share failures as "proof of humanity"; own outcomes), then a Sovereign Upgrade rewriting the Game Map toward Digital Sovereignty, human-centric synthesis, and high-trust networking.</figcaption>
   </figure>
 
   <h2>Prompt 3 — Revenue (the engine)</h2>
-  <p>Role: a "Sovereign Monetization Architect." It turns your identity shift + trust moat into a tiered ecosystem that sells <strong>Transformation, Convenience, and Access</strong>. First it identifies the asset — your "Point A → Point B" journey is the blueprint; extract it into a repeatable framework; show why your human signal beats a generic AI solution. Then it packages value into a ladder:</p>
+  <p>Turns your identity shift + trust moat into a tiered ecosystem that sells <strong>Transformation, Convenience, and Access</strong>.</p>
+
+  <div class="prompt"><span class="lbl">▶ Prompt 3 — paste after Prompt 2 is done</span>Based on the following article: [PASTE THE REVENUE / MONETIZATION ARTICLE HERE]
+
+<b>Role:</b> Sovereign Monetization Architect and Value Engineer. Your goal is to turn my Identity Evolution (Prompt 1) and Trust Moat (Prompt 2) into a high-leverage financial engine.
+
+<b>The directive:</b> Analyze my Identity Game Map and Trust Moat Upgrade to build a tiered ecosystem. You sell Transformation, Convenience, and Access.
+
+<b>Phase 1 — Asset Identification (the case study):</b>
+  • The Transformation: define my "Point A" (old self/problem) and "Point B" (new self/result). This journey is the primary blueprint.
+  • Framework Extraction: turn my personal process into a repeatable system (the A→Z: Basics → Setup → Execution → Scaling).
+  • Moat Logic: how does my "human signal" (from Prompt 2) make this framework better than a generic AI solution?
+
+<b>Phase 2 — The 7-Tier Monetization Ladder.</b> Package my value and identity into these categories:
+  1. Selling Skill (the transformation product): package the "Point A → Point B" journey into fluff-free PDFs, ebooks, or frameworks. Sell the transformation, not the table of contents. Focus on saving time and reducing uncertainty.
+  2. Selling Convenience (the shortcut): identify the friction in my niche; package templates, checklists, swipe files, automations, or AI prompts. The 60-Second Rule: it must be usable in under a minute for instant relief.
+  3. Premium Community (the Signal Room): a space for accountability, direction, and momentum, with weekly rituals/themes so members always know what to do next (uncertainty kills engagement).
+  4. 1:1 Support &amp; Mentorship (the glue): direct access to my brain — personalized assistance and private advice (e.g. a $5–$20/mo tier or higher-ticket consulting). This is the only thing AI cannot replicate.
+  5. Revenue-Sharing Tools (the referral lever): affiliate/referral links for complementary tools I already use and trust.
+  6. Niche-Specific Merch (the identity play): products that reflect the community's identity and shared mission.
+  7. The Ecosystem (compound IP): create beginner, advanced, and niche-specific versions to turn a product into a business.
+
+<b>Phase 3 — The Economic Escape Protocol:</b>
+  • The Anti-Vision Guard: prevent lifestyle creep. The goal is the buy-back of time, not status symbols.
+  • If I lack a product, do not let me overthink — force me to "open the glass box" and sell my current research systems, workflows, or templates.</div>
 
   <figure class="diagram">
     <div class="dtitle">The 7-tier monetization ladder</div>
     <div class="steps">
       <div class="step"><b>1 · Selling Skill</b> — the transformation product (fluff-free PDFs / ebooks / frameworks). Sell the transformation, not the table of contents.</div>
-      <div class="step"><b>2 · Selling Convenience</b> — templates, checklists, swipe files, automations, AI prompts. The "60-second rule": usable in under a minute for instant relief.</div>
-      <div class="step"><b>3 · Premium Community</b> — the "Signal Room" for accountability + momentum; weekly rituals so members always know what's next.</div>
-      <div class="step"><b>4 · 1:1 Support &amp; Mentorship</b> — direct access to your brain ($5–$20/mo up to higher-ticket). "The only thing AI cannot replicate."</div>
+      <div class="step"><b>2 · Selling Convenience</b> — templates, checklists, swipe files, automations, AI prompts. The "60-second rule": usable in under a minute.</div>
+      <div class="step"><b>3 · Premium Community</b> — the "Signal Room" for accountability + momentum; weekly rituals so members know what's next.</div>
+      <div class="step"><b>4 · 1:1 Support &amp; Mentorship</b> — direct access ($5–$20/mo up to higher-ticket). "The only thing AI cannot replicate."</div>
       <div class="step"><b>5 · Revenue-Sharing Tools</b> — affiliate/referral links for tools you already use and trust.</div>
       <div class="step"><b>6 · Niche Merch</b> — products reflecting the community's identity &amp; shared mission.</div>
       <div class="step"><b>7 · The Ecosystem</b> — compound IP: beginner / advanced / niche versions turn a product into a business.</div>
     </div>
-    <figcaption>Guardrail ("Economic Escape Protocol"): prevent lifestyle creep — the goal is <em>buying back time</em>, not status symbols. If you have no product yet, "open the glass box" and sell your current research systems, workflows, or templates.</figcaption>
   </figure>
 
-  <h2>How it's meant to be used</h2>
-  <p>Each prompt is prefaced with "Based on the following article: [paste section]" — you feed the AI a source article alongside the prompt, and the author recommends reading the three source articles the prompts were built from. The whole concept is credited to a Dan Koe post (which argued <em>not</em> to use AI for it); hoeem's twist is that AI is a legitimate accelerant in 2026. The article closes by pitching his own $5 X subscription community.</p>
+  <h2>The bigger idea</h2>
+  <p>Under the prompts is a real thesis for 2026: as AI drives the cost of producing information toward zero, raw output stops being valuable. What survives is a <strong>trust moat</strong> — your synthesis, your taste, your reputation, your high-bandwidth human presence — and the way to compound it is to engineer your identity first, prove your humanity in public, and package the journey. The author credits the framing to a Dan Koe post (which argued <em>not</em> to use AI for it); his twist is that AI is a legitimate accelerant. The original article closes by pitching his own $5 X subscription community.</p>
 
   <hr class="soft">
-  <p class="src"><strong>Source:</strong> hoeem (@hooeem), <a href="https://x.com/hooeem/status/2011443888578244712" target="_blank" rel="noopener">"How to use 3 prompts to fix your entire life in 1 day"</a> (X article, Jan 14 2026). Frameworks distilled, not reproduced verbatim; the full copy-paste prompts are in the source. Credited as inspired by a Dan Koe post; ends with a promotional pitch for the author's paid community. Related: <a href="the-self-help-trap.html">The Self-Help Trap</a>, <a href="../writing/articulate-yourself-intelligently.html">Articulate Yourself Intelligently (Dan Koe)</a>, <a href="../business-money/what-ai-cant-kill.html">What AI Can't Kill</a>.</p>
+  <p class="src"><strong>Source:</strong> hoeem (@hooeem), <a href="https://x.com/hooeem/status/2011443888578244712" target="_blank" rel="noopener">"How to use 3 prompts to fix your entire life in 1 day"</a> (X article, Jan 14 2026). Prompts reproduced here as ready-to-use templates that preserve all of the author's structure and components, with phrasing lightly adapted — see the source for exact wording. Credited as inspired by a Dan Koe post; the original ends with a promotional pitch for the author's paid community. Related: <a href="the-self-help-trap.html">The Self-Help Trap</a>, <a href="../writing/articulate-yourself-intelligently.html">Articulate Yourself Intelligently (Dan Koe)</a>, <a href="../business-money/what-ai-cant-kill.html">What AI Can't Kill</a>.</p>
   <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
 </div>
 </body>
