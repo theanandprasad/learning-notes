@@ -42,6 +42,38 @@
   .empty{border:1px dashed var(--line);border-radius:var(--radius);padding:22px;color:var(--muted);font-size:14px;text-align:center;margin:14px 0}
   .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
   code{background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.86em;color:var(--accent2)}
+
+  /* === browse controls (search + topic/theme filters) === */
+  .controls{margin:30px 0 4px}
+  .search{width:100%;font-size:15px;font-family:inherit;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:12px 18px;outline:none;transition:border-color .15s}
+  .search:focus{border-color:var(--accent)}
+  .search::placeholder{color:#9aa3b0}
+  .filterrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .flabel{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .chip{cursor:pointer;background:#eef1f6;border:1px solid var(--line);color:var(--muted);font-size:13px;padding:6px 13px;border-radius:999px;transition:background .15s,border-color .15s,color .15s;font-family:inherit;line-height:1.2}
+  .chip:hover{border-color:var(--accent);color:var(--ink)}
+  .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip .c{opacity:.55;margin-left:5px;font-size:.92em}
+  .chip.active .c{opacity:.8}
+  .themetoggle{cursor:pointer;background:#fff;border:1px solid var(--line);color:var(--accent);font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px;font-family:inherit;margin-left:auto}
+  .themetoggle:hover{border-color:var(--accent)}
+  .themetoggle.open{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .themepanel{margin-top:12px;padding:15px 16px;border:1px solid var(--line);border-radius:var(--radius);background:#f7f9fc}
+  .themepanel .ph{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 11px}
+  .themechips{display:flex;flex-wrap:wrap;gap:8px}
+  .themechips .chip{background:#fff}
+  .themechips .chip.active{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  .resultbar{display:flex;align-items:center;gap:14px;margin:20px 0 0;font-size:13px;color:var(--muted);min-height:18px}
+  .clearbtn{cursor:pointer;color:var(--accent);background:none;border:none;font-size:13px;font-family:inherit;padding:0;text-decoration:underline}
+  .banner{margin:14px 0 0;padding:11px 16px;border-left:3px solid var(--accent2);background:rgba(14,158,136,.07);border-radius:8px;font-size:14px;color:var(--ink)}
+  .banner b{color:var(--accent2)}
+  .noresults{padding:44px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:var(--radius);margin:24px 0}
+  /* theme pills shown on each card */
+  .themepills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+  .tpill{cursor:pointer;font-size:11px;color:var(--accent2);background:rgba(14,158,136,.08);border:1px solid rgba(14,158,136,.22);padding:2px 9px;border-radius:999px;transition:background .15s,color .15s,border-color .15s}
+  .tpill:hover{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+  .tpill::before{content:"\25C6";font-size:8px;opacity:.55;margin-right:4px;vertical-align:1px}
+  .is-hidden{display:none !important}
 </style>
 </head>
 <body>
@@ -52,15 +84,26 @@
     <a href="graph.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--accent);color:#fff;font-size:14px;font-weight:600;padding:9px 16px;border-radius:999px;text-decoration:none">🕸️ Explore the idea graph →</a>
   </header>
 
-  <nav class="topicnav">
-    <a href="#technology-ai">💻 Technology &amp; AI <span style="opacity:.6">11</span></a>
-    <a href="#writing">✍️ Writing &amp; Creativity <span style="opacity:.6">11</span></a>
-    <a href="#self-growth">🌱 Self &amp; Growth <span style="opacity:.6">9</span></a>
-    <a href="#philosophy">🧠 Philosophy <span style="opacity:.6">6</span></a>
-    <a href="#business-money">💼 Business &amp; Money <span style="opacity:.6">6</span></a>
-    <a href="#audience-growth">📣 Audience &amp; Growth <span style="opacity:.6">9</span></a>
-    <a href="#culture">🎭 Culture</a>
-  </nav>
+  <div class="controls">
+    <input id="q" class="search" type="search" placeholder="Search notes by title, author, or tag…" autocomplete="off" aria-label="Search notes">
+    <div class="filterrow" id="topicFilter">
+      <span class="flabel">Topic</span>
+      <button class="chip active" data-topic="all">All</button>
+      <button class="chip" data-topic="technology-ai">💻 Technology</button>
+      <button class="chip" data-topic="writing">✍️ Writing</button>
+      <button class="chip" data-topic="self-growth">🌱 Self &amp; Growth</button>
+      <button class="chip" data-topic="philosophy">🧠 Philosophy</button>
+      <button class="chip" data-topic="business-money">💼 Business</button>
+      <button class="chip" data-topic="audience-growth">📣 Audience</button>
+      <button class="themetoggle" id="themeToggle" aria-expanded="false">🕸️ Browse by theme</button>
+    </div>
+    <div class="themepanel is-hidden" id="themePanel">
+      <p class="ph">Themes connect articles across topics — click one to see what falls under it</p>
+      <div class="themechips" id="themeChips"></div>
+    </div>
+    <div class="banner is-hidden" id="banner"></div>
+    <div class="resultbar" id="resultbar"></div>
+  </div>
 
   <!-- ============ TECHNOLOGY & AI ============ -->
   <section class="topic" id="technology-ai">
@@ -545,5 +588,139 @@
     Stored locally in <code>~/Documents/projects/LearningNotes</code>. Each topic is a folder under <code>notes/</code>; add a note as an HTML file there and link it in its section above. New area of life? Add a new <code>&lt;section class="topic"&gt;</code> and a chip in the nav.
   </div>
 </div>
+
+<script>
+const THEMES=[["i1","Agent harness architecture",["what-is-an-agent-harness","hierarchical-memory-management","context-management-in-agent-harnesses","hermes-harness-architecture","testing-7-models-same-harness","sandboxes-are-the-servers","swarm-management-of-agent-harnesses"]],["i2","Context & memory for AI",["context-management-in-agent-harnesses","hierarchical-memory-management","ai-knowledge-layer","what-is-an-agent-harness","knowledge-graphs-blazing-fast"]],["i3","Multi-agent orchestration",["swarm-management-of-agent-harnesses","hermes-harness-architecture","sandboxes-are-the-servers","passive-income-with-ai-tool-sites","ai-knowledge-layer"]],["i4","Convergent design (bottom-up)",["what-is-an-agent-harness","context-management-in-agent-harnesses","hierarchical-memory-management"]],["i5","The human edge AI can't replace",["llms-are-not-brains","what-ai-cant-kill","how-to-become-disgustingly-creative","research-practice-creative-identity","ai-knowledge-layer"]],["i6","Productize expertise with AI",["17-claude-skills-income","claude-skills-service-business","passive-income-with-ai-tool-sites"]],["i7","Distribution & audience",["what-ai-cant-kill","passive-income-with-ai-tool-sites","how-to-become-disgustingly-creative","articulate-yourself-intelligently","why-write-about-your-own-life","growing-on-crypto-twitter","30-day-x-reply-routine","zero-to-2000-followers-playbook","reply-guy-strategy","x-algorithm-breakdown","how-to-post-bangers","honest-x-growth-journey","viral-launch-playbook","beat-the-x-algorithm","5m-impressions-replying"]],["i8","Compounding over years",["what-ai-cant-kill","passive-income-with-ai-tool-sites","research-practice-creative-identity","ai-knowledge-layer","pmarca-guide-to-career-planning","habits-that-make-you-a-writer","proof-of-abundance","the-only-moats-that-matter","zero-to-2000-followers-playbook","build-a-network-from-scratch"]],["i9","Taste & curation",["research-practice-creative-identity","ai-knowledge-layer","how-to-become-disgustingly-creative","what-ai-cant-kill"]],["i10","Original ideas = synthesis",["how-to-have-original-thoughts","how-to-become-disgustingly-creative","research-practice-creative-identity","articulate-yourself-intelligently"]],["i11","First-principles thinking",["how-to-pick-a-career","how-to-have-original-thoughts","articulate-yourself-intelligently","llms-are-not-brains","willingness-to-look-stupid"]],["i12","Authenticity & your voice",["youre-not-a-bad-writer","beginners-guide-to-personal-essays","why-write-about-your-own-life","how-to-have-original-thoughts","how-to-become-disgustingly-creative"]],["i13","Clarity & simplicity",["how-to-write-well","articulate-yourself-intelligently","beginners-guide-to-personal-essays"]],["i14","A skill, not a trait",["how-to-have-original-thoughts","how-to-become-disgustingly-creative","articulate-yourself-intelligently","habits-that-make-you-a-writer","special-but-average","growing-on-crypto-twitter","30-day-x-reply-routine","zero-to-2000-followers-playbook","reply-guy-strategy","x-algorithm-breakdown","honest-x-growth-journey"]],["i15","Systems > willpower",["habits-that-make-you-a-writer","you-dont-need-discipline-better-routine","write-with-a-full-time-job","pmarca-guide-to-career-planning"]],["i16","Start before ready",["youre-not-a-bad-writer","special-but-average","how-to-become-disgustingly-creative","you-dont-need-discipline-better-routine","pmarca-guide-to-career-planning","insane-things-in-my-20s","how-ambitious-people-get-what-they-want"]],["i17","Focus & saying no",["hell-yeah-or-no","special-but-average","how-to-do-what-you-love","how-to-become-disgustingly-creative"]],["i18","Beware prestige & validation",["how-to-do-what-you-love","how-to-have-original-thoughts","special-but-average","how-to-pick-a-career","burn-your-bridges","willingness-to-look-stupid"]],["i19","Work as calling & meaning",["make-your-work-your-calling","how-to-do-what-you-love","how-to-pick-a-career","pmarca-guide-to-career-planning","outgrow-employment"]],["i20","Explore, don't over-plan",["how-to-pick-a-career","pmarca-guide-to-career-planning","how-to-do-what-you-love"]],["i21","Combine skills to be rare",["pmarca-guide-to-career-planning","how-to-become-disgustingly-creative","articulate-yourself-intelligently"]],["i22","Self-knowledge & inner work",["how-to-sit-with-your-feelings","how-to-pick-a-career","why-write-about-your-own-life","how-to-do-what-you-love","the-self-help-trap"]],["i23","Writing to understand yourself",["why-write-about-your-own-life","beginners-guide-to-personal-essays","how-to-have-original-thoughts","how-to-sit-with-your-feelings"]],["i24","Deep attention & boredom",["how-to-become-disgustingly-creative","you-dont-need-discipline-better-routine","how-to-have-original-thoughts","research-practice-creative-identity"]],["i25","Curiosity, listening & service",["how-to-be-a-great-conversationalist","make-your-work-your-calling","how-to-have-original-thoughts","build-a-network-from-scratch","the-self-help-trap"]],["i26","Tech trajectory & abundance",["proof-of-abundance","llms-are-not-brains"]],["i27","Moats that survive AI",["the-only-moats-that-matter","what-ai-cant-kill"]],["i28","Replies as a growth engine",["growing-on-crypto-twitter","30-day-x-reply-routine","reply-guy-strategy","x-algorithm-breakdown","honest-x-growth-journey","viral-launch-playbook","5m-impressions-replying"]],["i29","Working the algorithm",["x-algorithm-breakdown","how-to-post-bangers","viral-launch-playbook","beat-the-x-algorithm","5m-impressions-replying"]],["i30","Ownership & the one-person business",["outgrow-employment","what-ai-cant-kill","passive-income-with-ai-tool-sites","pmarca-guide-to-career-planning","insane-things-in-my-20s"]],["i32","Seizing opportunity (do the work)",["how-ambitious-people-get-what-they-want","pmarca-guide-to-career-planning","insane-things-in-my-20s","willingness-to-look-stupid"]],["i31","Reinvention & letting go",["burn-your-bridges","outgrow-employment","how-to-pick-a-career"]],["i33","Ego as the obstacle to learning",["willingness-to-look-stupid","insane-things-in-my-20s","the-self-help-trap"]]];
+(function(){
+  const cards=[...document.querySelectorAll('.card')];
+  const slug2themes={};
+  THEMES.forEach(([id,l,slugs])=>slugs.forEach(sg=>(slug2themes[sg]=slug2themes[sg]||[]).push([id,l])));
+  // index cards + render theme pills
+  cards.forEach(card=>{
+    const href=card.getAttribute('href')||'';
+    const slug=href.split('/').pop().replace('.html','');
+    card.dataset.slug=slug;
+    card.dataset.topic=(card.closest('.topic')||{}).id||'';
+    const txt=(card.textContent||'').toLowerCase();
+    card.dataset.text=txt;
+    const th=slug2themes[slug]||[];
+    card.dataset.themes=th.map(t=>t[0]).join(' ');
+    if(th.length){
+      const wrap=document.createElement('div');
+      wrap.className='themepills';
+      th.forEach(([id,l])=>{
+        const b=document.createElement('span');
+        b.className='tpill';b.textContent=l;b.dataset.theme=id;
+        b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();selectTheme(id);window.scrollTo({top:0,behavior:'smooth'});});
+        wrap.appendChild(b);
+      });
+      card.appendChild(wrap);
+    }
+  });
+  const N=cards.length;
+  // counts
+  const topicCount={},themeCount={};
+  cards.forEach(c=>topicCount[c.dataset.topic]=(topicCount[c.dataset.topic]||0)+1);
+  THEMES.forEach(([id,l,slugs])=>themeCount[id]=slugs.filter(sg=>cards.some(c=>c.dataset.slug===sg)).length);
+
+  const q=document.getElementById('q');
+  q.placeholder='Search '+N+' notes by title, author, or tag…';
+  const topicFilter=document.getElementById('topicFilter');
+  const themeToggle=document.getElementById('themeToggle');
+  const themePanel=document.getElementById('themePanel');
+  const themeChips=document.getElementById('themeChips');
+  const banner=document.getElementById('banner');
+  const resultbar=document.getElementById('resultbar');
+
+  // topic chip counts
+  topicFilter.querySelectorAll('.chip[data-topic]').forEach(ch=>{
+    const t=ch.dataset.topic;
+    if(t!=='all'&&topicCount[t])ch.insertAdjacentHTML('beforeend',' <span class="c">'+topicCount[t]+'</span>');
+  });
+  // theme chips
+  THEMES.forEach(([id,l])=>{
+    const b=document.createElement('button');
+    b.className='chip';b.dataset.theme=id;
+    b.innerHTML=l+' <span class="c">'+themeCount[id]+'</span>';
+    b.addEventListener('click',()=>selectTheme(state.theme===id?null:id));
+    themeChips.appendChild(b);
+  });
+
+  const state={q:'',topic:'all',theme:null};
+
+  function selectTheme(id){
+    state.theme=id;
+    if(id){state.topic='all';}
+    themeChips.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.theme===id));
+    syncTopicChips();
+    if(id){themePanel.classList.remove('is-hidden');themeToggle.classList.add('open');themeToggle.setAttribute('aria-expanded','true');}
+    apply();
+  }
+  function syncTopicChips(){
+    topicFilter.querySelectorAll('.chip[data-topic]').forEach(c=>c.classList.toggle('active',c.dataset.topic===state.topic));
+  }
+
+  topicFilter.querySelectorAll('.chip[data-topic]').forEach(ch=>{
+    ch.addEventListener('click',()=>{
+      state.topic=ch.dataset.topic;
+      if(state.theme){state.theme=null;themeChips.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));}
+      syncTopicChips();apply();
+    });
+  });
+  themeToggle.addEventListener('click',()=>{
+    const hidden=themePanel.classList.toggle('is-hidden');
+    themeToggle.classList.toggle('open',!hidden);
+    themeToggle.setAttribute('aria-expanded',String(!hidden));
+  });
+  q.addEventListener('input',()=>{state.q=q.value.trim().toLowerCase();apply();});
+
+  function apply(){
+    const themeSlugs=state.theme?new Set((THEMES.find(t=>t[0]===state.theme)||[])[2]):null;
+    let visible=0;const topicsSeen={};
+    cards.forEach(c=>{
+      let ok=true;
+      if(state.q&&!c.dataset.text.includes(state.q))ok=false;
+      if(ok&&state.topic!=='all'&&c.dataset.topic!==state.topic)ok=false;
+      if(ok&&themeSlugs&&!themeSlugs.has(c.dataset.slug))ok=false;
+      c.classList.toggle('is-hidden',!ok);
+      if(ok){visible++;topicsSeen[c.dataset.topic]=(topicsSeen[c.dataset.topic]||0)+1;}
+    });
+    // hide empty topic sections
+    document.querySelectorAll('.topic').forEach(sec=>{
+      const has=sec.querySelectorAll('.card:not(.is-hidden)').length>0;
+      sec.classList.toggle('is-hidden',!has);
+    });
+    // banner for active theme
+    if(state.theme){
+      const t=THEMES.find(x=>x[0]===state.theme);
+      const nt=Object.keys(topicsSeen).length;
+      banner.innerHTML='Theme: <b>'+t[1]+'</b> — '+visible+' note'+(visible!==1?'s':'')+' across '+nt+' topic'+(nt!==1?'s':'');
+      banner.classList.remove('is-hidden');
+    }else banner.classList.add('is-hidden');
+    // result bar
+    const filtering=state.q||state.topic!=='all'||state.theme;
+    let html='';
+    if(filtering){
+      html='Showing <strong style="color:var(--ink)">'+visible+'</strong> of '+N+' notes';
+      html+=' <button class="clearbtn" id="clearbtn">Clear filters</button>';
+    }else{html=N+' notes · 7 topics · '+THEMES.length+' themes';}
+    resultbar.innerHTML=html;
+    const cb=document.getElementById('clearbtn');
+    if(cb)cb.addEventListener('click',clearAll);
+    // no results
+    let nr=document.getElementById('noresults');
+    if(visible===0){
+      if(!nr){nr=document.createElement('div');nr.id='noresults';nr.className='noresults';nr.textContent='No notes match your search or filters.';resultbar.after(nr);}
+      nr.classList.remove('is-hidden');
+    }else if(nr)nr.classList.add('is-hidden');
+  }
+  function clearAll(){
+    state.q='';state.topic='all';state.theme=null;q.value='';
+    syncTopicChips();themeChips.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    apply();
+  }
+  apply();
+})();
+</script>
 </body>
 </html>
