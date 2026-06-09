@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beat the X Algorithm in 2026 — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style></head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Beat the X Algorithm in 2026</h1>
+    <div class="meta">
+      By <strong>Kritika</strong> (@kritikakodes)
+      <span class="dot">·</span> Published Jan 20, 2026
+      <span class="dot">·</span> Saved Jun 9, 2026
+    </div>
+    <div class="tags">
+      <span class="tag">X Algorithm</span>
+      <span class="tag">Engagement</span>
+      <span class="tag">Virality</span>
+      <span class="tag">Timing</span>
+    </div>
+  </header>
+
+  <p class="lede">The X feed is no longer a clock. It is a guess. The algorithm tries to predict what you are most likely to interact with and floats that to the top of your "For You" — so the order you see posts in is shaped by your interests and behavior, not by when things were posted.</p>
+
+  <div class="disclaimer">
+    <strong>Captured as-is.</strong> A general beginner-level explainer of the X algorithm; specifics (e.g. best-time-to-post windows) are the author's reading of 2026 trends, not official documentation.
+  </div>
+
+  <div class="callout key">
+    <h4>The whole thing in one breath</h4>
+    <p style="margin:0">X promotes posts that earn <strong>quick, strong interaction</strong> — especially <strong>replies and reposts</strong>, not just likes. Feeds are <strong>personalized</strong> by your interests and behavior. To win: open with a <strong>strong first line</strong>, write content that <strong>sparks conversation</strong>, <strong>post at peak times</strong> so you catch early engagement, and stay <strong>consistent and high-quality</strong>.</p>
+  </div>
+
+  <h2>What X looks for</h2>
+  <p>Three signals do most of the heavy lifting. Read them together: the algorithm is hunting for posts people <em>want to interact with</em>, and pushing those to the top.</p>
+
+  <table>
+    <thead>
+      <tr><th>Signal</th><th>What it means</th><th>Why it matters</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="k">Early engagement</span></td>
+        <td>Fast likes, replies, and reposts in the first window after you post.</td>
+        <td>A quick burst tells X the post is worth showing — it earns more reach.</td>
+      </tr>
+      <tr>
+        <td><span class="k">Interactions over likes</span></td>
+        <td>Replies and reposts count for more than a passive like.</td>
+        <td>They show <em>real</em> interest — someone stopped to respond or to share with their own audience.</td>
+      </tr>
+      <tr>
+        <td><span class="k">Personalized feeds</span></td>
+        <td>Your interests plus your past behavior decide your "For You".</td>
+        <td>There is no single feed; each person sees content the algorithm thinks they will engage with.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>In short: <strong>X puts content people want to interact with at the top.</strong> Everything below is about earning that interaction quickly.</p>
+
+  <h2>What goes viral</h2>
+  <p>Reach starts with stopping the scroll, then giving people a reason to do more than glance.</p>
+  <ul>
+    <li><strong>A strong first line.</strong> The opening has to stop the scroll — it is the only thing most people read before deciding to move on.</li>
+    <li><strong>Questions and conversation-starters.</strong> Ask something; invite a take. This is "reply-bait" in the good sense — it pulls real responses, and replies are exactly what the algorithm rewards.</li>
+    <li><strong>Polls and threads.</strong> Both <em>extend</em> the interaction — a poll is one tap of engagement; a thread keeps people reading and replying down the chain.</li>
+    <li><strong>Relevant hashtags and trending topics.</strong> Tie into what people are already searching and talking about so your post can surface in those streams.</li>
+  </ul>
+
+  <div class="callout">
+    <h4>Myth-bust</h4>
+    <p style="margin:0">Typos alone do <strong>not</strong> make content go viral. The idea that a deliberate mistake "boosts" a post is a myth — what actually drives reach is <strong>engagement and quality</strong>. A typo might get a few "you spelled this wrong" replies, but that is not a strategy.</p>
+  </div>
+
+  <h2>Best time to post (2026 trends, author's view)</h2>
+  <p class="muted">Framed as the author's estimate of current trends, not an official window — treat it as a starting hypothesis to test against your own audience.</p>
+  <ul>
+    <li><strong>Weekdays, roughly 9–11 a.m.</strong> — with <strong>Wednesday around 9 a.m.</strong> singled out as a sweet spot.</li>
+    <li><strong>Weekends, early mornings.</strong></li>
+  </ul>
+  <p>The logic is the same in both cases: post when people are <em>waking up or commuting</em> and reaching for their phones. Land in that wave and you collect early engagement fast — which, per the section above, is the boost that decides how far the post travels.</p>
+
+  <h2>Other visibility tips</h2>
+  <div class="steps">
+    <div class="step">
+      <b>Be consistent.</b> Posting regularly lets the algorithm learn <em>when your audience is active</em>, so it can time your reach better. Sporadic posting gives it nothing to learn from.
+    </div>
+    <div class="step">
+      <b>Use threads smartly.</b> A good thread keeps people on your content longer — more time and more taps down the chain, all of which read as engagement.
+    </div>
+    <div class="step">
+      <b>Engage with your followers.</b> Reply to the people who comment. Real back-and-forth conversation both deepens relationships and feeds the interaction signals the algorithm cares about.
+    </div>
+    <div class="step">
+      <b>Quality beats quantity.</b> A few high-quality posts outperform a flood of weak ones. Weak posts that get ignored can teach the algorithm your content is not worth showing.
+    </div>
+  </div>
+
+  <h2>The early-engagement engine</h2>
+  <p>If one idea ties the whole note together, it is this: every post gets a small test window, and what happens in that window decides everything after.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Post → test window → reach (or death)</div>
+    <div class="row grow">
+      <div class="node accent">
+        <div class="nh">You post</div>
+        <div class="ns">Strong first line<br>at a peak time</div>
+      </div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="row grow">
+      <div class="node">
+        <div class="nh">Small test window</div>
+        <div class="ns">X shows it to a limited slice and watches the first reactions</div>
+      </div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="twocol">
+      <div class="vs good">
+        <h4>High interaction</h4>
+        <p style="margin:0;font-size:13px;color:var(--muted)">Fast replies &amp; reposts → X reads it as worth showing → <strong>wider reach</strong>, shown to more people, more "For You" slots.</p>
+      </div>
+      <div class="vs bad">
+        <h4>Low interaction</h4>
+        <p style="margin:0;font-size:13px;color:var(--muted)">Few reactions → no signal of interest → the post <strong>dies</strong> quietly, seen by almost no one.</p>
+      </div>
+    </div>
+    <div class="legend">Velocity in the first window is the gate. This is why a strong opener and peak-time posting matter so much. (HTML/CSS reconstruction.)</div>
+  </figure>
+
+  <h2>In simple words</h2>
+  <blockquote>
+    X promotes posts that get quick, strong interaction. Content that makes people talk and share spreads fastest. Posting at peak times gives you a better start. And no — typos don't make posts go viral. Engagement does.
+  </blockquote>
+
+  <hr class="soft">
+
+  <p class="src">
+    Source: Kritika (<a href="https://x.com/kritikakodes/status/2013503250688069740">@kritikakodes — "Beat the X Algorithm in 2026"</a>, X article, Jan 20 2026). A beginner-level explainer; the timing specifics are the author's reading of 2026 trends, not official documentation. Diagrams are HTML/CSS reconstructions.
+    <br><br>
+    Related: <a href="x-algorithm-breakdown.html">How the X Algorithm Works (TweepCred)</a>.
+  </p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

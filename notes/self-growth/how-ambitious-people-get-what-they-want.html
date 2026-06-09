@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Ambitious People Actually Get What They Want — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How Ambitious People Actually Get What They Want</h1>
+    <div class="meta">
+      By <strong>Ryan Holiday</strong> (@RyanHoliday)
+      <span class="dot">·</span> Published Feb 26, 2026
+      <span class="dot">·</span> Saved Jun 9, 2026
+    </div>
+    <div class="tags">
+      <span class="tag">Ambition</span>
+      <span class="tag">Preparation</span>
+      <span class="tag">Opportunity</span>
+      <span class="tag">Courage</span>
+    </div>
+  </header>
+
+  <p class="lede">In a high-stakes meeting there are two kinds of people: the one who treats it as an interview — reacting, answering questions, winging it — and the one who treats it as an audition, doing the asking and bringing a plan. The second one wins.</p>
+
+  <div class="callout key">
+    <h4>The key idea</h4>
+    <p>Ramit Sethi calls it the <strong>"Briefcase Technique."</strong> After the pleasantries and the basic small talk, you reveal how much you researched and lay out a concrete plan for what you'll do and why you're the person to do it. <strong>Preparation plus the courage to actually try — harder than everyone else — is how ambition converts an opportunity into an outcome.</strong> Most people just wing it, often out of a quiet fear of trying and failing.</p>
+  </div>
+
+  <h2>Interview vs. audition</h2>
+  <p>Walk into the same room and you can play it two completely different ways. Most people show up as an <em>interviewee</em>: they wait to be asked, they answer reactively, and they let the other side dictate where the conversation goes. The ambitious person shows up as an <em>auditioner</em>: they seize control of the meeting, do the asking, and pitch a vision instead of waiting to be evaluated against one.</p>
+  <p>The difference isn't charisma or luck. It's that one person came prepared to lead the conversation and the other came to be processed.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Two ways to walk into the room</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Interview — react &amp; wing it</h4>
+        <ul>
+          <li>Waits to be asked questions</li>
+          <li>Answers reactively, improvises</li>
+          <li>Lets the room dictate events</li>
+          <li>Hopes to be chosen</li>
+        </ul>
+      </div>
+      <div class="vs good">
+        <h4>Audition — research, plan, bold ask</h4>
+        <ul>
+          <li>Does the asking</li>
+          <li>Brings a concrete, researched plan</li>
+          <li>Takes control of the meeting</li>
+          <li>Makes the case and the ask</li>
+        </ul>
+      </div>
+    </div>
+    <figcaption>Same room, same opportunity — the outcome turns on which posture you bring.</figcaption>
+  </figure>
+
+  <h2>The briefcase technique</h2>
+  <p>The name comes from <strong>Ramit Sethi</strong>: once trust is established and the basics are out of the way, you open the "briefcase" — you reveal the research you've done and a plan for how you'd improve things. That single move separates you from everyone who simply "showed up and did nothing remarkable." Two coaching legends are the canonical examples.</p>
+
+  <div class="steps">
+    <div class="step"><b>Nick Saban (1994).</b> Walked into the Michigan State head-coaching interview with a legal pad full of notes and took control of the room — going so far as to name the specific assistants he intended to hire. He didn't audition to be considered; he arrived as though the job were already his to run. He got it.</div>
+    <div class="step"><b>Andy Reid.</b> Showed up to the Eagles with a roughly six-inch-thick binder of notes he'd been accumulating for some sixteen years. Years of preparation, made visible and concrete on the table. He got the job too.</div>
+    <div class="step"><b>Ramit Sethi's framing.</b> After trust is established, reveal your research plus an improvement plan. The point isn't the prop — it's the proof of work. It separates you from everyone who just turned up and did nothing remarkable.</div>
+  </div>
+
+  <h2>Why most people wing it</h2>
+  <p>Most people do the opposite of all this. They react, they improvise, and they let the room dictate events — and underneath that passivity is usually fear. The internal script runs something like: <em>I'll just see what happens, I won't really try.</em> Not-trying feels safer than wanting something badly, preparing hard for it, and then failing anyway. If you never put in the effort, you never have to feel the sting of falling short on something you cared about.</p>
+
+  <blockquote>
+    "I'll just see what happens. I won't really try."
+    <cite>— the quiet logic of winging it</cite>
+  </blockquote>
+
+  <p>It's a way of pre-protecting the ego. But it also guarantees you stay in the interview lane forever.</p>
+
+  <h2>Mr. A and Peter Thiel</h2>
+  <p>From Holiday's book <em>Conspiracy</em>: a 26-year-old he calls <strong>"Mr. A"</strong> landed a dinner with <strong>Peter Thiel</strong> and treated it as an audition, not an interview. He opened with a concrete, researched plan — a shell company that would hunt for legal causes of action against Gawker — complete with names, a timeline, and a budget: roughly three to five years and on the order of $10 million.</p>
+  <p>When Thiel hesitated and suggested it might be too hard, the young man doubled down rather than backing off: <em>"Peter, if everyone thought that way, what would the world look like?"</em> Thiel backed him on the spot — a budget around $10 million, structured at roughly $25,000 a month. (This is a real and controversial episode; recorded here factually, not as endorsement.)</p>
+  <p>The mechanics are the same as Saban and Reid: walk in with the plan, the specifics, and the nerve to make the ask — and hold the line when the answer wavers.</p>
+
+  <h2>The opportunities we leave on the table</h2>
+  <p>Holiday turns the lens on himself. As a young man chasing a PR job, he obsessed over buying and tailoring a suit for the interview — and prepared <em>nothing</em> to actually say. He winged the conversation, it happened to work out, and he now cringes at how much he was leaving to chance.</p>
+  <p>His larger point is about the opportunities we never even notice. Because we were too lazy, too scared, or too entitled to do the work, countless chances quietly never matured into opportunities at all — <em>"trees falling in the woods we never heard."</em> The cost of winging it isn't just the rooms you fumble; it's all the rooms you never got into.</p>
+
+  <h2>Just try (harder)</h2>
+  <p>Strip away the prop and the briefcase technique is really about one thing: being willing to take a real swing — to try much harder than everyone else around you. Most people won't, which is exactly why it works.</p>
+  <p>Holiday contrasts it with cold outreach. People email him offering to "work for free" or asking him to "be my mentor," but they rarely say what they can actually <em>do</em> or ask a single specific question. As he puts it, the note <em>"wasn't enough."</em> It was an interview posture pasted into an inbox.</p>
+  <blockquote>
+    Most of the time the door slams. But when it works, your whole life can change.
+    <cite>— on taking the real swing</cite>
+  </blockquote>
+  <p>It won't always land — usually it won't. But the upside is asymmetric: a single audition that connects can reroute an entire life, and the people who refuse to try forfeit that possibility entirely.</p>
+
+  <hr class="soft">
+  <p class="src">Source: Ryan Holiday (@RyanHoliday), author of <em>The Obstacle Is the Way</em> and creator of Daily Stoic — <a href="https://x.com/RyanHoliday/status/2027066473131204609">How Ambitious People Actually Get What They Want</a> (X article, Feb 26 2026). References Ramit Sethi's "Briefcase Technique," Nick Saban, Andy Reid, and Holiday's book <em>Conspiracy</em>; the original ends with a newsletter signup. Diagrams are HTML/CSS reconstructions. Related: <a href="../philosophy/pmarca-guide-to-career-planning.html">Pmarca Guide to Career Planning</a>.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

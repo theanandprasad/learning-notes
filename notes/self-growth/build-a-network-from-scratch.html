@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build a Network From Scratch — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Stop Waiting to Meet the "Right" People — Build a Network From Scratch</h1>
+    <div class="meta">
+      <span>By <strong>Lindsay Casale</strong> (@LindsayCasale)</span>
+      <span class="dot">·</span>
+      <span>Published Mar 5, 2026</span>
+      <span class="dot">·</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Networking</span>
+      <span class="tag">Relationships</span>
+      <span class="tag">Career</span>
+      <span class="tag">Long Game</span>
+    </div>
+  </header>
+
+  <p class="lede">Building a network isn't about being an extrovert or already knowing the right people. It's about intentionality, showing up consistently, and playing the long game — anyone can do it from zero.</p>
+
+  <div class="callout key">
+    <h4>The core sequence</h4>
+    <p>Get in the room (online <em>and</em> in person) → engage genuinely <strong>before</strong> you need anything → use warm, friend-of-a-friend intros → then nurture those relationships over time. Never lead with the ask before the relationship exists. Networks compound: the value of what you build shows up later, often in directions you can't predict.</p>
+  </div>
+
+  <h2>Get yourself in a room</h2>
+  <p>When the author moved to San Francisco with no network at all, she made one rule for herself: commit to <strong>one event per week</strong>. She found them on Eventbrite and Luma, searching for meetups around marketing, PR, and business. Even now, she still recommends roughly <strong>one in-person event a month, year-round</strong> — proximity to people is the raw input the whole system runs on.</p>
+  <p>If you're introverted and the room feels intimidating, four moves make it survivable:</p>
+
+  <div class="steps">
+    <div class="step"><b>Bring a friend as a "home base."</b> Having a familiar face lowers the activation energy — but don't cling to them all night. Use them as a place to reset, not a place to hide.</div>
+    <div class="step"><b>Approach people who are also alone.</b> Someone standing by themselves is almost always relieved to be talked to. It's the lowest-risk opening in the room.</div>
+    <div class="step"><b>Set a meeting goal.</b> Give yourself a concrete target — e.g. "meet 3 useful new people" — so you have a finish line instead of an open-ended ordeal.</div>
+    <div class="step"><b>Introduce yourself to the organizer.</b> They know everyone and want their event to go well. Tell them what you're looking for and ask them to introduce you.</div>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Working a room you walked into cold</div>
+    <div class="row grow">
+      <div class="node accent"><div class="nh">Bring a friend</div><div class="ns">Home base, not a hiding spot</div></div>
+      <div class="node"><div class="nh">Find the other loners</div><div class="ns">Easiest, warmest opens</div></div>
+      <div class="node"><div class="nh">Set a number</div><div class="ns">"Meet 3 people," then leave</div></div>
+      <div class="node accent2"><div class="nh">Meet the organizer</div><div class="ns">Ask for intros</div></div>
+    </div>
+    <figcaption>Four low-pressure tactics that turn "I know nobody here" into a handful of new contacts.</figcaption>
+  </figure>
+
+  <h2>The PR trick for online networking</h2>
+  <p>The author's PR background gives her the governing rule for reaching people online:</p>
+
+  <blockquote>You have to earn the right to pitch.<cite>— Lindsay Casale, on borrowing the PR mindset for networking</cite></blockquote>
+
+  <p>You don't earn that right with a cold DM. You earn it by becoming a name they recognize <em>before</em> you ever message them. Follow the people you want to know, turn on notifications, and comment and engage genuinely and consistently — until your name starts to feel familiar to them. <strong>Only then</strong> do you send the DM.</p>
+  <p>And when you do, keep it short and honest. Her sample DM, paraphrased:</p>
+
+  <blockquote>I've followed your work for a while and really admire it. Would you be open to connecting? I'll be upfront — I'm hoping to learn about X — and in return I'd be glad to help with Y. If now's not a good time, no worries at all.<cite>— paraphrased sample DM</cite></blockquote>
+
+  <p>Acknowledge their work, ask permission, be upfront about your intentions, and offer your own value. Keep it concise. If they don't reply, let it go and move on — no follow-up guilt-trips.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Earning the right to pitch (online)</div>
+    <div class="col">
+      <div class="node accent"><div class="nh">Follow + notifications on</div><div class="ns">Show up where they are</div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="nh">Comment &amp; engage genuinely</div><div class="ns">Consistently, over weeks</div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="nh">They recognize your name</div><div class="ns">You've earned the right</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent2"><div class="nh">Now send the DM</div><div class="ns">Short, honest, offers value</div></div>
+    </div>
+    <figcaption>The cold DM is the last step, not the first.</figcaption>
+  </figure>
+
+  <h2>Work the friend-of-a-friend layer</h2>
+  <p>Your existing connections are a hidden directory. Ask them plainly: <em>"Do you know anyone at X company / in this role / in this industry?"</em> A warm intro from someone you both know beats a cold approach every time.</p>
+  <p>Once you get one, handle it well:</p>
+  <ul>
+    <li><strong>Start low-pressure.</strong> A DM or email, then a quick informal call — nothing heavy.</li>
+    <li><strong>Come with curiosity.</strong> Ask about their path and their work; you're there to learn, not to extract.</li>
+    <li><strong>Treat it like they might be interviewing you.</strong> Be prepared and respectful of their time — first impressions still count, even in a casual chat.</li>
+    <li><strong>Close with a clear, specific ask.</strong> Only at the end, and only something concrete: "Would you mind giving my resume a look?" or "If you hear of openings, would you send them my way / refer me?"</li>
+  </ul>
+  <p>The order matters as much as the content. <strong>Never lead with the ask.</strong> The relationship comes first; the request comes last.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Anatomy of a warm intro</div>
+    <div class="col">
+      <div class="node"><div class="nh">Low-pressure first touch</div><div class="ns">DM / email → quick informal call</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">Lead with curiosity</div><div class="ns">Learn their story; treat it like they may be interviewing you</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent2"><div class="nh">Then a specific ask</div><div class="ns">Resume feedback · "send openings my way" · referral</div></div>
+    </div>
+    <figcaption>Relationship before request — the ask lands only after you've shown up as a real person.</figcaption>
+  </figure>
+
+  <h2>Cultivate what you build</h2>
+  <p>A network isn't a one-time harvest; it's a garden. Relationships are maintained over time through small, low-cost touches:</p>
+  <ul>
+    <li>Occasional check-ins — <em>"saw this, thought of you"</em> with a relevant link or article.</li>
+    <li>Coffee or a catch-up every few months, with no agenda attached.</li>
+    <li>Congratulating people on milestones — new jobs, launches, wins.</li>
+  </ul>
+  <p>The key is to <strong>not be transactional</strong>. You're not banking favors; you're keeping a relationship alive. Value shows up unpredictably and on its own schedule. Her own example: a casual, no-agenda catch-up with a boss from <strong>five years earlier</strong> led to her being hired by that person months later — a payoff she could never have planned or rushed.</p>
+
+  <h2>Final thoughts</h2>
+  <p>None of this is about collecting contacts or padding a follower count. It's about building genuine relationships that grow in directions you can't foresee. It feels slow at first — you put in effort and see little — but networks <strong>compound</strong>, and the early investment keeps paying out for years.</p>
+
+  <blockquote>It's not about who you know today. It's about who you'll be glad you stayed in touch with five years from now.<cite>— paraphrasing the closing idea</cite></blockquote>
+
+  <figure class="diagram">
+    <div class="dtitle">The networking loop</div>
+    <div class="row grow">
+      <div class="node accent"><div class="nh">Get in the room</div><div class="ns">Online + in person</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">Engage first</div><div class="ns">Before you need anything</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">Warm intros</div><div class="ns">Friend of a friend</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Nurture</div><div class="ns">Over months &amp; years</div></div>
+    </div>
+    <div class="legend">… and it compounds — each nurtured relationship widens the next room you can get into.</div>
+    <figcaption>The whole system as one loop: the more you nurture, the bigger your starting point becomes next time.</figcaption>
+  </figure>
+
+  <hr class="soft">
+
+  <p class="src"><strong>Source:</strong> <a href="https://x.com/LindsayCasale/status/2029298034904092681">Stop Waiting to Meet the "Right" People — Build a Network From Scratch</a> — Lindsay Casale (<a href="https://x.com/LindsayCasale">@LindsayCasale</a>, fractional CMO for tech startups), X article, Mar 5 2026. A follow-up to her earlier piece "Never Apply to Another Job Again," it closes with an invitation to DM her. Diagrams here are HTML/CSS reconstructions of the ideas, not from the original.</p>
+  <p class="src"><strong>Related:</strong> <a href="how-to-be-a-great-conversationalist.html">How to Be a Great Conversationalist</a></p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Viral Tech Launch Playbook — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>The Viral Tech Launch Playbook ($1M+ Spent in a Year)</h1>
+    <div class="meta">
+      <span>By <strong>Mitchell</strong> (@MitcheIl)</span>
+      <span class="dot">•</span>
+      <span>Published Mar 19, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Launches</span>
+      <span class="tag">Marketing</span>
+      <span class="tag">Virality</span>
+      <span class="tag">X Algorithm</span>
+    </div>
+  </header>
+
+  <p class="lede">An agency that's spent $1M+ engineering startup launch videos on X — 100M+ views, roughly 1.5M average views per video — breaks down the repeatable playbook. Every viral launch, the author argues, is "engineered from the first frame to the last repost."</p>
+
+  <div class="disclaimer">
+    Captured as-is. This is the author's agency playbook and ends as a sales pitch ("work with me" / comment to get the full guide); the view counts and client results are his claims, and it normalizes engineered/astroturfed virality. Archived for how launch marketing actually works, not as an endorsement of the tactics.
+  </div>
+
+  <div class="callout key">
+    <h4>The core claim</h4>
+    <p style="margin:0">A launch is <strong>engineered, not lucky.</strong> Six steps: (1) a video worth stopping for, (2) the right influencers, (3) hand-write every influencer post, (4) use the company network, (5) include a valuable giveaway, (6) track everything. All six are built around <strong>how X's algorithm distributes content</strong> — the first 30–60 minutes decide everything, replies count far more than likes, and the founder must reply for a full 48 hours.</p>
+  </div>
+
+  <h2>The six steps</h2>
+  <div class="steps">
+    <div class="step"><b>1 · Make a video worth stopping for.</b> The hook is the #1 viral signal. Build swipe files of proven 10M+-view hooks (using tools like <em>1of10</em> and <em>Foreplay</em>) and pattern-match them to the product. You have <strong>3 seconds to stop the scroll</strong>: land a bold claim by second 5 and a live product demo by second 10, in present tense, with audio and visuals matched 1:1. Write at roughly a <strong>5th-grade reading level</strong>. Example: Arcads AI mashed together 5 viral hooks into one video → 4M+ views.</div>
+    <div class="step"><b>2 · Work with the right influencers.</b> X's algorithm sorts content into <em>"SimClusters"</em> — about 145,000 communities — so the job is to infiltrate the right ones. The formula: <strong>Engagement + Audience Overlap / Cultural Impact.</strong> Use two buckets: <strong>ICP accounts</strong> (your buyers' world — these drive sales) and <strong>Amplification accounts</strong> (news / high-reach — these make it feel like a cultural moment). Several credible accounts posting in a short window signals "big news" to the algorithm. Don't just sort by follower count — you'll get bots and low engagement.</div>
+    <div class="step"><b>3 · Write every influencer post by hand.</b> Busy creators half-ass AI-generated posts, so supply tailored copy matched to each creator's voice. <strong>Require the paid-partner badge.</strong> Plant a subtle, slightly provocative edge so a specific community distributes the post for you — by arguing about it. (Noted here neutrally: this is a deliberately manipulative mechanic.)</div>
+    <div class="step"><b>4 · Use the company network.</b> Tap customers, partners, and employees' personal contacts — then systematize and incentivize it. One company gave staff an extra PTO day for hitting <strong>1,000 comments in 24 hours</strong> → 2.9M views.</div>
+    <div class="step"><b>5 · Include a valuable giveaway.</b> Give away something genuinely useful — your hiring system, sales process, or fundraising strategy. People love free stuff, and it drives the engagement the algorithm rewards.</div>
+    <div class="step"><b>6 · Track everything.</b> Run a real-time <strong>"War Room"</strong> — 40+ people monitoring every impression, comment, and repost on launch day. Push more fuel toward whatever's outperforming and course-correct the narrative live.</div>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Two influencer buckets, two jobs</div>
+    <div class="twocol">
+      <div class="vs a"><h4>ICP accounts</h4><p style="margin:0;font-size:14px">Live inside your <strong>buyers' world</strong>. Right audience overlap → these are what actually <strong>drive sales</strong>. Lower reach, higher conversion.</p></div>
+      <div class="vs b"><h4>Amplification accounts</h4><p style="margin:0;font-size:14px">News and <strong>high-reach</strong> handles. Several posting in a tight window makes the launch feel like a <strong>cultural moment</strong> — manufactured "big news."</p></div>
+    </div>
+    <figcaption>Targeting the right SimClusters (~145k communities) beats sorting by raw follower count.</figcaption>
+  </figure>
+
+  <h2>Why it works: the algorithm</h2>
+  <p>Every step above is reverse-engineered from a few facts about how X actually distributes a post. The window is tiny and the engagement weighting is lopsided.</p>
+
+  <table>
+    <thead>
+      <tr><th>Mechanic</th><th>How it works</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="k">First 30–60 minutes</span></td><td>A small test audience measures <strong>engagement velocity</strong>. High ratio → a big push to a wider audience. Low ratio → it quietly dies.</td></tr>
+      <tr><td><span class="k">Not all engagement is equal</span></td><td>Likes are the weakest signal (about <strong>+0.5</strong>). Replies are the strongest — worth up to roughly <strong>150×</strong> — and an <strong>author reply</strong> is critical.</td></tr>
+      <tr><td><span class="k">Founder replies for 48 hrs</span></td><td>The founder must reply to <strong>every comment</strong> for two full days. Each reply spawns a new reply chain — itself a top ranking signal.</td></tr>
+      <tr><td><span class="k">Founder-engaged launches</span></td><td>Outperform by <strong>2–3×</strong> and can keep gaining for a <strong>full week</strong> rather than dying in hours.</td></tr>
+    </tbody>
+  </table>
+
+  <figure class="diagram">
+    <div class="dtitle">The first hour decides everything</div>
+    <div class="col">
+      <div class="node accent" style="max-width:520px"><div class="nh">Post goes live</div><div class="ns">shown to a small test audience</div></div>
+      <div class="arrow">↓</div>
+      <div class="node" style="max-width:520px"><div class="nh">First 30–60 min: engagement velocity measured</div><div class="ns">replies ≫ reposts ≫ likes; author replies weighted heaviest</div></div>
+      <div class="arrow">↓</div>
+      <div class="row grow" style="max-width:640px">
+        <div class="node ok"><div class="nh">High ratio</div><div class="ns">big push → wider audience → can compound for a week</div></div>
+        <div class="node warn"><div class="nh">Low ratio</div><div class="ns">no push → it dies in hours</div></div>
+      </div>
+    </div>
+    <figcaption>Why the War Room and the 48-hour founder-reply rule exist: you're feeding the velocity test in real time.</figcaption>
+  </figure>
+
+  <blockquote>Launches don't fail because the product is bad. They fail because nobody saw it.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Mitchell (@MitcheIl, founder of Shown Media; "the viral launch guy"), <a href="https://x.com/MitcheIl/status/2034633159409869069" target="_blank" rel="noopener">"The Viral Tech Launch Playbook ($1M+ Spent in a Year)"</a> (X article, Mar 19 2026). Cited client examples (Meridian, Arcads, Contra) and tools (1of10, Foreplay, Favikon) are the author's, and the post is a paid-service pitch. Diagrams are HTML/CSS reconstructions of the argument. Related: <a href="../audience-growth/x-algorithm-breakdown.html">How the X Algorithm Works</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
