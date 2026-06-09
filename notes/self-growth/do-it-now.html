@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do It Now — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+  <header class="post"><h1>Do It Now</h1>
+    <div class="meta"><span>By <strong>Steve Pavlina</strong></span><span class="dot">•</span><span>Published Nov 28, 2005</span><span class="dot">•</span><span>Saved Jun 9, 2026</span></div>
+    <div class="tags">
+      <span class="tag">Productivity</span>
+      <span class="tag">Time Management</span>
+      <span class="tag">Discipline</span>
+      <span class="tag">Focus</span>
+      <span class="tag">Decision-Making</span>
+    </div>
+  </header>
+
+  <p class="lede">How Pavlina earned two B.S. degrees in three semesters — and the dozen time-management habits that made 250-hour weeks possible.</p>
+
+  <div class="callout key"><h4>The core</h4><p>Productivity isn't a stack of clever tricks — it's a hierarchy. Get <strong>clarity of purpose</strong> right and almost everything below it (habits, decisions, energy) starts to self-optimize. Then act: be tight on your goals, flexible on your plans, treat failure as data, and <strong>do it now</strong> instead of deliberating. The point of all this is not self-denial — it's to make your life as juicy as you want it.</p></div>
+
+  <h2>The experiment</h2>
+  <p>In college, Pavlina set himself a challenge: graduate in <strong>three semesters</strong> instead of four years, taking <strong>30–40 units per semester</strong> while the average student took 12–15. He read everything he could find on time management and applied it.</p>
+  <p>The result: two Bachelor of Science degrees — <strong>computer science and mathematics</strong> — in three semesters, no summer school. He still slept 7–8 hours a night, did chores, had a social life, and exercised 30 minutes every morning. In his final semester he held a <strong>full-time 40 hr/week job</strong> as a game programmer and served as Vice Chair of the local ACM chapter while taking <strong>37 units</strong> of mostly senior-level CS and math. Classmates estimated his weeks must have run ~250 hours. He finished with a <strong>3.9 GPA</strong> and a special award for top CS student.</p>
+  <p>He notes he was not a gifted child, had never done anything like this before, had no mentors, and that most people discouraged the attempt.</p>
+
+  <h2>Clarity Is Key</h2>
+  <p>Know exactly what you want. Make goals so specific and so clearly written that a stranger could give an absolute yes/no on whether you achieved them. The key horizon is <strong>ninety days — one season</strong>: write a snapshot of how you want life to be in 90 days (income, weight, friends, career, relationship).</p>
+  <p>Then <strong>reread your written goals every morning</strong>, and post them on the walls. Years ago he put up "$5,000 / month" signs around his apartment and hit it within weeks. Clarity also makes it easy to disregard things that fall off-path. If you lack clarity, make <em>that</em> your first goal — clarity is self-created; the universe is waiting on you.</p>
+  <blockquote>Don't wait for clarity to materialize — grab a chisel.</blockquote>
+
+  <h2>Be Flexible</h2>
+  <p>There's a difference between knowing your destination and knowing the path. A commercial airplane is <strong>off course ~90% of the time</strong>, yet it arrives — because it knows its destination and constantly corrects. The real purpose of planning is to stay convinced a path exists. Nearly all successful businesses did <em>not</em> succeed in the way they originally planned.</p>
+  <blockquote>No plan survives contact with the real world.</blockquote>
+  <p>Pavlina cites Covey's <strong>"integrity in the moment of choice"</strong>: don't follow plans blindly. When an unforeseen opportunity arises, reconnect with your goals to decide. Be <strong>tight on your goals but flexible on your plans</strong> — a clear goal matters more than a clear plan.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Tight goal, loose path</div>
+    <div class="col">
+      <div class="node accent2" style="min-width:240px"><div class="nh">DESTINATION (the goal)</div><div class="ns">Specific · written · 90-day horizon · reread daily — held fixed</div></div>
+      <div class="arrow">↓ constant correction ↓</div>
+      <div class="row grow" style="max-width:520px">
+        <div class="node"><div class="nh">Plan A</div><div class="ns">off course</div></div>
+        <div class="node warn"><div class="nh">↺ correct</div><div class="ns">moment of choice</div></div>
+        <div class="node"><div class="nh">Plan B</div><div class="ns">off course</div></div>
+        <div class="node warn"><div class="nh">↺ correct</div><div class="ns">reconnect to goal</div></div>
+        <div class="node ok"><div class="nh">Arrive</div><div class="ns">on target</div></div>
+      </div>
+      <div class="legend">A plane is off course ~90% of the time and still lands — because the destination never moves.</div>
+    </div>
+  </figure>
+
+  <h2>Use Single Handling</h2>
+  <p>His system was a plain pen-and-paper to-do list — no elaborate apparatus. He scanned for the most pressing item that fit the available time, did it, and crossed it off. A 10-hour term paper he'd do <strong>all at once</strong> (usually weekends): once he began, he stayed until it was 100% complete.</p>
+  <p>This concentrates effort and avoids the time lost reloading context every time you switch tasks. He <strong>batched assignments by subject</strong> — all math, then all programming, then gen-ed — to stay in a single mode. It also kept his mind uncluttered and relaxed: one thing at a time.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Batching by mode vs. context-switching</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Constant switching</h4>
+        <div class="col">
+          <div class="node warn" style="width:100%"><div class="nh">Math → Code → Essay</div></div>
+          <div class="node warn" style="width:100%"><div class="nh">Code → Essay → Math</div></div>
+          <div class="node warn" style="width:100%"><div class="nh">Essay → Math → Code</div></div>
+        </div>
+        <div class="legend">Every switch = reload context. Time bleeds out.</div>
+      </div>
+      <div class="vs good">
+        <h4>Single handling</h4>
+        <div class="col">
+          <div class="node ok" style="width:100%"><div class="nh">All MATH</div><div class="ns">stay in one mode</div></div>
+          <div class="node ok" style="width:100%"><div class="nh">All CODE</div><div class="ns">finish, then move</div></div>
+          <div class="node ok" style="width:100%"><div class="nh">All GEN-ED</div><div class="ns">100% done before next</div></div>
+        </div>
+        <div class="legend">One mode at a time. Mind stays uncluttered.</div>
+      </div>
+    </div>
+  </figure>
+
+  <h2>Failure Is Your Friend</h2>
+  <p>People fear failure, but it's your best friend: those who succeed also fail a lot, because they make many attempts. <strong>Babe Ruth held the home-run AND strikeout records simultaneously.</strong> Microsoft wasn't Gates and Allen's first venture (Traf-o-Data flopped); Jim Carrey was booed; Edison ran 10,000 failed experiments.</p>
+  <p>So prefer <strong>ready-fire-aim</strong> over ready-aim-fire: after you "fire" you have real data to adjust your aim, while too many people get stuck in analysis paralysis (ready-aim-aim-aim…).</p>
+  <blockquote>You either succeed, or you have a learning experience.</blockquote>
+
+  <figure class="diagram">
+    <div class="dtitle">Ready-fire-aim beats ready-aim-fire</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Ready · Aim · Fire</h4>
+        <div class="col">
+          <div class="node"><div class="nh">Ready</div></div>
+          <div class="arrow">↓</div>
+          <div class="node warn"><div class="nh">Aim … aim … aim</div><div class="ns">analysis paralysis</div></div>
+          <div class="arrow">↓</div>
+          <div class="node"><div class="nh">Fire (maybe)</div></div>
+        </div>
+      </div>
+      <div class="vs good">
+        <h4>Ready · Fire · Aim</h4>
+        <div class="col">
+          <div class="node"><div class="nh">Ready</div></div>
+          <div class="arrow">↓</div>
+          <div class="node ok"><div class="nh">Fire</div><div class="ns">act, generate data</div></div>
+          <div class="arrow">↓ then ↑ repeat</div>
+          <div class="node accent2"><div class="nh">Aim</div><div class="ns">correct from real feedback</div></div>
+        </div>
+      </div>
+    </div>
+    <figcaption>You can only correct your aim once you've actually fired.</figcaption>
+  </figure>
+
+  <h2>Do It Now!</h2>
+  <p>W. Clement Stone made his employees recite <strong>"Do it now!"</strong> Develop the habit of making decisions as soon as possible. Pavlina uses a <strong>60-second rule</strong>: once he has the data, he gives himself 60 seconds to make a firm decision — flipping a coin if he must. Delaying a decision usually carries only negative consequences.</p>
+  <p>The best managers have a <strong>high tolerance for ambiguity</strong>: they act boldly on partial or conflicting data. Pour the bulk of your time into action, not deliberation. He says he never gets writer's block because he's too busy writing to think about writing.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The 60-second decision rule</div>
+    <div class="col">
+      <div class="node"><div class="nh">A decision lands on your desk</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">Do you have enough data?</div><div class="ns">partial / conflicting is fine</div></div>
+      <div class="arrow">↓ yes</div>
+      <div class="node warn"><div class="nh">Start a 60-second clock</div><div class="ns">tolerate the ambiguity</div></div>
+      <div class="arrow">↓</div>
+      <div class="row grow" style="max-width:480px">
+        <div class="node ok"><div class="nh">Decide firmly</div><div class="ns">commit</div></div>
+        <div class="node accent2"><div class="nh">Can't decide?</div><div class="ns">flip a coin</div></div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="node ok"><div class="nh">Act → spend time on doing, not deciding</div></div>
+    </div>
+  </figure>
+
+  <h2>Triage Ruthlessly</h2>
+  <p>Get rid of everything that wastes time. <strong>"When in doubt, throw it out."</strong> Nothing is free if it costs you time — every activity has an <strong>opportunity cost</strong>. He once told a professor he wouldn't do a 10–20 hour project worth 10% of the grade, accepting an <strong>A- instead of an A</strong> — a fair trade for using that time better.</p>
+  <p>Apply <strong>zero-based thinking</strong>: "Would I start this project / relationship / career again, knowing what I now know?" If no, get out. Don't cling to "always finish what you start" — that's just a ladder leaning against the wrong building.</p>
+
+  <h2>Recover Wasted Time — but fix purpose first</h2>
+  <p>Small optimizations help: tape a show and skip the commercials; make a phone call instead of writing a long email; batch errands; he even moved to a more efficient apartment. <strong>But trying to cut time-wasting habits first is a mistake.</strong> Without clarity of purpose, habit changes simply fizzle out.</p>
+  <p>The principle: <strong>fix the highest level (purpose, meaning), and the lower levels (habits, actions) tend to self-optimize.</strong></p>
+
+  <figure class="diagram">
+    <div class="dtitle">Fix the top — the rest self-optimizes</div>
+    <div class="col">
+      <div class="node accent2" style="min-width:260px"><div class="nh">1 · PURPOSE / MEANING</div><div class="ns">Clarity of what you want — fix this first</div></div>
+      <div class="arrow">↓ flows down ↓</div>
+      <div class="node accent" style="min-width:240px"><div class="nh">2 · HABITS</div><div class="ns">Start to self-optimize once purpose is clear</div></div>
+      <div class="arrow">↓</div>
+      <div class="node ok" style="min-width:220px"><div class="nh">3 · ACTIONS</div><div class="ns">Wasted time falls away on its own</div></div>
+      <div class="legend">Attack habits without purpose and the changes fizzle. Set purpose and the levels below align.</div>
+    </div>
+  </figure>
+
+  <h2>Apply the 80-20 Rule (Pareto)</h2>
+  <p>Roughly <strong>20% of effort yields 80% of value</strong>. Pavlina skipped up to <strong>40% of classes</strong> when lectures weren't the best way to learn. He once learned an entire math class straight from the textbook, showing up only for the midterm and final — and got the highest grade, while the teacher didn't even know who he was. Find your crucial 20% and pour your energy there.</p>
+
+  <h2>Guard Thy Time</h2>
+  <p>You need uninterrupted blocks — a <strong>minimum of ~90 minutes</strong> is ideal. Negotiate with others for that time; he locked his door. He works best in long, open-ended stretches, often 6+ hours straight. Flow takes <strong>~15 minutes to enter</strong>, and each interruption costs another <strong>~15 minutes to recover</strong>. Guard flow with your life.</p>
+
+  <div class="callout"><h4>The cost of an interruption</h4><p>~15 min to enter flow + ~15 min to recover from each break. A "quick" interruption every 20 minutes means you may never reach deep work at all. The fix isn't willpower — it's a closed door and a protected ≥90-minute block.</p></div>
+
+  <h2>Work All the Time You Work</h2>
+  <p>During a time block, do <strong>nothing but the task</strong>: no email, no forums, no surfing (unplug if you have to). Handle bathroom and food beforehand; don't leave your chair. If you need a break, take a <strong>real break</strong> — eyes closed, breathing, a nap, some fruit. Checking email is not a break.</p>
+  <blockquote>Work with 100% concentration, or don't work at all.</blockquote>
+
+  <h2>Multitask only low-intensity work</h2>
+  <p>Multitasking is fine <strong>only for low-intensity activities</strong> — standing in line, cooking, driving, walking. Pair those with reading or audio programs. Pavlina read <em>while shaving</em> (about 2 extra articles a week ≈ 100/year) and listened to tapes while jogging and walking between classes. Never multitask where it degrades a crucial task.</p>
+
+  <h2>Experiment</h2>
+  <p>Everyone is different. Find your peak hours and test variables — he used Mozart for development work, fast techno for routine tasks, and silence for deep focus. Try even the wacky productivity ideas; partial successes are common and worth keeping.</p>
+
+  <h2>Cultivate Your Enthusiasm</h2>
+  <p>"Enthusiasm" comes from the Greek <strong>entheos — "the god within."</strong> Chase passion, not money. And <strong>reinforce enthusiasm daily</strong>: he listened to motivational tapes hourly via a Walkman. Without that daily reinforcement, self-doubt and lower productivity creep back. When motivation is high, work feels like play.</p>
+
+  <h2>Eat and Exercise for Energy</h2>
+  <p>Diet affects productivity — Pavlina became vegetarian, then vegan, and noticed boosts in energy and concentration (his reasoning: animal products take more energy to digest; he points to Ben Franklin eating light at lunch). Run or exercise for energy and mental clarity. <strong>Your body is your best time-management tool.</strong></p>
+
+  <h2>Maintain Balance</h2>
+  <p>It's hard to sustain productivity, health, and happiness long-term if life is unbalanced. He took a full day off each week. His <strong>biggest regret</strong>: no time for a girlfriend during those three semesters — in hindsight he'd have stretched it to 4–5 semesters.</p>
+  <blockquote>The main goal of time management is to make your life as juicy as you want — it's about embracing more of what you already love, not self-denial.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Steve Pavlina, <a href="https://stevepavlina.com/blog/2005/11/do-it-now/" target="_blank" rel="noopener">"Do It Now"</a> (stevepavlina.com, Nov 28 2005). Related: <a href="../../index.html">Learning Notes index</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

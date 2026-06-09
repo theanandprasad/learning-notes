@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advice That Actually Worked For Me — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+  <header class="post">
+    <h1>Advice That Actually Worked For Me</h1>
+    <div class="meta"><span>By <strong>Nabeel S. Qureshi</strong></span><span class="dot">•</span><span>Published Jul 4, 2022</span><span class="dot">•</span><span>Saved Jun 9, 2026</span></div>
+    <div class="tags">
+      <span class="tag">Energy</span>
+      <span class="tag">Habits</span>
+      <span class="tag">Thinking</span>
+      <span class="tag">Productivity</span>
+      <span class="tag">Self-Growth</span>
+    </div>
+  </header>
+
+  <p class="lede">Most self-help is generic and useless. This is the short list of things that, after actually trying them, changed how Nabeel works and thinks — split between managing your energy and sharpening your mind.</p>
+
+  <div class="callout key">
+    <h4>The throughline</h4>
+    <p>Output is dominated by <strong>consistency, not peak performance</strong> — and consistency runs on energy. So the first job is to protect and compound your baseline energy; the second is to install thinking habits (numbers, steelmanning, writing, synthesis, logic trees) that make the energy land on true beliefs and real problems. Both halves compound: small daily wins feed tomorrow's; clear thinking feeds clearer thinking.</p>
+  </div>
+
+  <p>Nabeel groups his ten lessons into two buckets. The first four are about <strong>energy and habits</strong> — the raw fuel of getting things done. The last six are about <strong>thinking well</strong> — what you do with the fuel. We'll keep all ten, in order.</p>
+
+  <h2>Part I — Energy &amp; Habits</h2>
+
+  <h3>1. Maximize your baseline energy</h3>
+  <p>Exercise at least five days a week. Energy compounds: if you start the morning by <em>getting something done</em>, your whole day operates from a higher baseline. The crucial reframe is that mental energy is <strong>not a depleting tank</strong>. Spending it on productive, important things actually <em>gives you more</em> energy — a positive feedback loop — whereas procrastinating, scrolling, and staying in bed <em>drains</em> it. The way out of an energy rut isn't to wait for motivation; it's to do something tiny (empty the dishwasher, write one sentence) for a small hit of accomplishment, and build from there.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The two energy loops</div>
+    <div class="twocol">
+      <div class="vs good">
+        <h4>↻ Positive loop</h4>
+        <div class="col">
+          <div class="node ok"><div class="nh">Do an important thing</div></div>
+          <div class="arrow">↓</div>
+          <div class="node"><div class="nh">Hit of accomplishment</div><div class="ns">baseline rises</div></div>
+          <div class="arrow">↓</div>
+          <div class="node ok"><div class="nh">More energy → do the next thing</div></div>
+        </div>
+      </div>
+      <div class="vs bad">
+        <h4>↻ Negative loop</h4>
+        <div class="col">
+          <div class="node warn"><div class="nh">Scroll / stay in bed</div></div>
+          <div class="arrow">↓</div>
+          <div class="node"><div class="nh">Energy drains</div><div class="ns">baseline sinks</div></div>
+          <div class="arrow">↓</div>
+          <div class="node warn"><div class="nh">Less energy → avoid the next thing</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="legend">Escape hatch: a <strong>tiny</strong> action (one sentence, the dishwasher) breaks the negative loop and seeds the positive one.</div>
+    <figcaption>Mental energy isn't a tank that empties — productive effort refills it, idle avoidance empties it.</figcaption>
+  </figure>
+
+  <h3>2. Do the most important thing first thing — before social media</h3>
+  <p>Your first actions set the day's spiral. Do the single most important thing before you check any social media. Even if you accomplish nothing else, you've done <em>the one thing</em> — and that matters more than it sounds, because <strong>most people fail from accumulating zero-output days, not from a low ceiling on their best days</strong>. The danger of social media is subtler than wasted time: it delivers a "reward" that perniciously substitutes for the reward of doing the productive thing — the same way sugar substitutes for real calories. You feel fed without being nourished.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The morning fork</div>
+    <div class="row grow">
+      <div class="node accent2"><div class="nh">Wake up</div></div>
+    </div>
+    <div class="arrow">↓ which do you reach for first?</div>
+    <div class="twocol">
+      <div class="vs good">
+        <h4>Important thing first</h4>
+        <div class="col">
+          <div class="node ok"><div class="nh">Real reward</div><div class="ns">the "one thing" is done</div></div>
+          <div class="arrow">↓</div>
+          <div class="node"><div class="nh">Day spirals up</div></div>
+        </div>
+      </div>
+      <div class="vs bad">
+        <h4>Social media first</h4>
+        <div class="col">
+          <div class="node warn"><div class="nh">Substitute reward</div><div class="ns">sugar, not calories</div></div>
+          <div class="arrow">↓</div>
+          <div class="node"><div class="nh">Day spirals down</div></div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Consistency beats peak output: a chain of "did the one thing" days is what compounds.</figcaption>
+  </figure>
+
+  <h3>3. Tell the right stories about yourself</h3>
+  <p>The story you tell about yourself matters, and it tends to come truer with the telling. Tell yourself you're an energetic person, or that you don't get jetlagged, and — in Nabeel's experience — it has a way of becoming so.</p>
+  <div class="disclaimer">Nabeel flags this one heavily himself: it comes with all the obvious disclaimers and isn't a license for magical thinking. He keeps it on the list only because it has actually worked for him.</div>
+
+  <h3>4. Don't sleep too much</h3>
+  <p>The sweet spot is roughly <strong>7–7.5 hours</strong> — partly genetic, so it varies. Oversleeping costs time and may be bad for you. The weaker, safer version of the claim: there's a real difference between 7 and 9 hours, and many 9-hour sleepers can train themselves into 7-hour sleepers, then compound the recovered two hours a day into something large over a year.</p>
+  <blockquote>Sleep is like hunger — you shouldn't just sleep whenever you happen to feel like it. — paraphrasing Alexey Guzey</blockquote>
+
+  <h2>Part II — Thinking Well</h2>
+
+  <h3>5. Get in the habit of Fermi estimation, looking up key quantities, and using bounds</h3>
+  <p>The smartest people "think in numbers." They don't take claims at face value — they estimate orders of magnitude and sanity-check plausibility. Most people don't, which is exactly why they're so easily fooled (the viral "if Elon gave everyone $X..." memes; wildly miscalibrated COVID risk estimates).</p>
+  <p>Nabeel's example: in SBF's <em>Conversation with Tyler</em>, a back-of-envelope suggested a global blockchain would need on the order of <strong>~1,000,000 transactions/sec</strong>, while Ethereum at the time did about <strong>~10</strong> — off by roughly <strong>six orders of magnitude</strong>. The bounding technique is the everyday version: <em>"it's not as high as X, not as low as Y, so it's roughly Z."</em></p>
+
+  <figure class="diagram">
+    <div class="dtitle">Bounding: squeeze the answer between extremes</div>
+    <div class="row grow">
+      <div class="node warn"><div class="nh">Too high?</div><div class="ns">AGI next month</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Plausible band</div><div class="ns">→ in your grandkids' lifetime</div></div>
+      <div class="arrow">←</div>
+      <div class="node warn"><div class="nh">Too low?</div><div class="ns">AGI not until 2150</div></div>
+    </div>
+    <div class="legend">Rule it out at the top, rule it out at the bottom, and what's left is your estimate.</div>
+    <figcaption>"Not as high as X, not as low as Y, so it's roughly Z." Cheap, fast, and surprisingly hard to fool.</figcaption>
+  </figure>
+
+  <h3>6. Whenever you make a claim, imagine the strongest possible argument against it</h3>
+  <p>Borrow the chess analogy. Weak players play <strong>"hope chess"</strong> — they make a move and <em>hope</em> the opponent replies poorly. Strong players test each move against the opponent's <em>strongest</em> available response. Your brain resists modeling the opponent as strong, because it <em>wants</em> your idea to work. Doing it anyway — steelmanning the counterargument before you commit — is essential if what you actually care about is having true beliefs.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Hope chess vs. strong play</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Hope chess</h4>
+        <div class="col">
+          <div class="node"><div class="nh">Make a claim / move</div></div>
+          <div class="arrow">↓</div>
+          <div class="node warn"><div class="nh">Assume weak reply</div><div class="ns">your brain wants it to work</div></div>
+          <div class="arrow">↓</div>
+          <div class="node warn"><div class="nh">Comfortable but fragile</div></div>
+        </div>
+      </div>
+      <div class="vs good">
+        <h4>Strong play (steelman)</h4>
+        <div class="col">
+          <div class="node"><div class="nh">Make a claim / move</div></div>
+          <div class="arrow">↓</div>
+          <div class="node ok"><div class="nh">Imagine the strongest counter</div><div class="ns">model the opponent as smart</div></div>
+          <div class="arrow">↓</div>
+          <div class="node ok"><div class="nh">Belief survives → it's more likely true</div></div>
+        </div>
+      </div>
+    </div>
+    <figcaption>The point isn't to win the argument — it's to find out whether your belief deserves to win.</figcaption>
+  </figure>
+
+  <h3>7. Write regularly; learn to "think in writing"</h3>
+  <p>This is true for everyone, whether or not you ever publish. Keep a running Google Doc and add a page a day. Writing "clears your cache" — it gets the half-formed thoughts out of your head and onto the page, which makes room for new ones to form. (Nabeel points to Holden Karnofsky's guide on this.)</p>
+
+  <h3>8. Do a weekly review</h3>
+  <p>Every Sunday, spend about an hour: what went well, what went poorly, what you're aiming for next week. The value is the <strong>mode switch</strong> — it forces you out of "doing mode" and into "reflection mode," which is where the compounding weekly improvements come from.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The weekly review loop (~1 hr, every Sunday)</div>
+    <div class="steps">
+      <div class="step"><b>1 · What went well?</b> — name the wins, so you keep doing them on purpose.</div>
+      <div class="step"><b>2 · What went poorly?</b> — name the misses, so they don't silently repeat.</div>
+      <div class="step"><b>3 · What am I aiming for next week?</b> — set the targets that next Sunday will grade.</div>
+    </div>
+    <div class="legend">Switches you from <em>doing mode</em> → <em>reflection mode</em>; each review compounds on the last.</div>
+    <figcaption>An hour of reflection that quietly steers the other 167 hours.</figcaption>
+  </figure>
+
+  <h3>9. Synthesize things as you read</h3>
+  <p>Reading is not the same as understanding. Your brain has to build its <em>own</em> encoding of the material. Understanding is closely related to <strong>compression</strong>: can you restate the idea in your own words — several different ways? Draw it. Write it the way Simple-English Wikipedia would. This doubles as a bullshit filter, in both directions: if you can't restate something, you don't actually understand it.</p>
+
+  <h3>10. Map out problems using logic trees</h3>
+  <p>Also called <strong>morphological analysis</strong> — Nabeel calls it "80% of a consultant's secret sauce." Break a problem into <strong>logically exhaustive parts</strong>, recursively, so you end up with a full map and can spot the options you'd otherwise overlook. The canonical example is profit: profit splits into revenue and costs; revenue splits into price × quantity; and so on. It's especially useful for ambiguous startup questions like "how do we grow faster?"</p>
+
+  <figure class="diagram">
+    <div class="dtitle">A logic tree: decomposing "profit"</div>
+    <div class="col">
+      <div class="node accent"><div class="nh">Profit</div></div>
+      <div class="arrow">↓ exhaustively splits into</div>
+      <div class="row grow">
+        <div class="node accent2"><div class="nh">Revenue</div></div>
+        <div class="node warn"><div class="nh">Costs</div></div>
+      </div>
+      <div class="arrow">↓ revenue splits into</div>
+      <div class="row grow">
+        <div class="node"><div class="nh">Price</div><div class="ns">per unit</div></div>
+        <div class="node"><div class="nh">×</div></div>
+        <div class="node"><div class="nh">Quantity</div><div class="ns">units sold</div></div>
+      </div>
+    </div>
+    <div class="legend">Recurse on each leaf until the map is complete — overlooked levers stop being invisible.</div>
+    <figcaption>Logically exhaustive decomposition (MECE): every branch is a place to look for the answer.</figcaption>
+  </figure>
+
+  <div class="callout key">
+    <h4>If you keep one thing</h4>
+    <p>The energy lessons and the thinking lessons aren't separate lists — they're two ends of the same machine. Protect your baseline energy and you get consistent days; install the thinking habits and those days point at true beliefs and real problems. Both compound. Start tomorrow morning with one important thing, before the phone.</p>
+  </div>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Nabeel S. Qureshi, <a href="https://nabeelqu.co/advice" target="_blank" rel="noopener">"Advice That Actually Worked For Me"</a> (nabeelqu.co, Jul 4 2022). Related: <a href="../../index.html">Learning Notes index</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

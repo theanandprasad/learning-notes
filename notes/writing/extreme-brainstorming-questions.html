@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extreme Brainstorming Questions — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+  <header class="post">
+    <h1>Extreme Brainstorming Questions</h1>
+    <div class="meta"><span>By <strong>Jason Cohen</strong> (A Smart Bear)</span><span class="dot">•</span><span>Published A Smart Bear (undated)</span><span class="dot">•</span><span>Saved Jun 9, 2026</span></div>
+    <div class="tags">
+      <span class="tag">Brainstorming</span>
+      <span class="tag">Ideas</span>
+      <span class="tag">Strategy</span>
+      <span class="tag">Creativity</span>
+    </div>
+  </header>
+
+  <p class="lede">Ordinary brainstorming fails because we're blinded by our daily work: no forest, all trees. The fix is to stretch one dimension of reality so far it's almost nonsense — and watch new ideas fall out.</p>
+
+  <div class="callout key">
+    <h4>The mechanic</h4>
+    <p>Take any dimension of your business — price, scope, headcount, the existence of customers — and crank it to an absurd extreme. The point isn't to act on the absurdity. It's that a dramatically different perspective forces ideas you'd never reach from inside your normal constraints. <strong>An idea that would only be a 60% solution in the extreme hypothetical can be a 2x or even 10x idea back in reality.</strong> And sometimes the extreme <em>is</em> the strategy — it unlocks a long-term moat.</p>
+  </div>
+
+  <p>Why does this work? Because most of the genuinely transformative business models looked impossible right up until someone shipped them. Zappos let you return shoes free, 364 days later. Robinhood made stock trades cost $0. Amazon Prime made delivery free. Netflix mailed you DVDs. Open-source companies charge money for software that's free and open. Airbnb, Uber, and Lyft are built entirely on strangers trusting strangers. Each one sounds like a brainstorm someone should have laughed out of the room — until it became the default.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The core mechanic</div>
+    <div class="row grow">
+      <div class="node"><div class="nh">Normal view</div><div class="ns">Daily work blinds you — all trees, no forest</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Stretch a dimension</div><div class="ns">Crank price / scope / staff to an extreme so far it's nearly nonsense</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Radical perspective</div><div class="ns">A view so different it surfaces ideas you couldn't otherwise reach</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Huge idea in reality</div><div class="ns">A "60% answer" at the extreme = a 2x–10x answer back home</div></div>
+    </div>
+    <figcaption>The extreme is a thinking tool — and occasionally the actual strategy.</figcaption>
+  </figure>
+
+  <h2>How to use the prompts</h2>
+  <p>Each question below picks one dimension and pushes it to a breaking point. Answer it honestly inside the hypothetical, then ask the real question: <em>which part of that answer would still be valuable if I dialed the extreme back to normal?</em> That residue is where the new strategy lives. The fifteen prompts group into five families.</p>
+
+  <h2>Pricing &amp; business model</h2>
+
+  <h3>1 · 10x prices</h3>
+  <p>If you were forced to raise prices <strong>tenfold</strong>, what would you have to do to justify it? Rethink brand, positioning, the narrow subset of customers who'd happily pay, premium services worth that much. You won't actually charge 10x — but you may discover a clean path to at least 2x.</p>
+
+  <h3>2 · No customers</h3>
+  <p>Imagine every customer vanished and you rebuilt from scratch, free of all legacy expectations. What unique message, positioning, pricing, and feature set would you choose? Build for the <strong>10x-larger pool of future customers</strong>, not the ones you happen to have inherited.</p>
+
+  <h3>7 · Flipped business model</h3>
+  <p>You're forced to charge in a completely different manner — usage-based becomes flat-rate, tiers become a per-day formula. The change forces you to re-examine how you frame value, where your costs actually sit, and which features matter under the new economics.</p>
+
+  <h3>11 · Cost is no object</h3>
+  <p>Unprofitability doesn't matter; spend 10–100x freely. Treat the product as philanthropy. The trick: a high-touch concierge experience done <strong>30% by software at 1/100th the cost</strong> is a genuinely good feature you can ship in reality.</p>
+
+  <h2>Product &amp; scope</h2>
+
+  <h3>3 · No tech support</h3>
+  <p>You're never allowed to provide support. That forces self-serve onboarding, more user control, better visibility into state, and more intuitive actions. The payoff is real on both sides: <strong>self-service is more profitable and makes customers happier.</strong></p>
+
+  <h3>4 · Maximize fun</h3>
+  <p>What's the most <em>fun</em> thing you could build — that still improves the product? Run a one-week hackathon on it. Fun isn't a distraction from productivity; it's a source of it, plus fulfillment.</p>
+
+  <h3>6 · No time</h3>
+  <p>Ship a complete, lovable MVP/SLC feature in <strong>two weeks</strong>. Strip all complexity, minimize scope — and get more learning on day one than a six-month plan delivers in six months.</p>
+  <blockquote>"To achieve great things, two things are needed: a plan, and not quite enough time." — Leonard Bernstein</blockquote>
+
+  <h2>Growth &amp; distribution</h2>
+
+  <h3>5 · Complete rip-off</h3>
+  <p>Your biggest competitor copies <strong>every single feature</strong>. How do you still win? The answer is never a feature — features always get copied. It's ease and design, the speed at which you ship the <em>next</em> feature, brand, mission, trust, service, community.</p>
+
+  <h3>8 · No website</h3>
+  <p>Grow with no website at all. That pushes you toward word-of-mouth, advocates and ambassadors, social, and product-as-marketing — growth that lives <strong>inside the product itself.</strong></p>
+
+  <h3>10 · No customer contact</h3>
+  <p>You may never talk to a customer. So you lean on behavioral measurement, fast A/B tests, "coming soon" buttons to gauge demand, and analysis of what people say online. Not a pure loss — <strong>interviews can mislead anyway.</strong></p>
+
+  <h2>Org &amp; process</h2>
+
+  <h3>9 · No meetings</h3>
+  <p>No synchronous meetings, ever. Onboarding, decisions, and brainstorming all move to async systems — and the ideas may be <em>better</em> without groupthink in the room. Ask what documents would have to exist: e.g. "the why" behind your last twenty decisions, written down.</p>
+
+  <h3>12 · Sociopathic CEO</h3>
+  <p>Change anything, regardless of whose feelings it hurts. Explore terminating a product line, or pivoting the whole company. The best ideas shouldn't be dodged just because they're hard — and you can often execute them by <strong>reorganizing rather than laying off.</strong></p>
+
+  <h2>Strategy &amp; survival</h2>
+
+  <h3>13 · Mortal wound</h3>
+  <p>What single externality could kill the entire company — a competitor's product or price, a security breach, an economic shift? Name it, then mitigate it. Cohen ran this at WP Engine and surfaced <strong>35 existential threats.</strong> You don't fix all of them, but some of the fixes are wise regardless.</p>
+
+  <h3>14 · Philanthropist</h3>
+  <p>If your only goal were to create the most good for customers — money aside — what would you do? Help small businesses thrive, help writers improve their craft, help performers get attention. <strong>Mission beats metrics for loyalty</strong>, and Gen Z notices.</p>
+
+  <h3>15 · Only one thing this year</h3>
+  <p>If you could ship exactly <strong>one</strong> thing all year, what single initiative makes the most difference? Often a whole year's trajectory comes down to one or two big decisions.</p>
+  <blockquote>"The dangerous man is the one who has only one idea… The way real science goes is you come up with lots of ideas, and most of them will be wrong." — Francis Crick</blockquote>
+
+  <figure class="diagram">
+    <div class="dtitle">The fifteen prompts, grouped</div>
+    <table>
+      <thead>
+        <tr><th>Family</th><th>Prompts</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Pricing &amp; business model</strong></td><td>1 · 10x prices &nbsp;·&nbsp; 2 · No customers &nbsp;·&nbsp; 7 · Flipped model &nbsp;·&nbsp; 11 · Cost is no object</td></tr>
+        <tr><td><strong>Product &amp; scope</strong></td><td>3 · No tech support &nbsp;·&nbsp; 4 · Maximize fun &nbsp;·&nbsp; 6 · No time</td></tr>
+        <tr><td><strong>Growth &amp; distribution</strong></td><td>5 · Complete rip-off &nbsp;·&nbsp; 8 · No website &nbsp;·&nbsp; 10 · No customer contact</td></tr>
+        <tr><td><strong>Org &amp; process</strong></td><td>9 · No meetings &nbsp;·&nbsp; 12 · Sociopathic CEO</td></tr>
+        <tr><td><strong>Strategy &amp; survival</strong></td><td>13 · Mortal wound &nbsp;·&nbsp; 14 · Philanthropist &nbsp;·&nbsp; 15 · Only one thing</td></tr>
+      </tbody>
+    </table>
+    <figcaption>Each prompt stretches a different dimension of reality to its breaking point.</figcaption>
+  </figure>
+
+  <h2>The payoff curve</h2>
+  <p>The reason the absurdity is worth tolerating: the value doesn't disappear when you leave the hypothetical. It scales. What looks like a partial answer under impossible constraints becomes an outsized advantage under normal ones — and once in a while, you find you can just <em>keep</em> the extreme and turn it into a moat.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">60% at the extreme → 10x in reality</div>
+    <div class="row grow">
+      <div class="node warn"><div class="nh">At the extreme</div><div class="ns">Your idea is only a 60% solution — it can't fully cope with the absurd constraint</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Dial back to normal</div><div class="ns">Relax the constraint to real-world levels and keep the residue</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">2x–10x in reality</div><div class="ns">The same idea is now wildly valuable under ordinary conditions</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Sometimes: keep the extreme</div><div class="ns">$0 trades, free returns, free delivery — the extreme becomes a durable moat</div></div>
+    </div>
+    <legend>The "impossible until done" models all started as someone's absurd brainstorm.</legend>
+  </figure>
+
+  <div class="callout">
+    <h4>Closing</h4>
+    <p>Cohen ends by asking readers to subscribe and to share the piece with anyone who could use a fresh angle on a stuck problem — fitting for an essay whose whole point is that the best ideas come from a perspective you'd never choose on your own.</p>
+  </div>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Jason Cohen, <a href="https://longform.asmartbear.com/extreme-questions/" target="_blank" rel="noopener">"Extreme brainstorming questions to trigger new, better ideas"</a> (A Smart Bear). Related: <a href="../../index.html">Learning Notes index</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

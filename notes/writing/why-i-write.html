@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why I Write — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+  <header class="post">
+    <h1>Why I Write</h1>
+    <div class="meta"><span>By <strong>George Orwell</strong></span><span class="dot">•</span><span>Published 1946 (<em>Gangrel</em>)</span><span class="dot">•</span><span>Saved Jun 9, 2026</span></div>
+    <div class="tags">
+      <span class="tag">Writing</span>
+      <span class="tag">Craft</span>
+      <span class="tag">Politics &amp; Language</span>
+      <span class="tag">Motivation</span>
+    </div>
+  </header>
+
+  <p class="lede">Every writer is driven by a tangle of motives — vanity, love of beauty, the urge to record, the urge to change minds — and which one wins says everything about the books they end up writing.</p>
+
+  <div class="callout key">
+    <h4>The core</h4>
+    <p>Orwell traces his own writing back to a lonely childhood and an early certainty that he was meant to write. He then names four enduring motives behind all prose — egoism, aesthetic pleasure, the historical impulse, and political purpose — present in everyone but mixed in different proportions, shifting with the age you live in. His own life pushed the political motive to the front, and his life's work became an attempt to fuse it with art: to make political writing beautiful rather than merely true.</p>
+  </div>
+
+  <h2>The writer was set early</h2>
+  <p>Orwell says he knew from around age five or six that he would be a writer. Between seventeen and twenty-four he tried to give the idea up, but doing so meant betraying his own nature — and the impulse came back. He describes himself as a lonely middle child who invented stories, kept up conversations with imaginary companions, and felt isolated and undervalued. That mix produced two lasting habits: a facility with words, and a willingness to look squarely at unpleasant facts rather than away from them.</p>
+
+  <p>A useful distinction follows. A writer's <em>subject matter</em> is handed to them by the age they happen to live in. But their <em>emotional attitude</em> — the temperament they bring to that subject — is set before they ever start writing seriously. Try to escape those early influences entirely, Orwell warns, and you don't free yourself; you kill the very impulse to write.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Subject vs. attitude</div>
+    <div class="row grow">
+      <div class="node accent">
+        <div class="nh">The age you live in</div>
+        <div class="ns">supplies your <strong>subject matter</strong> — the wars, ideas, and events you can't ignore</div>
+      </div>
+      <div class="node accent2">
+        <div class="nh">Your early self</div>
+        <div class="ns">supplies your <strong>emotional attitude</strong> — fixed before you start, and not to be escaped</div>
+      </div>
+    </div>
+    <div class="legend">Escape your early influences entirely and you don't liberate the writer — you abolish them.</div>
+  </figure>
+
+  <h2>The four great motives</h2>
+  <p>This is the heart of the essay. Orwell argues that, setting aside the need to earn a living, four motives drive everyone who writes prose. They exist in every writer at once, in proportions that vary from person to person and shift over time as circumstances change. He is candid that they often pull against each other.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Four motives for writing prose</div>
+    <div class="twocol">
+      <div class="vs b">
+        <h4>1 · Sheer egoism</h4>
+        <p class="muted" style="font-size:14px;margin:0">The desire to seem clever, to be talked about, to be remembered after death — to get a little of your own back on the adults who slighted you in childhood. Writers share this drive with the ambitious "top crust" of humanity.</p>
+      </div>
+      <div class="vs a">
+        <h4>2 · Aesthetic enthusiasm</h4>
+        <p class="muted" style="font-size:14px;margin:0">Pleasure in beauty — in the world, and in words and their right arrangement; in the rhythm of good prose. Even a textbook writer has pet words. No book above the level of a railway guide is wholly free of aesthetic considerations.</p>
+      </div>
+      <div class="vs good">
+        <h4>3 · Historical impulse</h4>
+        <p class="muted" style="font-size:14px;margin:0">The desire to see things as they are, to dig out true facts, and to store them up for the use of posterity.</p>
+      </div>
+      <div class="vs bad">
+        <h4>4 · Political purpose</h4>
+        <p class="muted" style="font-size:14px;margin:0">Taken in the widest sense: the urge to push the world in a certain direction, to alter people's idea of the kind of society they should want. No book is genuinely free from political bias — and the belief that art should keep clear of politics is itself a political stance.</p>
+      </div>
+    </div>
+    <div class="legend">All four live in every writer at once; they war against one another, and their balance shifts with the times.</div>
+  </figure>
+
+  <h2>How life tipped the balance</h2>
+  <p>By temperament, Orwell says, his first three motives outweighed the fourth. In a peaceful era he might have written ornate, descriptive books and barely noticed his own political loyalties. But the times didn't allow it. His years in the Imperial Police in Burma, his deliberate descent into poverty afterwards, an early sense of failure, the rise of Hitler, and above all the Spanish Civil War of 1936–37 forced the political motive to the front. After 1936, he says, everything serious he wrote was written — directly or indirectly — against totalitarianism and for the kind of democratic socialism he believed in.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">From lonely child to political artist</div>
+    <div class="col">
+      <div class="node accent2"><div class="nh">A lonely, story-telling child</div><div class="ns">imaginary friends, a knack for words, the habit of facing hard facts</div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="nh">Burma &amp; chosen poverty</div><div class="ns">empire and hardship seen up close; an early sense of failure</div></div>
+      <div class="arrow">↓</div>
+      <div class="node warn"><div class="nh">Hitler &amp; Spain, 1936–37</div><div class="ns">the events that dragged political purpose to the front of everything</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">"Make political writing an art"</div><div class="ns">fuse the urge to expose with the love of beauty</div></div>
+    </div>
+    <div class="legend">Temperament leaned aesthetic; the age made him political. The work was reconciling the two.</div>
+  </figure>
+
+  <h2>Making political writing an art</h2>
+  <p>Orwell's stated aim across his last decade was to turn political writing into an art. The starting point is always partisanship — a sense of injustice, a lie to expose, a fact that deserves attention. But that alone is not enough; the writing has to be an aesthetic experience as well. <em>Animal Farm</em>, he notes, was the first book in which he set out consciously to weld political purpose and artistic purpose into one whole.</p>
+
+  <p>He's honest about the cost of that conviction. In <em>Homage to Catalonia</em>, a friendly critic told him a fact-heavy chapter had turned what might have been a good book into journalism. Orwell agreed it hurt the book — but he could not cut it, because innocent men were being falsely accused, and the facts mattered more than the shape of the chapter. The aesthetic instinct and the duty to the truth don't always agree, and he chose the truth.</p>
+
+  <div class="callout">
+    <h4>The discipline of the windowpane</h4>
+    <p>Orwell's ideal of style is transparency — prose that lets you see straight through to the thing being described, with no decoration calling attention to itself.</p>
+    <blockquote>"Good prose is like a windowpane." — Orwell</blockquote>
+    <p>To write like that, he argues, you have to keep struggling to efface your own personality. He found the reverse too: wherever he lacked a real political purpose, he slipped into lifeless books and gaudy, "purple" passages.</p>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Why purpose makes prose clear</div>
+    <div class="row grow">
+      <div class="node ok">
+        <div class="nh">Real purpose</div>
+        <div class="ns">a fact to expose forces you to efface the self → clear, living prose (the windowpane)</div>
+      </div>
+      <div class="arrow">vs</div>
+      <div class="node warn">
+        <div class="nh">No purpose</div>
+        <div class="ns">nothing pressing to say → the self leaks back in → lifeless books and purple passages</div>
+      </div>
+    </div>
+    <div class="legend">Clarity isn't decoration removed for its own sake — it's what's left when you have something true to say.</div>
+  </figure>
+
+  <h2>The honest caveat</h2>
+  <p>Orwell refuses to let the high-minded, public-spirited framing stand as the whole story. All writers, he says flatly, are vain, selfish, and lazy, and at the very bottom of their motives lies a mystery. Writing a book is a horrible, exhausting struggle, driven by a kind of demon one can neither resist nor fully understand. The four motives are real; so is the fact that, beneath them, the writer is also just a person who cannot help themselves.</p>
+
+  <div class="callout key">
+    <h4>What to keep</h4>
+    <p>Know which of the four motives is really driving you — and be suspicious of any answer that's purely flattering. Let the age give you your subject, but don't pretend you have no attitude toward it. If you want clear prose, find something true enough to say that it pushes your ego out of the way. And accept that even the noblest stated reasons sit on top of an impulse you'll never entirely explain.</p>
+  </div>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> George Orwell, <a href="https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/why-i-write/" target="_blank" rel="noopener">"Why I Write"</a> (<em>Gangrel</em>, Summer 1946; reproduced by the Orwell Foundation). Distilled here; the essay remains under copyright. Related: <a href="../../index.html">Learning Notes index</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

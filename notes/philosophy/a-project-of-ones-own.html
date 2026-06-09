@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Project of One's Own — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+  <header class="post">
+    <h1>A Project of One's Own</h1>
+    <div class="meta">
+      <span>By <strong>Paul Graham</strong></span>
+      <span class="dot">•</span>
+      <span>Published June 2021</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Work</span>
+      <span class="tag">Autonomy</span>
+      <span class="tag">Creativity</span>
+      <span class="tag">Meaning</span>
+      <span class="tag">Motivation</span>
+    </div>
+  </header>
+
+  <p class="lede">A nine-year-old who can't wait to get home to write his story has discovered something most adults spend their lives trying to get back: a way of working that feels less like work than like skating.</p>
+
+  <div class="callout key">
+    <h4>The core</h4>
+    <p>Working on <strong>a project of your own</strong> is, in PG's words, <em>"as different from ordinary work as skating is from walking"</em> — more fun, but also much more productive. A lot of great work has been done by people skating in this sense. The trick is making this childhood mode of working <strong>converge</strong> with adult work, which two things make hard: the conditions you choose to work under, and your own morale.</p>
+  </div>
+
+  <h2>Skating, not walking</h2>
+  <p>PG noticed his nine-year-old son couldn't wait to get home to work on his story. And what he felt wasn't worry that the boy was wasting his time — it was happiness that he'd discovered <em>this way of working.</em> Working on a project of your own is to ordinary work what skating is to walking: it gets you there faster <em>and</em> you enjoy the ride.</p>
+  <p>The feeling isn't exactly <strong>happiness</strong> — better words are <strong>excited</strong> and <strong>engaged</strong>. When PG is writing an essay he's mostly worried and puzzled: groping for an idea, unsure he can pin it down. The happiness arrives in brief moments when something works — and then it's straight on to the next problem. So why do it? Because to people who like working this way, nothing else feels as right. It's like being an animal in its natural habitat — awake and alive.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Two ways to move toward the same place</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Walking — ordinary work</h4>
+        <p class="muted" style="font-size:13.5px;margin:6px 0">Pushed along. Dutiful effort. You get there, but slowly, and you'd rather be elsewhere.</p>
+        <div class="node warn"><div class="nh">Less fun</div><div class="ns">+ less productive</div></div>
+      </div>
+      <div class="vs good">
+        <h4>Skating — a project of one's own</h4>
+        <p class="muted" style="font-size:13.5px;margin:6px 0">Pulled along. Excited, engaged, "awake and alive." You go faster and you want to keep going.</p>
+        <div class="node ok"><div class="nh">More fun</div><div class="ns">+ more productive</div></div>
+      </div>
+    </div>
+    <figcaption>The rare double win: it isn't a trade-off between enjoyment and output — skating gives you both at once.</figcaption>
+  </figure>
+
+  <h2>The concealed path from the treehouse</h2>
+  <p>Kids experience this mode naturally. The hard part is making it <strong>converge with adult work</strong> — and our customs make that harder than it needs to be. We treat "playing" and "hobbies" as qualitatively different from "work." A kid building a treehouse isn't told he's on a (long) route to architecture or engineering. Instead we conceal that route and tell him the path to such work runs through school.</p>
+  <p>But schoolwork, PG observes, "is usually neither a project, nor one's own." The work that made Darwin and Newton famous was far closer in spirit to building treehouses than to studying for exams. If forced to choose, PG would pick a kid working on ambitious projects of their own over a kid with good grades — and not on sentiment. From years of picking startups for Y Combinator, he's found that <strong>projects have more predictive value than grades.</strong></p>
+
+  <figure class="diagram">
+    <div class="dtitle">The route we hide from kids</div>
+    <div class="col">
+      <div class="node accent2"><div class="nh">Building a treehouse</div><div class="ns">a project of one's own — the real seed</div></div>
+      <div class="arrow">↓ &nbsp;the actual route (concealed)</div>
+      <div class="node ok"><div class="nh">Architecture · engineering · great work</div><div class="ns">Darwin & Newton: closer to treehouses than to exams</div></div>
+    </div>
+    <div class="legend">Instead of pointing at this route, we redirect the kid…</div>
+    <div class="col" style="margin-top:14px">
+      <div class="node warn"><div class="nh">"The path goes through school"</div><div class="ns">schoolwork = not a project, and not one's own</div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="nh">Dutiful plodding</div><div class="ns">grades — weaker predictor of who does great work</div></div>
+    </div>
+    <figcaption>We swap the engaging route for a dutiful one, then wonder why the skating stops.</figcaption>
+  </figure>
+
+  <h2>Two senses of "one's own"</h2>
+  <p>Work can be one's own in two distinct senses, and they behave very differently.</p>
+  <p><strong>(1) Doing it voluntarily</strong> — being pulled rather than pushed. This is a <em>sharp</em> edge. But the test isn't simply whether you were told to do it: you can <em>choose</em> to do something you were told to do, and own it more thoroughly than whoever told you. PG's mathematician father treated the problems in a math book as the point, and the surrounding text as mere annotation — the assignment became fully his.</p>
+  <p><strong>(2) Doing it by yourself</strong> — this is a <em>soft</em> edge that shades into collaboration in two ways: <strong>(a) a shared project</strong>, where two people work on one thing (two mathematicians on a single proof); and <strong>(b) a jigsaw</strong>, where separate projects fit together (one person writes the text, another does the graphic design).</p>
+
+  <figure class="diagram">
+    <div class="dtitle">When is work "one's own"?</div>
+    <div class="twocol">
+      <div class="vs a">
+        <h4>Axis 1 · Voluntary ↔ Assigned <span class="muted" style="font-weight:400">(sharp edge)</span></h4>
+        <div class="row" style="margin-top:8px">
+          <div class="node ok" style="flex:1"><div class="nh">Pulled</div><div class="ns">chosen — even if first told to do it</div></div>
+          <div class="node warn" style="flex:1"><div class="nh">Pushed</div><div class="ns">working merely to order</div></div>
+        </div>
+        <p class="muted" style="font-size:12.5px;margin:8px 0 0">You can choose what you were told to do and own it more than whoever told you.</p>
+      </div>
+      <div class="vs b">
+        <h4>Axis 2 · Solo ↔ Collaborative <span class="muted" style="font-weight:400">(soft edge)</span></h4>
+        <div class="col" style="margin-top:8px;align-items:stretch">
+          <div class="node accent2"><div class="nh">Solo</div><div class="ns">a project entirely by yourself</div></div>
+          <div class="node"><div class="nh">(a) Shared project</div><div class="ns">two people, one proof</div></div>
+          <div class="node"><div class="nh">(b) Jigsaw</div><div class="ns">separate projects that interlock — text + design</div></div>
+        </div>
+      </div>
+    </div>
+    <figcaption>"One's own" survives collaboration — what it can't survive is being pushed instead of pulled.</figcaption>
+  </figure>
+
+  <h2>Keeping it alive inside an organization</h2>
+  <p>Under the right conditions, the excitement of a project of one's own survives for a while even inside an organization. The history of successful organizations is partly the history of techniques for preserving it. PG's example is the <strong>original Macintosh team</strong> — Burrell Smith, Andy Hertzfeld, Bill Atkinson, Susan Kare. They worked late into the night not because they were driven, but because they individually felt the excitement of a project of their own.</p>
+  <blockquote>They weren't tennis balls hit by Steve Jobs, but rockets let loose by Steve Jobs.</blockquote>
+  <p>That's the opposite end of the spectrum from sweatshop-style long hours. Which is why PG thinks it's a mistake to insist dogmatically on "work/life balance." For skaters, the relation between work and life is better described by a <strong>dash than a slash</strong>. PG wouldn't work on anything he didn't want to take over his life.</p>
+
+  <h2>Newness, autonomy, and the wormhole</h2>
+  <p><strong>Newness</strong> helps work feel like your own. It's why programmers so often rewrite things from scratch — costly in characters, but writing it yourself is so much more rewarding that a good programmer can end up net ahead. Capitalism, conveniently, encourages exactly this rewriting. Skating also aligns naturally with solving <strong>new problems</strong> — part of why startup payoffs are high: there's a higher market price for unsolved problems, plus a productivity discount, and clean-sheet work is easier to recruit skaters for.</p>
+  <p>But all of this requires <strong>autonomy</strong>. You can't be working to order, or be slowed down by bureaucracy. There are two ways to have no boss: <strong>be the boss</strong> (a startup), or <strong>work on projects outside work</strong> (open source). Financially these sit at opposite ends — yet both are often run by skaters, and there's a <strong>wormhole</strong> between them: working on a project just for fun is one of the best ways to find startup ideas.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Two routes to having no boss</div>
+    <div class="row grow">
+      <div class="node accent"><div class="nh">Be the boss</div><div class="ns">a startup — high financial stakes</div></div>
+      <div class="node accent2"><div class="nh">Work outside work</div><div class="ns">open source — for fun, no money</div></div>
+    </div>
+    <div class="arrow" style="margin-top:10px">↑ &nbsp;wormhole &nbsp;↓</div>
+    <div class="legend">A project done purely for fun is one of the best ways to find a startup idea — and vice versa. Opposite ends financially, both run by skaters.</div>
+  </figure>
+
+  <h2>The hardest part is morale — and the beginning</h2>
+  <p>For projects that don't make money, the hardest part is <strong>morale</strong>. Adults have it harder than kids, who simply plunge in without worrying whether they're wasting time, or how their treehouse compares to anyone else's.</p>
+  <p>And the single most important phase is the <strong>beginning</strong> — the move from "it might be cool to do x" to actually doing x. Here, high standards are "not merely useless but positively harmful." Far more people are deterred by fear of failure than ever start too many projects. The remedy is to remember, as grownups, that our projects trace right back to treehouses — and to recapture the <strong>careless confidence</strong> we had as kids.</p>
+
+  <div class="callout key">
+    <h4>The ideal posture</h4>
+    <p>Be <strong>deliberate</strong> in choosing which projects to take on — but <strong>carelessly confident</strong> in starting them. Care about the <em>what</em>; refuse to let fear of failure govern the <em>whether</em>.</p>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Where projects live or die</div>
+    <div class="steps">
+      <div class="step"><b>"It might be cool to do x."</b> &nbsp;— the idea appears.</div>
+      <div class="step"><b>The most important phase ↓</b> &nbsp;Here high standards are <em>harmful</em>. Most people are deterred by fear of failure long before they ever start too much.</div>
+      <div class="step"><b>Actually doing x.</b> &nbsp;— recapture the kid's careless confidence: just plunge in.</div>
+    </div>
+    <figcaption>Deliberate in <em>choosing</em>, carelessly confident in <em>starting</em>.</figcaption>
+  </figure>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Paul Graham, <a href="https://paulgraham.com/own.html" target="_blank" rel="noopener">"A Project of One's Own"</a> (paulgraham.com, June 2021). Related: <a href="../../index.html">Learning Notes index</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>101 Additional Advices — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+  <header class="post">
+    <h1>101 Additional Advices</h1>
+    <div class="meta">
+      <span>By <strong>Kevin Kelly</strong> (The Technium)</span>
+      <span class="dot">•</span>
+      <span>Published Apr 18, 2024</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Life Advice</span>
+      <span class="tag">Aphorisms</span>
+      <span class="tag">Wisdom</span>
+      <span class="tag">Decisions</span>
+    </div>
+  </header>
+
+  <p class="lede">An all-new set of unsolicited advice Kevin Kelly wrote for his 73rd birthday — a sequel to his viral "68 Bits of Unsolicited Advice," and none of these overlap with his book.</p>
+
+  <div class="callout key">
+    <h4>About this list</h4>
+    <p>This is a <strong>curated selection of roughly 28</strong> of Kelly's original 101 aphorisms, grouped into six themes. Each line below is reproduced verbatim, but this is only a slice — <a href="https://kk.org/thetechnium/101-additional-advices/" target="_blank" rel="noopener">read the full list of 101 at the source</a>. Kelly notes he keeps 460 more in his book <em>Excellent Advice for Living</em> (promotional plug at the end).</p>
+  </div>
+
+  <h2>On starting, failing &amp; persisting</h2>
+  <p>The recurring move here: the bottleneck is almost never talent or ideas — it's beginning, and then not stopping.</p>
+  <ul>
+    <li>Many fail to finish, but many more fail to start. The hardest work in any work is to start.</li>
+    <li>Don't fear failure. Fear average.</li>
+    <li>Fail fast. Fail often. Fail forward. Failing is not a disgrace if you keep failing better.</li>
+    <li>When you try something new, think of it as success / learning to succeed (not success / failure).</li>
+    <li>There is no formula for success, but two formulas for failure: not trying and not persisting.</li>
+    <li>The more persistent you are, the more chances you get to be lucky.</li>
+    <li>Slow progress is still a million times better than no progress.</li>
+  </ul>
+
+  <h2>On decisions &amp; thinking</h2>
+  <p>Kelly treats decisions as reversible by default and thinking as something you should be willing to update.</p>
+  <div class="steps">
+    <div class="step"><b>Run it forward.</b> Your decisions will become wiser when you consider these three words: "…and then what?"</div>
+    <div class="step"><b>Most doors swing both ways.</b> Most deciding points are two-way doors, not one-way. Don't get bogged down; you can usually back up.</div>
+    <div class="step"><b>Halt when impaired.</b> Avoid important decisions when you are Hungry, Angry, Lonely, or Tired (HALT). Just halt when you are HALT.</div>
+  </div>
+  <ul>
+    <li>Changing your mind about important things is not a consequence of stupidity, but a sign of intelligence.</li>
+    <li>Strong opinions, clearly stated, but loosely held. Always ask: what would change my mind?</li>
+    <li>When you are right, you are learning nothing.</li>
+    <li>Do not cling to a mistake just because you spent a lot of time making it.</li>
+  </ul>
+
+  <h2>On generosity &amp; relationships</h2>
+  <p>The throughline: generosity is framed not as sacrifice but as the most self-interested thing you can do.</p>
+  <blockquote>The most selfish thing in the world you can do is to be generous. Your generosity will return you ten fold.</blockquote>
+  <ul>
+    <li>If you are more fortunate than others, build a longer table rather than a taller fence.</li>
+    <li>What others want from you is mostly to be seen. Let others know you see them.</li>
+    <li>The very best way to win a friend is to be one.</li>
+    <li>Whenever you hug someone, be the last to let go.</li>
+    <li>You owe everyone a second chance, but not a third.</li>
+    <li>Being envious is a toxin. Take joy in the success of others and treat their success as your gain.</li>
+  </ul>
+
+  <h2>On self, humility &amp; honesty</h2>
+  <p>Humility, in Kelly's framing, is mostly accuracy — being honest about luck and easy to correct.</p>
+  <div class="twocol">
+    <div class="vs a">
+      <h4>Honesty as a gift</h4>
+      <p class="muted" style="font-size:14px;margin:0">Always be radically honest, but use your honesty as a gift not a weapon.</p>
+    </div>
+    <div class="vs b">
+      <h4>Humility as accuracy</h4>
+      <p class="muted" style="font-size:14px;margin:0">Humility is mostly about being very honest about how much you owe to luck.</p>
+    </div>
+  </div>
+  <ul>
+    <li>There is a profound difference between thinking less of yourself (not useful), and thinking of yourself less (better).</li>
+    <li>Get good at being corrected without being offended.</li>
+    <li>Admitting that "I don't know" at least once a day will make you a better person.</li>
+    <li>Work on your tone. Often ideas are rejected because of the tone they're wrapped in. Humility covers many blemishes.</li>
+  </ul>
+
+  <h2>On time &amp; the long game</h2>
+  <p>Several of the 101 collapse into one stance: think in long horizons, but act on the nearest small thing.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Two horizons, one habit</div>
+    <div class="row grow">
+      <div class="node accent2">
+        <div class="nh">Think in decades</div>
+        <div class="ns">Set the direction by the long game</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node accent">
+        <div class="nh">Act in days</div>
+        <div class="ns">Move the nearest small thing forward</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node ok">
+        <div class="nh">Compound</div>
+        <div class="ns">Small advances become large achievements</div>
+      </div>
+    </div>
+    <figcaption>"Think in terms of decades, and act in terms of days" — the spine of Kelly's time advice.</figcaption>
+  </figure>
+
+  <ul>
+    <li>Think in terms of decades, and act in terms of days.</li>
+    <li>Small steps matter more when you play a long game—you compound small advances into large achievements.</li>
+    <li>What is important is seldom urgent and what is urgent is seldom important.</li>
+    <li>The most common mistake we make is to do a great job on an unimportant task.</li>
+    <li>Very small things accumulate until they define your larger life. Carefully choose your everyday things.</li>
+    <li>When you are stuck or overwhelmed, focus on the smallest possible thing that moves your project forward.</li>
+  </ul>
+
+  <h2>On living well</h2>
+  <p>The closing theme is the most personal — what to do with abundance, attention, and the people around you.</p>
+  <blockquote>The highest form of wealth is deciding you have enough.</blockquote>
+  <ul>
+    <li>Don't save up the good stuff (fancy wine, or china) for that rare occasion that will never happen; instead use them whenever you can.</li>
+    <li>There should be at least one thing in your life you enjoy despite being no good at it. This is your play time. Never apologize for it.</li>
+    <li>Discover people whom you love doing "nothing" with, and do nothing with them on a regular basis.</li>
+    <li>Where you live—what city, what country—has more impact on your well being than any other factor.</li>
+    <li>The cheapest therapy is to spend time with people who make you laugh.</li>
+    <li>Write your own obituary, the one you'd like to have, and then everyday work towards making it true.</li>
+  </ul>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Kevin Kelly, <a href="https://kk.org/thetechnium/101-additional-advices/" target="_blank" rel="noopener">"101 Additional Advices"</a> (The Technium, Apr 18 2024). A curated selection of his 101 bits; read all 101 at the source. He notes 460 more are in his book <em>Excellent Advice for Living</em> (promotional). Related: <a href="../../index.html">Learning Notes index</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
