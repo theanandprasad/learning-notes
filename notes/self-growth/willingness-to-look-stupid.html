@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willingness to Look Stupid — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Willingness to Look Stupid</h1>
+    <div class="meta">
+      <span>By <strong>Dan Luu</strong></span>
+      <span class="dot">•</span>
+      <span>Published danluu.com (undated)</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Learning</span>
+      <span class="tag">Ego</span>
+      <span class="tag">Mindset</span>
+      <span class="tag">Asking Questions</span>
+      <span class="tag">Contrarian</span>
+    </div>
+  </header>
+
+  <p class="lede">People frequently think Dan Luu is stupid — because he doesn't mind looking stupid, so he doesn't adjust his behavior to avoid it. The compounding upside of that willingness, he argues, vastly outweighs the downside.</p>
+
+  <div class="callout key">
+    <h4>The core claim</h4>
+    <p style="margin:0">Most people quietly optimize to <strong>avoid looking (or feeling) stupid</strong>. That instinct blocks the very things that build deep understanding and find high-ROI ideas: asking naive questions, owning failures, trying obviously-dumb-sounding things, and pursuing ideas everyone else dismissed out of hand. The cost of looking stupid is small and momentary; the compounding benefit of being willing to is large.</p>
+  </div>
+
+  <h2>Where it started: the "stupid" questions</h2>
+  <p>In college, a group who were themselves struggling with the material concluded Dan was "really dumb" — because he asked stupid-sounding questions. The questions sounded stupid precisely because he'd <em>already</em> seen past the obvious-but-wrong answer and was probing for the subtler real one.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Why a good question can sound stupid</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node warn"><div class="nh">1 · Obvious reason</div><div class="ns">seems true, but is actually wrong — most people stop here</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">2 · Refutation</div><div class="ns">obvious reason is debunked → makes the claim <em>seem</em> untrue</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">3 · Subtle truth</div><div class="ns">a complex reason the thing is actually true after all</div></div>
+    </div>
+    <figcaption>Asking about layer 3 sounds dumb to anyone stuck at layer 1 (or who thinks layer 2 settles it). Example: why wider tires grip better — it's <em>not</em> a bigger contact patch (patch area is ~fixed at a given weight/pressure), but the real cause is subtler still.</figcaption>
+  </figure>
+
+  <p>The payoff is tiny in any single instance but <strong>compounds enormously over time</strong>. Dan notes that people with genuinely deep understanding of a topic <em>still</em> ask naive-sounding questions — it's the same habit that got them there in the first place.</p>
+
+  <h2>The video-game tell: excuses vs. improvement</h2>
+  <p>Playing competitive games as a teen, he could watch everyone improve (or not) over time. The pattern was stark: people who blamed external factors when they lost almost never got good.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">What happens when something goes wrong</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Make an excuse</h4>
+        <p style="margin:0;font-size:14px">Blame lag, luck, a glitch, teammates, unfairness. Protects the ego <em>in the moment</em> — but you learn nothing, so you keep failing (and keep looking stupid anyway).</p>
+      </div>
+      <div class="vs good">
+        <h4>Look at what went wrong</h4>
+        <p style="margin:0;font-size:14px">Dan's "one weird trick": every time something went wrong, figure out why and try to improve. Feels stupid now; gets you good. (He was arguably #1 in the world one season.)</p>
+      </div>
+    </div>
+    <figcaption>The excuse-makers traded a small short-term ego hit for a large long-term cost. The same fork shows up far beyond games.</figcaption>
+  </figure>
+
+  <h2>It shows up everywhere</h2>
+  <p>Most of the essay is a catalogue of real instances where Dan accepted looking stupid — and usually came out ahead. A selection:</p>
+  <div class="steps">
+    <div class="step"><b>COVID, early.</b> Bought a half-mask respirator on <strong>2020-01-26</strong> (using N95s the week before) based on existing SARS contact-tracing and air-filtration literature. Mocked for months. The person he lived with found masking on an empty BART too embarrassing — caught COVID early, then got long COVID for months.</div>
+    <div class="step"><b>Chip-verification, pre-tape-out.</b> The head of verification wanted to re-run old "golden" tests (almost no chance of finding bugs) instead of the best test mix — explicitly so the team wouldn't <em>look</em> incompetent if an old test later caught something. Dan was shocked someone would knowingly do the wrong thing to avoid looking stupid. He's since seen most people do exactly that — and considers it self-sabotage.</div>
+    <div class="step"><b>Air filters since 2012.</b> Called paranoid for years; added capacity in a wildfire-risk area. Was essentially unaffected through two severe wildfire seasons while others developed lasting issues (in one case, persistent asthma).</div>
+    <div class="step"><b>Asking questions.</b> A top failure mode in junior engineers: too afraid to look stupid to ask, so they learn slowly — sometimes badly enough to be PIP'd and fired. It can take him up to six weeks to convince a new hire it's genuinely okay to ask. (If your workplace punishes questions, leave if you can.)</div>
+    <div class="step"><b>Deliberate practice at the edge.</b> Repeating an easy climbing move many ways to feel what works; wanting to set up cones to learn exactly where the edge of a car is. Strangers literally point and laugh — it's how he improves quickly.</div>
+    <div class="step"><b>Medical care.</b> Doctors get confident and condescending fast. In the most extreme case he'd have died if he'd listened; in the next, gone blind. For blood draws he states what works; the ~half of staff who take him seriously get a clean draw, the half who treat him like an idiot fail and/or leave a hematoma.</div>
+    <div class="step"><b>This website / long posts.</b> Designers and typographers tell him the site is stupid — but the current design tested better on engagement and sharing, and the blog out-traffics most sub-$100B corporate blogs. He writes 5,000–10,000-word posts against the "keep it to 500–1,000 words" advice.</div>
+    <div class="step"><b>Career & recruiting.</b> Quitting Centaur to attend RC and switch into software (seen as very stupid in 2013); taking his current job (almost everyone thought it dumb). His recruiting pitch <em>leads with the downsides</em> — sounds comically stupid, yet he's never failed to close a full-time candidate.</div>
+  </div>
+  <p class="muted">Other examples in the essay: buying the laptop that ships in the smallest box; preferring Moderna over Pfizer; reframing "feeling dumb" as "the feeling of learning"; car insurance with no own-damage coverage; being earnest / a "tryhard"; and posting on the internet at all.</p>
+
+  <h2>Why it's a competitive edge at work</h2>
+  <p>Beyond faster learning, willingness to look stupid is where the <strong>high-ROI ideas</strong> live.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Where to go hunting for valuable ideas</div>
+    <div class="twocol">
+      <div class="vs b">
+        <h4>Trendy / "reasonable" ideas</h4>
+        <p style="margin:0;font-size:14px">Crowded. Many smart, hardworking people tread the same ground. To do something extraordinary you must out-execute <em>all</em> of them — very hard.</p>
+      </div>
+      <div class="vs a">
+        <h4>"Too stupid to consider" ideas</h4>
+        <p style="margin:0;font-size:14px">Almost no competition. Often the fix is simple and easy — anything an idiot could've done, left undone only because no one was willing to think the dumb thought. If no one else is trying it, out-executing them is trivial.</p>
+      </div>
+    </div>
+    <figcaption>"I don't actually have to be nearly as smart or work nearly as hard as most people to get good results" — by looking where others won't.</figcaption>
+  </figure>
+
+  <h2>The upside/downside ledger</h2>
+  <p>For anything <em>not</em> socially judged — winning a game, understanding something, building things — it's all upside. The downside is concentrated in things that <em>are</em> about social judgment, like dates and interviews. And even there, Dan reframes much of it as upside:</p>
+  <ul>
+    <li><strong>Dates:</strong> if asking what a word means makes a date visibly think you're stupid, that's strong early evidence of incompatibility — better learned sooner.</li>
+    <li><strong>Interviews:</strong> the genuine hard case. At big companies the interviewer may have no bearing on your eventual work life, so the cost is real. But the habit of saying what he believes true is too deeply ingrained — and too valuable elsewhere — to rewire just for interviews.</li>
+  </ul>
+
+  <h2>"But I'm already willing to look stupid"</h2>
+  <div class="callout">
+    <p style="margin:0">Dan expects most readers to conclude they're already great at this — the same way most people, asked, believe they're creative, innovative, and big risk-takers. (He knows one of the most conservative people alive who counts "sometimes jaywalking" as taking big risks.) A real check: he runs into someone <strong>obviously</strong> thinking he's an idiot about <strong>once a week</strong>.</p>
+  </div>
+  <p>If that essentially never happens to you, he suggests at least one of these is true:</p>
+  <div class="row grow" style="max-width:740px;margin:18px 0">
+    <div class="node"><div class="nh">Filtered world</div><div class="ns">you only interact with hand-picked people, screened of these reactions</div></div>
+    <div class="node"><div class="nh">No exposure</div><div class="ns">you don't post to the internet (or don't read the comments)</div></div>
+    <div class="node warn"><div class="nh">Avoiding it</div><div class="ns">you're actively steering clear of looking stupid</div></div>
+    <div class="node"><div class="nh">Not noticing</div><div class="ns">it's happening and you don't see it (he thinks this one's least likely — people work hard to make sure you know)</div></div>
+  </div>
+  <p>The deeper trap isn't filtering <em>out</em> dumb-sounding comments consciously — that's fine if it's low-overhead. It's having an <strong>unconscious process that refuses to even evaluate</strong> a stupid-sounding thought, in others or in your own head. Note he doesn't court weirdness: he conforms cheaply where it doesn't matter (dressing casually on the west coast) to spend his "weirdness points" on radical ideas, not on appearances.</p>
+
+  <h2>The catch, and the contexts</h2>
+  <p>Stupid-sounding thoughts <em>are</em> frequently wrong. If you won't lean on social proof to filter them, you have to hone your own intuition or find trusted friends who can catch the ones that are actually stupid — and since almost no one tries, you can get relatively good at it just by trying at all.</p>
+  <p>He's also explicit about scope: in contexts where it's <em>more important to look competent than to be competent</em>, this advice doesn't apply (he cites Ali Partovi's story of honesty costing his company a Yahoo acquisition — which indirectly led to Paul Graham founding YC). Dan has deliberately avoided such contexts, though he grants they're probably more lucrative.</p>
+
+  <blockquote>"Often, the dumb solution is something any idiot could've come up with and the reason the problem hasn't been solved is because no one was willing to think the dumb thought until an idiot like me looked at the problem."</blockquote>
+
+  <p class="muted">On "how" to stop caring: Dan says it's idiosyncratic, so general advice fails. For him it came easily — he genuinely felt stupid growing up (smarter childhood friends; an abusive household where he was berated for hours for being "stupid"), so a stranger's low opinion is water off a duck's back. A path he wouldn't recommend, but which worked out okay.</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Dan Luu, <a href="https://danluu.com/look-stupid/" target="_blank" rel="noopener">"Willingness to look stupid"</a> (danluu.com). Examples, quotes, and the tire-grip and chip-verification anecdotes are the author's own; dates (e.g. 2020-01-26) are as stated in the post. Includes appendix remarks from Ben Kuhn, Laurence Tratt, and Gary Bernhardt. Related: <a href="the-self-help-trap.html">The Self-Help Trap</a>, <a href="insane-things-in-my-20s.html">10 Insane Things I Did In My 20s</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
