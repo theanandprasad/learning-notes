@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 30-Day X Routine: 850 → 1,400 Followers, 4.9M Views — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>The 30-Day X Routine: 850 → 1,400 Followers, 4.9M Views</h1>
+    <div class="meta">
+      <span>By <strong>Tarang Agarwal</strong> (@tarang8811)</span>
+      <span class="dot">•</span>
+      <span>Published Apr 13, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">X / Twitter Growth</span>
+      <span class="tag">Replies</span>
+      <span class="tag">Distribution</span>
+      <span class="tag">Monetization</span>
+    </div>
+  </header>
+
+  <p class="lede">Thirty days: from 857 followers and 100–200 views a tweet to 4.9M impressions (single-day peak ~1M) and monetized — by doing <em>one</em> thing, not ten.</p>
+
+  <div class="disclaimer">⚠️ <strong>Captured as-is.</strong> A personal X-growth playbook; all follower/impression/revenue figures are the author's own claims, unverified, and the platform mechanics he describes are his read of a fast-changing algorithm. Archived as one practitioner's method, not endorsed advice.</div>
+
+  <div class="callout key">
+    <h4>The one insight</h4>
+    <p style="margin:0"><strong>Originals build your brand. Replies build your reach.</strong> Nobody cares about your originals until they know who you are — so stop posting louder into the void and show up where the attention already is: the replies under bigger accounts in your niche. A reply that lands in the top 3 borrows their audience for free.</p>
+  </div>
+
+  <h2>Where he started</h2>
+  <p>Under 900 followers. A bio that didn't say what he did, a six-month-old pinned tweet, posting 2–3× a week — always originals, always hoping. He'd built a real business ($800K ARR Shopify app, five years of scars) but his account reflected none of it. "Posting into a void and calling it 'consistency.'"</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Brand vs reach — write in better rooms</div>
+    <div class="twocol">
+      <div class="vs b">
+        <h4>Originals → brand</h4>
+        <p style="margin:0;font-size:14px">They define who you are — but they're invisible until people already know you. A megaphone into an empty room is still an empty room.</p>
+      </div>
+      <div class="vs good">
+        <h4>Replies → reach</h4>
+        <p style="margin:0;font-size:14px">A big account's comment section is a free audition stage — thousands scroll it every post. Land in the top 3 and you borrow their audience.</p>
+      </div>
+    </div>
+    <figcaption>His single best reply did <strong>570,937 views</strong> — more than his previous three months of originals combined. "I wasn't writing better tweets. I was writing them in better rooms."</figcaption>
+  </figure>
+
+  <h2>The targets: who to reply to</h2>
+  <p>Where most people blow it: replying to Elon or MrBeast — 50M-follower accounts with 20,000 replies in the first minute, where you'll never be seen. Aim for the sweet spot instead.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The follower sweet spot</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node warn"><div class="nh">Too big</div><div class="ns">celebs / 50M followers — 20k replies/min, you vanish</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">✓ 30K–500K in your niche</div><div class="ns">posting daily, with a consistent reply section where the same faces recur</div></div>
+      <div class="arrow">→</div>
+      <div class="node warn"><div class="nh">Too small</div><div class="ns">not enough eyes to borrow</div></div>
+    </div>
+    <figcaption>He built a list of <strong>22 niche accounts</strong> (SaaS / indie hackers / founders), opened them as one tab group every morning, and ignored his For You feed for 30 days.</figcaption>
+  </figure>
+
+  <p>Three rules for the list:</p>
+  <ul>
+    <li><strong>Their audience is your audience.</strong> If their followers wouldn't follow you, nothing you write in their comments matters.</li>
+    <li><strong>They post often enough</strong> to give you multiple at-bats per day.</li>
+    <li><strong>You can actually get into the replies</strong> while the post is still climbing.</li>
+  </ul>
+
+  <div class="callout">
+    <h4 style="margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">Myth: the 30-minute window</h4>
+    <p style="margin:0">"Reply in the first 30 minutes" no longer holds — posts now run 6–24 hours and can peak anytime. His 500K-view reply wasn't early; it was <em>there when the peak hit</em>. Rule of thumb: catch a tweet within the first <strong>3–6 hours</strong> to ride the peak, and just stay consistent in your niche.</p>
+  </div>
+
+  <h2>The reply that works (and why)</h2>
+  <p>Most replies die not because they're generic but because they never get eyes. What works passes the <strong>scroll test</strong>: if a stranger reads only your reply, with no context, does it still make them think?</p>
+
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Dies</h4>
+      <p style="margin:0;font-size:13.5px">"Great post!" (adds nothing) · "So true, I wrote about it here [link]" (self-promo, buried) · a 4-paragraph essay (nobody reads it in a comment section)</p>
+    </div>
+    <div class="vs good">
+      <h4>Lands</h4>
+      <p style="margin:0;font-size:13.5px">A standalone micro-post that happens to live under someone else's tweet. Three lines, four max.</p>
+    </div>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">The reply shape — 3 lines</div>
+    <div class="steps">
+      <div class="step"><b>1 · A sharp opening that takes a position.</b> Not "I agree" — something like "The version of this nobody talks about is…"</div>
+      <div class="step"><b>2 · One specific thing from your real experience.</b> A number, a timeframe, a scar.</div>
+      <div class="step"><b>3 · One punchy close.</b> No hashtags, no link, no "DM me."</div>
+    </div>
+    <figcaption>Bonus lever: a <em>genuine</em> question to @grok gets a boosted answer (X is promoting Grok), and others with the same question check your reply.</figcaption>
+  </figure>
+
+  <h2>The daily engine (~2 hours, in 3–5 min chunks)</h2>
+  <figure class="diagram">
+    <div class="dtitle">Exact schedule: 2 originals + ~20 replies</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node accent"><div class="nh">Morning · 30 min</div><div class="ns">queue 2 originals (1 casual, 1 value); reply to any early posts on the target list</div></div>
+      <div class="node accent"><div class="nh">Daytime · 60–90 min</div><div class="ns">notifications on; reply in &lt;3 min when a target posts; aim 15–25 quality replies</div></div>
+      <div class="node accent"><div class="nh">Evening · 20 min</div><div class="ns">post the PM value tweet; answer everyone who replied to you within the first hour</div></div>
+    </div>
+    <figcaption>Two hours spread across the day, not two focused hours. To stay consistent he built a simple progress dashboard (Claude + the X API, plus a weekly analytics screenshot) so the boring, mechanical work felt like measurable progress.</figcaption>
+  </figure>
+
+  <h2>What he stopped doing</h2>
+  <ul>
+    <li><strong>Scrolling For You "for inspiration."</strong> It's a slot machine — 45 minutes for one mediocre idea.</li>
+    <li><strong>Posting threads before anyone cares.</strong> Threads are megaphones; earn the audience first.</li>
+    <li><strong>Chasing viral trends</strong> outside your topic — it just confuses followers about what you do.</li>
+    <li><strong>Writing originals longer than 3 lines in week one.</strong> Short originals test angles in days, not months.</li>
+    <li><strong>Following back everyone</strong> — protect your timeline; follow only who you learn from.</li>
+    <li><strong>Replying to out-of-niche viral accounts.</strong> A 50K-view reply on a fitness post does nothing for SaaS followers — and may confuse the algorithm about what you are.</li>
+  </ul>
+
+  <h2>What's changed in X monetization</h2>
+  <p>The ground is shifting under the playbook — these are the author's reads of current creator changes:</p>
+  <table>
+    <tr><th>Shift</th><th>What it means</th></tr>
+    <tr><td>Impressions alone no longer pay</td><td>Revenue is moving toward engagement from <strong>verified</strong> users; optimize for replies &amp; bookmarks, not raw reach.</td></tr>
+    <tr><td>Engagement rate is a gate</td><td>Below ~1% ER the algorithm quietly throttles your next posts. His ER fell 5% → 1.1% over 90 days chasing impressions, and every later post started at a disadvantage.</td></tr>
+    <tr><td>Monetization requirements</td><td>500+ followers, verified, and 5M impressions over 3 months. This playbook clears that bar in one month.</td></tr>
+    <tr><td>Verified replies count more</td><td>10 likes from verified accounts beat 200 from new ones. Target accounts whose audience skews verified (founders, investors, operators).</td></tr>
+    <tr><td>X favors original content</td><td>The reply strategy still earns impressions and can cross the payout threshold — but payout from replies is "almost dead." Original content is now king for actually getting paid.</td></tr>
+  </table>
+  <p class="muted">His takeaway: the reply playbook still works to <em>cross the line</em>, but it won't reward like before — after hitting the mark he's pivoting to original content.</p>
+
+  <h2>The 7-day starter plan</h2>
+  <div class="steps">
+    <div class="step"><b>Day 1 — Bio.</b> A stranger should know in 8 seconds who you are, what you do, and what they get. One clear identity (his: "founder who built $800K ARR, building again in public").</div>
+    <div class="step"><b>Day 2 — Target list.</b> 15+ accounts, all in your niche, all 30K–500K, all posting daily. Save them in a one-click list/folder.</div>
+    <div class="step"><b>Day 3 — Notifications on</b> for those accounts (delete TikTok — the notifications are your new feed).</div>
+    <div class="step"><b>Day 4 — Practice.</b> Write 5 reply-shaped micro-posts: three lines each (opinion · specific detail · close). No hashtags, no links.</div>
+    <div class="step"><b>Day 5 — Ship 10 real replies</b> on live posts; track which land.</div>
+    <div class="step"><b>Day 6 — First original</b> of the new era: one short story from your life, 3 lines, no moral (let the reader fill it in).</div>
+    <div class="step"><b>Day 7 — Review analytics.</b> Note the single best reply and best original; next week do more of that shape. Then run it 30 days without changing the plan.</div>
+  </div>
+
+  <h2>The honest part</h2>
+  <blockquote>4.9 million impressions did not make me rich. It did not ship my product. It did not close a single customer. What it did was buy me a real audience.</blockquote>
+  <p>The real prize isn't the number — it's the room: an audience of founders and builders who now actually pay attention when he posts about what he's building. Run the playbook because you have something real to say to that room, not for the dopamine of a big number. "But if you want the big number too, 30 days and the playbook above will get you there."</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Tarang Agarwal (@tarang8811; building GetIntel, prior SaaS ~$900K ARR), <a href="https://x.com/tarang8811/status/2043611938614399173" target="_blank" rel="noopener">"The 30-Day X Routine That Took Me From 850 to 1,400 Followers and 4.9M Views"</a> (X article, Apr 13 2026). All figures are the author's own claims; algorithm/monetization details are his interpretation. Related: <a href="30-day-x-reply-routine.html">The 30-Day X Reply Routine</a>, <a href="x-algorithm-breakdown.html">How the X Algorithm Works</a>, <a href="5m-impressions-replying.html">5M Impressions in 4 Weeks</a>, <a href="reply-guy-strategy.html">The Reply Guy Strategy</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
