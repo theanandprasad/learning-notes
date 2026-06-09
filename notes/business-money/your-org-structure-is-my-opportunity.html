@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Org Structure Is My Opportunity — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Your Org Structure Is My Opportunity</h1>
+    <div class="meta">
+      <span>By <strong>Nikunj Kothari</strong> (@nikunj, FPV Ventures)</span>
+      <span class="dot">•</span>
+      <span>Published Feb 19, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">AI-Native</span>
+      <span class="tag">Org Design</span>
+      <span class="tag">Hiring</span>
+      <span class="tag">Startups vs Incumbents</span>
+      <span class="tag">Strategy</span>
+    </div>
+  </header>
+
+  <p class="lede">AI didn't just give everyone an assistant — it erased the skill constraint that org charts were built around. Most companies bolted AI onto the old structure and called it a strategy. To a startup, that unchanged structure is the opening.</p>
+
+  <div class="callout key">
+    <h4>The thesis</h4>
+    <p style="margin:0">Roles like "PM has the idea, engineer builds it" existed because <strong>you literally couldn't do the next step yourself</strong> — a real skill constraint. AI removed the constraint but nobody redrew the org chart. The companies that <strong>restructure</strong> (one person, idea→shipped, no handoffs) beat the ones that just hand everyone a copilot and leave the boxes in place. Every handoff leaks context; the gaps add up to weeks — and in those weeks a competitor is already talking to your customers.</p>
+  </div>
+
+  <h2>Two conversations that frame it</h2>
+  <div class="twocol">
+    <div class="vs a">
+      <h4>The founder</h4>
+      <p style="margin:0;font-size:14px">His hardest problem isn't product or customers — it's <strong>hiring</strong>. He can't find people who do more than one thing well. Why: a generation spent the last decade inside companies that trained them to do <em>exactly one job, in one box, on one org chart</em>.</p>
+    </div>
+    <div class="vs bad">
+      <h4>The exec</h4>
+      <p style="margin:0;font-size:14px">Proud of his AI rollout — copilots everywhere, adoption dashboards, 20 minutes of "efficiency gains." But his hiring plan hadn't changed, headcount was still rising, and he <strong>couldn't name a single metric that moved.</strong> He gave everyone an assistant and left the structure exactly where it was.</p>
+    </div>
+  </div>
+  <p>The symptoms of the unchanged org: same dependencies between product and design, same review cycles between design and eng, same eight-person meetings so everyone "has context." Product says "prioritize." Eng says "capacity." The board wants Q2 projections and "product velocity." Everyone's busy — they look around the room and it <em>feels</em> like progress.</p>
+
+  <h2>The constraint that justified the boxes is gone</h2>
+  <figure class="diagram">
+    <div class="dtitle">Why the separation existed — and why it doesn't now</div>
+    <div class="twocol">
+      <div class="vs b">
+        <h4>Old: a real skill constraint</h4>
+        <div class="col" style="align-items:stretch">
+          <div class="node">💡 PM has the idea</div>
+          <div class="arrow">↓ <span style="font-size:11px">handoff</span></div>
+          <div class="node">🎨 Design</div>
+          <div class="arrow">↓ <span style="font-size:11px">review cycle</span></div>
+          <div class="node">⚙️ Eng builds it</div>
+          <div class="arrow">↓</div>
+          <div class="node">🚀 Ship</div>
+        </div>
+      </div>
+      <div class="vs good">
+        <h4>Now: distance ≈ zero</h4>
+        <div class="col" style="align-items:stretch">
+          <div class="node accent2"><div class="nh">🧠 One brain</div><div class="ns">holds the whole problem, start to finish</div></div>
+          <div class="arrow">↓</div>
+          <div class="node accent2"><div class="nh">Idea → build → ship</div><div class="ns">no one else needs to touch it</div></div>
+        </div>
+        <p class="legend" style="margin-top:14px">At a Claude Code event for non-technical people, an <strong>investment banker built a shopping app and pushed it live to customers that same afternoon.</strong></p>
+      </div>
+    </div>
+    <figcaption>The boxes were a workaround for "you can't do the next step yourself." AI blew that up — and most companies are still organized around a distance that no longer exists.</figcaption>
+  </figure>
+
+  <h2>What fast-growing startups hire now: tinkerers</h2>
+  <div class="callout">
+    <p style="margin:0">No fast-growing startup he knows is hiring "just a PM" or "just a marketer" anymore. They want <strong>tinkerers</strong>: the person who <em>talks to the customer in the morning, builds the fix by noon, and ships it before dinner.</em> One brain holding the whole problem. Not because they can't afford to specialize — because <strong>every time work changes hands, context leaks</strong>, and they learned to just not have that problem.</p>
+  </div>
+
+  <h2>Follow the biggest line item</h2>
+  <figure class="diagram">
+    <div class="dtitle">Where AI-native startups spend</div>
+    <div class="row grow" style="max-width:620px">
+      <div class="vs bad" style="flex:1"><h4>Incumbent</h4><p style="margin:0;font-size:13.5px">Biggest line item: <strong>salaries</strong>. Add a function, add headcount, add a gap between each one.</p></div>
+      <div class="arrow" style="align-self:center">vs</div>
+      <div class="vs good" style="flex:1"><h4>AI-native startup</h4><p style="margin:0;font-size:13.5px">Biggest line item: <strong>compute</strong> — thousands a month in token costs <em>instead of</em> headcount.</p></div>
+    </div>
+    <figcaption>"That says more about where companies are headed than any AI 'strategy' deck."</figcaption>
+  </figure>
+
+  <h2>The Chief AI Officer tell</h2>
+  <p>Every Fortune 500 is hiring a Chief AI Officer right now — the same instinct as "VP of Innovation" a decade ago. The move is to <strong>create a role so the rest of the org can stay exactly as it is</strong>: outsource the conviction instead of building it.</p>
+  <blockquote>Tobi Lutke doesn't have a CAIO. He <em>is</em> the CAIO. His conviction comes from building, not briefings.</blockquote>
+  <p>Most CEOs would rather hire someone to hold that conviction on their behalf — and it shows.</p>
+
+  <h2>Why this is different from "startups are just faster"</h2>
+  <p>Startups have always been faster — that's not news. What changed: AI lets <strong>every person on a team take something from idea to shipped product without needing anyone else to touch it.</strong> Per-seat incumbents have the exact same tools on every laptop — and a structure that forces the separation anyway.</p>
+  <div class="callout key">
+    <h4>The closing line</h4>
+    <p style="margin:0">Your company still has a role for every function and a gap between each one. Those gaps add up to weeks, and in those weeks your customers are already talking to someone who doesn't work that way. <strong>"The pot keeps boiling."</strong></p>
+  </div>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Nikunj Kothari (@nikunj; partner at FPV Ventures, early at Meter / Opendoor / Atlassian), <a href="https://x.com/nikunj/status/2024278811395969302" target="_blank" rel="noopener">"Your Org Structure Is My Opportunity"</a> (X article, Feb 19 2026). An investor's opinion piece; the founder/exec/banker anecdotes are the author's own. Related: <a href="what-ai-cant-kill.html">What AI Can't Kill</a>, <a href="the-only-moats-that-matter.html">The Only Moats That Matter</a>, <a href="../philosophy/outgrow-employment.html">Outgrow the Idea of Employment</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
