@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elon Musk's Algorithm (5 Steps) — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Elon Musk's Algorithm: Question → Delete → Simplify → Accelerate → Automate</h1>
+    <div class="meta">
+      <span>By <strong>Jaynit</strong> (@jaynitx)</span>
+      <span class="dot">•</span>
+      <span>Published Jun 9, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">First Principles</span>
+      <span class="tag">Building</span>
+      <span class="tag">Subtraction</span>
+      <span class="tag">Process</span>
+    </div>
+  </header>
+
+  <p class="lede">Most people optimize and automate first. Musk's 5-step algorithm says do those last — because the most expensive mistake is making something that shouldn't exist work better. The order is the whole point.</p>
+
+  <div class="callout key">
+    <h4>The opening story</h4>
+    <p style="margin:0">A Tesla factory had an elaborate, carefully-automated system for putting fiberglass mats on battery packs. Musk asked: <em>why do we need the mats?</em> The answer — "fire safety, it's a requirement." But when tested, the mats didn't do much for fire safety. It was a requirement nobody had questioned, so Musk <strong>deleted the entire process.</strong> The thing that had been so carefully automated shouldn't have existed in the first place.</p>
+  </div>
+
+  <h2>The algorithm (the order matters more than the steps)</h2>
+  <p>From Walter Isaacson's Musk biography — repeated so often at SpaceX and Tesla it's a mantra:</p>
+  <figure class="diagram">
+    <div class="dtitle">Five steps — strictly in order</div>
+    <div class="col" style="max-width:560px;margin:0 auto">
+      <div class="node accent" style="width:100%"><div class="nh">1 · Question every requirement</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent" style="width:100%"><div class="nh">2 · Delete any part or process you can</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent2" style="width:100%"><div class="nh">3 · Simplify and optimize</div><div class="ns">← most people wrongly start here</div></div>
+      <div class="arrow">↓</div>
+      <div class="node" style="width:100%"><div class="nh">4 · Accelerate cycle time</div></div>
+      <div class="arrow">↓</div>
+      <div class="node" style="width:100%"><div class="nh">5 · Automate</div><div class="ns">← and many wrongly start <em>here</em></div></div>
+    </div>
+    <figcaption>If you haven't done steps 1 and 2 first, you're automating and optimizing things that shouldn't exist.</figcaption>
+  </figure>
+
+  <blockquote>The most common error of a smart engineer is to optimize a thing that should not exist.<cite>— Elon Musk (relayed via @EricJorgenson)</cite></blockquote>
+
+  <h2>Step by step</h2>
+  <div class="steps">
+    <div class="step"><b>1 · Question every requirement</b> — especially if it came from a smart person (we assume they thought it through, so we don't question them). <em>"Each requirement should come with the name of the person who made it. Never accept that a requirement came from a department."</em> Departments don't defend requirements; people do. (Model 3 had a battery-pack sensor nobody could trace — the original engineer had left years earlier, solving a problem that no longer existed. Removed it; nothing broke.)</div>
+    <div class="step"><b>2 · Delete</b> — his favorite step. Delete <em>everything</em> you can, see what breaks, add back only what's truly needed. <em>"If you're not adding back at least 10% of the things you deleted, you haven't deleted enough."</em> (The Raptor engine: removed part after part, combined functions → dramatically fewer components, simpler/cheaper/more reliable. Tesla deleted radar entirely and went cameras-only — controversial, but "if you don't delete things that seem necessary, you never find out what's actually necessary.")</div>
+    <div class="step"><b>3 · Simplify and optimize</b> — and notice it's <em>third</em>. "It's very common, possibly the most common error, to optimize something that should not exist." (Model X's falcon-wing doors: months of optimization on a feature Musk later called a mistake — it shouldn't have existed. The optimization felt productive, but in the wrong direction.)</div>
+    <div class="step"><b>4 · Accelerate cycle time</b> — only now speed up the loop from idea → execution → feedback. (SpaceX builds and tests faster than anyone thought possible; exploding Starship prototypes were rapid learning, not failure.) <em>"Speed is a multiplier. If you're doing the wrong thing, speed just gets you to the wrong place faster."</em></div>
+    <div class="step"><b>5 · Automate — last.</b> Automation locks things in and becomes invisible; automate before questioning/deleting and you make a bad process permanent. (Model 3's "lights-out" over-automation was a disaster — they ripped out robots and brought back humans.) <em>"Excessive automation at Tesla was a mistake. Humans are underrated."</em> Even Musk made this mistake — but he knows the sequence.</div>
+  </div>
+
+  <h2>Why smart people get it backwards</h2>
+  <div class="callout">
+    <p style="margin:0">Musk specifically warns about smart people: they're <em>more</em> likely to optimize things that shouldn't exist, because they're good at optimization. If you're smart you can make almost anything work better — find efficiencies in bad processes, polish bad ideas, make wrong directions feel productive. That's the trap. <strong>"Intelligence becomes a liability when it lets you avoid the hard question of whether you're working on the right thing."</strong> Someone who <em>can't</em> optimize is forced to ask whether the thing should exist at all.</p>
+  </div>
+
+  <h2>The author's own version</h2>
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Before — straight to 3·4·5</h4>
+      <p style="margin:0;font-size:13.5px">After dropping out of college (2023): SEO, dropshipping, Amazon FBA (lost money), a clothing brand, affiliate marketing. Each time he <em>built systems first</em> — supplier databases before sales, tracking spreadsheets before customers. "Beautiful systems for businesses that were fundamentally broken." He never did steps 1 and 2.</p>
+    </div>
+    <div class="vs good">
+      <h4>After — question first</h4>
+      <p style="margin:0;font-size:13.5px">With content (his "eye for virality"), he started with <strong>questions</strong> (why does this post work? why did that fail?), <strong>deleted ruthlessly</strong> (best practices / posting schedules / forced tactics that didn't move the needle), <strong>simplified to the minimum</strong> needed to perform — and only <em>then</em> built systems, on something that actually worked.</p>
+    </div>
+  </div>
+
+  <h2>The question that matters</h2>
+  <blockquote>Before optimizing anything: should this even exist? Have I questioned the requirements? Have I deleted everything I can?</blockquote>
+  <p>Most advice says build systems, automate, scale, follow best practices. The algorithm says that's the <em>last</em> step, not the first — and to question every requirement, especially from smart people. "If everyone's optimizing and automating, the advantage is in questioning and deleting. The stuff nobody wants to do. The stuff that feels like going backwards."</p>
+  <p class="muted">Its real value isn't that it makes you successful — it's that <strong>"it makes you fail at the wrong things faster so you can find the right things."</strong> Question. Delete. Simplify. Accelerate. Automate — in that order.</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Jaynit (@jaynitx; building aHQ), <a href="https://x.com/jaynitx/status/2064342452782420052" target="_blank" rel="noopener">"Elon Musk's Algorithm: the 5-Step process he uses to build everything"</a> (X article, Jun 9 2026). The algorithm and Tesla/SpaceX anecdotes are relayed from Walter Isaacson's Musk biography (with a quote credited to @EricJorgenson); quotes are as cited by the author. Related: <a href="do-it-now.html">Do It Now</a>, <a href="willingness-to-look-stupid.html">Willingness to Look Stupid</a>, <a href="../writing/extreme-brainstorming-questions.html">Extreme Brainstorming Questions</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
