@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confidencemaxxer: A Manifesto — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Confidencemaxxer: A Manifesto</h1>
+    <div class="meta">
+      <span>By <strong>GRITCULT</strong> (@GRITCULT)</span>
+      <span class="dot">•</span>
+      <span>Published Jun 10, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Confidence</span>
+      <span class="tag">Audacity</span>
+      <span class="tag">Manifesto</span>
+      <span class="tag">Self-Belief</span>
+    </div>
+  </header>
+
+  <p class="lede">"Don't be confident, be over confident. Be delusionally confident. Be so confident that doors open for you and reality bends for you… Be too much. Be impossible to ignore."</p>
+
+  <div class="disclaimer">⚠️ <strong>A provocative manifesto, captured as-is.</strong> Deliberately extreme rhetoric ("delusional confidence," "reality bends") from a reader-supported publication that ends with subscribe CTAs. Archived for its lines and its argument, not as literal advice — read the original for the full text.</div>
+
+  <div class="callout key">
+    <h4>The thesis</h4>
+    <p style="margin:0">Confidence isn't a feeling to muster — it's a <em>valuation</em> you set, and the world meets you at it. The meek "inherit nothing if they never believed they were worthy of more." So stop negotiating against yourself: raise your own price, drop the search for permission, and act as if it's already yours.</p>
+  </div>
+
+  <h2>Three men walk toward a door</h2>
+  <blockquote>The reasonable man knocks and waits. The rational man calculates his odds and stays home. The delusional man walks in like the meeting could not start without him.<cite>— GRITCULT</cite></blockquote>
+  <figure class="diagram">
+    <div class="dtitle">Who gets in</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node"><div class="nh">The reasonable man</div><div class="ns">knocks and waits</div></div>
+      <div class="node warn"><div class="nh">The rational man</div><div class="ns">calculates his odds and stays home</div></div>
+      <div class="node accent2"><div class="nh">The delusional man</div><div class="ns">walks in like the meeting couldn't start without him — rules bend, exceptions appear, strangers fight for his cause</div></div>
+    </div>
+    <figcaption>"Audacity is so rare the world has no defence against it."</figcaption>
+  </figure>
+
+  <h2>You were born delusional</h2>
+  <p>Watch any four-year-old: he announces he'll be an astronaut and dares you to disagree — no evidence, no credentials, no permission. Delusional self-belief is your birthright. The world has been robbing you of it since your first day of school —</p>
+  <blockquote>Confident men are difficult to manage and impossible to sell to. A man who needs no approval cannot be controlled by withholding it.<cite>— GRITCULT</cite></blockquote>
+
+  <h2>Reality is a negotiation</h2>
+  <blockquote>Supreme confidence is the art of kings and con men. Both know the same secret: people take you at your own valuation. Price yourself low and the world will haggle you down further.<cite>— GRITCULT</cite></blockquote>
+
+  <h2>The prescription</h2>
+  <p>"Stop negotiating against yourself. Stop scanning rooms for permission." Then:</p>
+  <div class="steps">
+    <div class="step"><b>Fix the posture. Slow the voice.</b></div>
+    <div class="step"><b>Keep your plans to yourself</b> — "mystery is a weapon."</div>
+    <div class="step"><b>Sit in every chair like you own the building.</b></div>
+    <div class="step"><b>Greet kings and servants with the same easy nonchalance.</b></div>
+    <div class="step"><b>Fear nothing.</b> "Pressure is a privilege. Doors open for the delusional."</div>
+  </div>
+
+  <blockquote>Don't bend yourself to fit in small holes. Bend reality itself.<cite>— GRITCULT</cite></blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> GRITCULT (@GRITCULT), <a href="https://grit.substack.com/p/confidencemaxxer-a-manifesto" target="_blank" rel="noopener">"Confidencemaxxer: A Manifesto"</a> (GRITCULT on Substack, Jun 10 2026). A short, deliberately provocative manifesto; quoted lines are verbatim. The publication is reader-supported (subscribe CTAs). Related: <a href="burn-your-bridges.html">Burning All Your Bridges</a>, <a href="how-ambitious-people-get-what-they-want.html">How Ambitious People Get What They Want</a>, <a href="willingness-to-look-stupid.html">Willingness to Look Stupid</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
