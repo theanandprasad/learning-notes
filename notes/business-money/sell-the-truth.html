@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sell the Truth (Naval) — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Sell the Truth</h1>
+    <div class="meta">
+      <span>By <strong>Naval Ravikant</strong> (with Nivi)</span>
+      <span class="dot">•</span>
+      <span>Published May 15, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Persuasion</span>
+      <span class="tag">Dealmaking</span>
+      <span class="tag">Leadership</span>
+      <span class="tag">Naval</span>
+    </div>
+  </header>
+
+  <p class="lede">"There are only two skills you have to have in life: how to build and how to sell." Naval on the sell side — except his whole point is that he doesn't sell. He builds credibility, sells the truth, and walks away from everything else.</p>
+
+  <div class="callout key">
+    <h4>The core flip</h4>
+    <p style="margin:0">"Humans are hardwired to resist being sold to." So forget sales tactics: <strong>credibility is way more important than sales.</strong> Be the real-estate agent who steers people away from bad houses, so they trust you when the right one comes. To be credible you have to be authentic, honest, knowledgeable, long-term, and able to explain it simply — and unattached to the outcome.</p>
+  </div>
+
+  <blockquote>The people you most want to impress in life are the ones who can see right through you — and they'll see right through your sales tactics.<cite>— Naval (paraphrased from the transcript)</cite></blockquote>
+  <p class="muted">His "sales training": he watched <em>Glengarry Glen Ross</em> and read Robert Cialdini's <em>Influence</em> (skip the sequel). Cialdini's six levers — <strong>CLASSR</strong>:</p>
+  <figure class="diagram">
+    <div class="dtitle">Cialdini's CLASSR (+ a 7th)</div>
+    <table>
+      <tr><th>Lever</th><th>Lever</th></tr>
+      <tr><td>Consistency</td><td>Liking</td></tr>
+      <tr><td>Authority</td><td>Scarcity</td></tr>
+      <tr><td>Social proof</td><td>Reciprocity</td></tr>
+      <tr><td colspan="2">+ Anchoring (added in the sequel)</td></tr>
+    </table>
+    <figcaption>He knows the whole checklist but "might use it once in a blue moon." If a pitch doesn't resonate, "I move on instantly" — he's just looking for the person it <em>will</em> resonate with.</figcaption>
+  </figure>
+
+  <h2>"Yes, and" → rational empathy</h2>
+  <p>Naval "yes-ands" almost everything — agreeing, expanding your point, then pivoting. But it's not a tactic; it's <strong>rational empathy</strong>: "you reason your way to their position, and you see if their position is valid. And if it is, then you say 'yes' — but then you reinforce why your position is valid." When he genuinely disagrees, he just says so ("No, I don't think that's true, and here's why") — "and usually when I disagree, that's when I get humiliated… that's when I learn to be humble."</p>
+
+  <h2>Selfish honesty</h2>
+  <p>Objectivity means getting the ego out — seeing it from the other person's completely different perspective. A friend told him: "you give me advice, but it never comes from you. It feels like it's me talking to myself, but in a slightly different way." That's the goal. And it's <em>selfish</em> honesty: "I want to make the right decisions for myself, which means I have to be as objective as possible. I'm probably wrong 80% of the time" — without objectivity, he'd be wrong 95%.</p>
+
+  <h2>Charisma = confidence + love</h2>
+  <blockquote>Charisma is the ability to project confidence and love simultaneously — or just power and good intentions.<cite>— Naval</cite></blockquote>
+  <p>Being truthful <em>and</em> positive at once is the rare skill. Honesty is the bedrock — if you must pick one, honesty beats kindness — "but if you're honest but not kind, they're not going to listen to you." So the real question:</p>
+  <blockquote>Do you want to be right, or do you want to be effective? If you want to be effective, you have to layer it in with some kindness.<cite>— Naval</cite></blockquote>
+  <p class="muted">(His own weakness from this: he's "very bad at firing people" — too empathic — and only manages it when convinced the person will be more effective elsewhere, then helps them find that role.)</p>
+
+  <h2>Don't manage — lead</h2>
+  <blockquote>Management is telling people what to do, and leadership is making them want to do it.<cite>— Naval</cite></blockquote>
+  <p>Inspire people to <em>want</em> the work — but it can't be fake; tie it to what they want out of life. He invokes Antoine de Saint-Exupéry:</p>
+  <blockquote>If you want to build a ship, don't just gather the men, and issue orders, and cut the wood, and start the fires. Instead, teach them to yearn for the vast and endless sea.<cite>— Antoine de Saint-Exupéry (quoted by Naval)</cite></blockquote>
+  <p>His honest recruiting pitch: startups beat big companies — more autonomy, more fun, more money; you're not a cog. And the kicker:</p>
+  <blockquote>A taste of freedom can make you unemployable.<cite>— Naval</cite></blockquote>
+  <p class="muted">For self-motivated, high-agency people, once you've worked free, it's hard to be employable — "like a kid who's been homeschooled becomes unschoolable."</p>
+
+  <h2>Hunt together: the stag hunt</h2>
+  <p>You want the <strong>minimum-sized group</strong> for the scope of the job. We evolved in hunter-gatherer tribes — small bands going on the hunt — and that's "baked into us": missions with small groups of highly competent people you can completely rely on (he cites <em>Liftoff</em>, <em>The Macintosh Way</em>, <em>The Soul of a New Machine</em>). The game theory:</p>
+  <figure class="diagram">
+    <div class="dtitle">Prisoner's Dilemma vs Stag Hunt</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Prisoner's Dilemma</h4>
+        <p style="margin:0;font-size:14px">Two of us arrested — the incentive is to cheat / rat out the other. The pop-culture model of life, but <em>not</em> how real society mostly works.</p>
+      </div>
+      <div class="vs good">
+        <h4>Stag Hunt (real life)</h4>
+        <p style="margin:0;font-size:14px">Hunt alone → you kill a bunny. Hunt <em>together</em> → you take down a stag, far more meat for everyone. Cooperation beats defection when trust holds.</p>
+      </div>
+    </div>
+    <figcaption>Low-trust societies (high taxes/regulation/bureaucracy) can't run stag hunts → "lots of tiny businesses, but also lots of poverty." High-trust + rule of law → teams of 10–200 do the impossible.</figcaption>
+  </figure>
+  <p class="muted">A recruiting trick that keeps the bar high: "you can walk in here and interview anybody on this office floor right now. If you don't think they're brilliant, don't join. They're all that good."</p>
+
+  <h2>Feed your (good) obsessions</h2>
+  <p>An investor called Naval's style an "evangelical sale." He rejects the label — "it's just honest. You have to genuinely be excited about the thing." <em>"If I believe it's the best pen ever made, I'll sell it for free."</em> Sales is a byproduct of credibility. And every framework is secondary:</p>
+  <blockquote>All frameworks in life — your workout framework, your sales framework, your building-an-app framework — they're all secondary, and distant secondary, to your motivation. If you are truly motivated, you will figure it out.<cite>— Naval</cite></blockquote>
+  <p>On Schopenhauer: "the point of reading is a kindling — to light a fire in your own brain"; likewise motivation is kindling to light a fire in your own heart — "and if that fire can't be lit, then you're just going to be listening to motivational podcasts until the end of time." His prescription: don't read business books, <em>go do it</em> "with fervor and obsession and authenticity." Distinguish bad obsessions (overeating, drugs, video games) from good (intellectual) ones — and <strong>feed the good ones; don't look for balance.</strong></p>
+  <blockquote>If it feels to you like you're selling, then you're probably selling the wrong thing.<cite>— Naval</cite></blockquote>
+
+  <h2>Sell the truth (when to pitch)</h2>
+  <p>Raising for his new company, Impossible, he isn't driven by an external clock ("it's September, let me put the deck together"). He <strong>waits, works on the company and team, and measures his own excitement level</strong> — when it crosses a threshold, he knows the business deserves the round and he's ready. "I don't have to pitch something that isn't true… I just have to genuinely convey what's down there that's getting me excited." (And there's always a preamble — a larger story or context — before the pitch.)</p>
+
+  <h2>Good deal or no deal — walk away</h2>
+  <p>He'll walk away from any non-ideal deal, even under slight pressure — and being paranoid, he plans ahead (raise 6–12 months before you need it) so his back is never against the wall. A bad deal is a trap (a board seat, preferred stock, veto rights are hard to undo).</p>
+  <figure class="diagram">
+    <div class="dtitle">What a contract really is</div>
+    <div class="col" style="max-width:600px;margin:0 auto">
+      <div class="node"><div class="nh">Two parties constrain their future</div><div class="ns">"I'll limit myself to Z; you limit yourself to A"</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent2"><div class="nh">…to create greater value together</div><div class="ns">a stag hunt: stop chasing rabbits, hunt the stag, split the spoils</div></div>
+      <div class="arrow">↓</div>
+      <div class="node warn"><div class="nh">Cost: you shackle your options</div><div class="ns">"optionality is very powerful" — so the path had better be one of the best available</div></div>
+    </div>
+    <figcaption>"Compromise is the enemy of building a great business. And you know it in your gut" — that slightly sinking feeling of being forced into something. Lean toward walking away from suboptimal deals.</figcaption>
+  </figure>
+
+  <h2>The age of nonlinear returns</h2>
+  <p>Focus on the upside and expanding the pie — not splitting it. "We live in the age of nonlinear returns. The upside can be 100x, 1,000x, 10,000x bigger." It's a <strong>power law</strong>: "the number one winner is worth more than numbers two through N put together." So in deals your most precious asset is <strong>time + optionality</strong> — only trade it for a shot at 100x–1,000x. "There's no point in fighting to divide up small spoils."</p>
+  <p class="muted">Caveat: when the big spoils land, "the knives hit the table" — sometimes you must defend yourself on principle ("business is war by other means"). But guard your time, reputation, and peace. People "spend too much time splitting hairs on small stakes and not enough time focusing on the big upside."</p>
+  <blockquote>It's better to live a couple of different lives, crammed within this one life — each one doing what you want, pursuing your own genuine interest… Because life is short.<cite>— Naval</cite></blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Naval Ravikant (with co-host Nivi), <a href="https://substack.com/home/post/p-197749849" target="_blank" rel="noopener">"Sell the Truth"</a> (the Naval Podcast / Naval on Substack, May 15 2026; also on nav.al). A transcript; quotes are verbatim from it (incl. Saint-Exupéry and Schopenhauer as cited by Naval). Ends with a subscribe CTA. Related: <a href="what-ai-cant-kill.html">What AI Can't Kill</a>, <a href="../philosophy/outgrow-employment.html">Outgrow the Idea of Employment</a>, <a href="the-only-moats-that-matter.html">The Only Moats That Matter</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
