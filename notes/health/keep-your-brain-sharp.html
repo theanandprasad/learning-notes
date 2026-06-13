@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Keep Your Brain Sharp — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Keep Your Brain Sharp: A Practical Playbook Beyond the Basics</h1>
+    <div class="meta">
+      <span>By <strong>Dr. Tommy Wood</strong> (guest post on Tim Ferriss's blog)</span>
+      <span class="dot">•</span>
+      <span>Published Apr 24, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 9, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Brain Health</span>
+      <span class="tag">Dementia Prevention</span>
+      <span class="tag">Longevity</span>
+      <span class="tag">Sleep</span>
+      <span class="tag">Nutrients</span>
+    </div>
+  </header>
+
+  <p class="lede">"The era of preventive neurology has arrived." At least 45% of dementia may be preventable — so beyond the big lifestyle rocks, here are the lesser-known, low-effort, high-leverage levers, with the actual lab targets and studies to anchor them.</p>
+
+  <div class="disclaimer">⚠️ <strong>Health information, not medical advice.</strong> A guest post by neuroscientist Dr. Tommy Wood (promoting his book <em>The Stimulated Mind</em>); it names many specific supplements, doses, tests, and consumer products. Lab targets and figures are as cited in the article — talk to your own doctor before testing, supplementing, or changing anything. Captured to preserve the specifics, not as a prescription.</div>
+
+  <div class="callout key">
+    <h4>The frame: dementia is increasingly preventable</h4>
+    <p style="margin:0">The <strong>Lancet Commission</strong> estimates ~<strong>45%</strong> of dementia is preventable via <strong>14 modifiable risk factors</strong>: low education, hearing loss, vision loss, high LDL cholesterol, brain trauma, physical inactivity, diabetes, smoking, high blood pressure, obesity, excessive alcohol, social isolation, depression, and air pollution. Other work puts it above <strong>70%</strong>. This playbook adds the emerging, lower-effort levers on top of the lifestyle basics.</p>
+  </div>
+
+  <h2>1. B vitamins + Omega-3 (they work as a pair)</h2>
+  <p>Missing from the Lancet list. Homocysteine-lowering <strong>B vitamins</strong> (B12, folate/B9, plus B6 and riboflavin/B2) and <strong>Omega-3s</strong> are each only effective <em>when the other is adequate</em> — that's why studying them individually fails. The <strong>VITACOG</strong> trial (B12 + folic acid + B6 in people with elevated homocysteine) slowed brain atrophy and cognitive decline — but only in those with adequate Omega-3 status; multiple trials since show the same interdependence.</p>
+  <figure class="diagram">
+    <div class="dtitle">The lab targets to aim for</div>
+    <table>
+      <tr><th>Marker</th><th>Target</th></tr>
+      <tr><td>Homocysteine</td><td>under 13 μmol/L; <strong>better &lt; 10–11</strong></td></tr>
+      <tr><td>Omega-3 Index (% of Omega-3 in red blood cells)</td><td>at least <strong>5%</strong>; lowest risk above <strong>8%</strong></td></tr>
+    </table>
+    <figcaption>Tests: most PCPs measure homocysteine (use <em>plasma</em>; serum can read falsely high); at-home OmegaQuant (Omega-3 Index) or DRIfT (adds homocysteine, HbA1c, Vitamin D).</figcaption>
+  </figure>
+  <div class="callout">
+    <h4 style="margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">Strategy + doses</h4>
+    <p style="margin:0">If homocysteine &gt; 11, consider the VITACOG doses: <strong>800 mcg folic acid</strong> (1,360 DFE) + <strong>500 mcg B12</strong>, plus ~20 mg B6 and 1–2 mg riboflavin. For Omega-3, average <strong>2–4 g/day EPA + DHA</strong> (seafood or supplement). Named B-vitamin options: Thorne Methyl-Guard, Pure Encapsulations MethylAssist, Designs for Health Homocysteine Supreme. Omega-3: Nordic Naturals Ultimate Omega 2X, Parasol Omega-3, Momentous.</p>
+  </div>
+
+  <h2>2. Toxins in your air, water, and food</h2>
+  <div class="steps">
+    <div class="step"><b>Air.</b> Pollution (roads, industry, wildfires) raises dementia risk via inflammation/oxidative stress. Wear an <strong>N95</strong> on smoky days (filters the ~2.5-micron particles). Indoor air is often several times worse than outdoor → a <strong>HEPA air purifier</strong> where you spend time (one study found a HEPA filter lowered blood pressure). Bonus: the air-pollution effect was <em>attenuated</em> in people with good B-vitamin intake.</div>
+    <div class="step"><b>Water.</b> Mostly safe, but watch <strong>lead</strong> (millions of lead pipes remain) and <strong>PFAS</strong> ("forever chemicals" — in food packaging, old/damaged nonstick cookware, drinking water; they accumulate in the brain). Even a basic <strong>water filter</strong> removes most heavy metals and PFAS.</div>
+    <div class="step"><b>Microplastics.</b> The viral "a credit card's worth per week" claim was reanalyzed down to &lt;0.0001% of that, and brain measurements (via pyrolysis) are debated (heated fat can look like polyethylene). Microplastics in dementia brains may be a <em>consequence</em>, not a cause. Still: bisphenols/phthalates are linked to harm, so reduce exposure — filtered tap (not bottled) water, wood/metal utensils, glass for storing/microwaving, fresh foods. And <strong>eat more fiber and berries</strong> (anthocyanins + β-glucan may blunt plastic/PFAS effects; berries independently improve cognition).</div>
+  </div>
+  <div class="callout">
+    <h4 style="margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">Tim's add-on: the hotel CO₂ problem</h4>
+    <p style="margin:0">James Nestor (author of <em>Breath</em>) travels with an <strong>Aranet4 CO₂ monitor</strong> and finds many hotels — especially "green"/LEED ones — seal windows and recirculate stale air, recording CO₂ up to <strong>2,800 ppm</strong> (outdoor ≈ 425 ppm; <strong>cognitive scores drop significantly past ~1,500 ppm</strong>). Fix: call ahead and make "windows that open, even a few inches" a booking criterion.</p>
+  </div>
+  <p class="muted">Set-and-forget gear named: air — HealthMate, Jaspr, Blueair, Coway Airmega (budget). Water — check EPA/EWG, then a jug (Epic, ClearlyFiltered, Brita Elite, or Cyclopure for PFAS) or under-sink reverse osmosis.</p>
+
+  <h2>3. Oral health is brain health</h2>
+  <p>Periodontal disease (gingivitis → periodontitis) comes from an oral-microbiome imbalance (overgrowth of <em>P. gingivalis</em>, <em>S. mutans</em>), opening a route for mouth bacteria to enter the body.</p>
+  <figure class="diagram">
+    <div class="dtitle">The mouth → brain chain</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node warn"><div class="nh">Gum disease</div><div class="ns">P. gingivalis overgrowth, local inflammation</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">Into the bloodstream</div><div class="ns">found in arterial plaques (heart attacks, strokes)</div></div>
+      <div class="arrow">→</div>
+      <div class="node warn"><div class="nh">Into the brain</div><div class="ns">P. gingivalis found <em>inside</em> Alzheimer's amyloid plaques (amyloid may be an immune response)</div></div>
+    </div>
+    <figcaption>Meta-analyses: periodontal disease → higher dementia risk; treating it → lower risk. An NHANES study found higher antibodies to oral bacteria predicted more Alzheimer's.</figcaption>
+  </figure>
+  <p><strong>Strategy:</strong> brush ≥2 min, 2×/day; clear between teeth (floss / water flosser / interdental brushes); dentist/hygienist ≥2×/year and treat periodontitis promptly. For periodontitis, consider xylitol gum (2–3 g, 2–3×/day) or mouthwash (TheraBreath, ACT; gums: Epic, Kaigum).</p>
+
+  <h2>4. Cognitive training that actually works</h2>
+  <p>The landmark <strong>ACTIVE</strong> study (2,800 adults 65+) randomized people to control or one of three trainings — <strong>processing speed</strong>, reasoning, or memory — for ten ~60-min sessions over 5–6 weeks plus boosters. Five years on, all three trained groups declined less in quality of life, with the <strong>biggest benefit from processing-speed training</strong>. A <strong>20-year follow-up</strong> found processing-speed training (with boosters) <strong>significantly lowered dementia risk.</strong></p>
+  <p>The task — "<strong>Double Decision</strong>" (identify a central object while locating a peripheral one, under increasingly brief conditions) — is in <strong>BrainHQ</strong> (designed by a team led by Dr. Michael Merzenich). But you don't need an app:</p>
+  <figure class="diagram">
+    <div class="dtitle">Things shown to keep the brain young</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node accent"><div class="nh">Processing-speed training</div><div class="ns">Double Decision / BrainHQ — improved acetylcholine signaling in the anterior cingulate</div></div>
+      <div class="node accent2"><div class="nh">Creative skills</div><div class="ns">dance, visual art, music → "younger" brains (fronto-parietal network) per "Creative Experiences and Brain Clocks"</div></div>
+      <div class="node accent2"><div class="nh">Complex video games</div><div class="ns">StarCraft II (RCT); Super Mario 3D World (↑ hippocampus, gray matter); Minecraft, action games</div></div>
+    </div>
+    <figcaption>Pick a creative art, physical activity, or complex skill that demands focused attention + rapid information processing — then progressively challenge it and keep practicing.</figcaption>
+  </figure>
+
+  <h2>5. Protect what you have: hearing, vision, illness</h2>
+  <p>If stimulus drives cognition, <strong>losing inputs</strong> hurts. Hearing and vision loss raise dementia risk (less input + less engagement) — and it's reversible (hearing aids, cataract surgery). More insidious is <strong>accumulated illness</strong>: hospitalization accelerates cognitive decline (worse illness, worse decline); even two weeks of bed rest impairs cognition in healthy people. Each bout costs "a little fitness, a little muscle, a little cognitive function" — which adds up and masquerades as "just aging."</p>
+  <div class="callout">
+    <h4 style="margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">The shingles-vaccine natural experiment</h4>
+    <p style="margin:0">Wales rolled out the shingles vaccine by <em>date of birth</em>: born before Sept 1, 1933 → ~0% vaccinated; just after → ~50% vaccinated. The eligible group saw a sudden drop in shingles diagnoses <strong>and a sudden drop in dementia diagnoses</strong> — replicated in Australia, the US, and Canada. <strong>Strategy:</strong> get hearing/visual aids when needed; take vaccines and early treatment for flu and shingles to minimize time "out of action."</p>
+  </div>
+
+  <h2>6. Sleep: the clearest missing factor</h2>
+  <p>Poor sleep was the starkest omission from the Lancet report, and it's a well-established dementia risk. Beyond the basics (cool dark room, morning light + dim evenings, warm bath before bed, sleep mask, magnesium, <em>enough time in bed</em>, and good ventilation — CO₂ climbs in closed rooms and degrades deep sleep), some lesser-known levers:</p>
+  <figure class="diagram">
+    <div class="dtitle">Lesser-known sleep aids (doses as cited)</div>
+    <table>
+      <tr><th>Lever</th><th>Dose / detail</th></tr>
+      <tr><td>Light therapy</td><td>20–30 min early in the day at ≥10,000 lux (e.g. Verilux), or AYO glasses for travel/jet lag</td></tr>
+      <tr><td>Glycine</td><td><strong>3 g before bed</strong> → shorter sleep latency, better efficiency (speeds the body-temp drop). 400 mg magnesium <em>bisglycinate</em> ≈ 3 g glycine too</td></tr>
+      <tr><td>Serine</td><td><strong>3 g L-serine, 30 min before bed</strong> → melatonin rises earlier (good for jet lag / social jet lag)</td></tr>
+      <tr><td>Theanine</td><td>~<strong>200 mg L-theanine</strong> before bed → better sleep quality</td></tr>
+    </table>
+  </figure>
+  <div class="callout">
+    <h4 style="margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">Hemoglobin testing (while you're at the lab)</h4>
+    <p style="margin:0">Get a CBC + iron panel. <strong>Anemia</strong> (Hb &lt; 12 g/dL women / &lt; 13 men) is linked to higher dementia risk (often low iron, sometimes B vitamins or inflammation; common cause of perimenopausal fatigue/brain-fog). <strong>High Hb</strong> (&gt; 15 women / &gt; 17 men) often signals <strong>obstructive sleep apnea</strong> — itself a dementia risk, treatable with CPAP.</p>
+  </div>
+
+  <blockquote>If the majority of dementia cases truly are preventable, a sensible approach is to tackle our own individual risk factors and stack the deck in our favor.<cite>— Dr. Tommy Wood</cite></blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Dr. Tommy Wood (@drtommywood; assoc. professor of pediatrics &amp; neuroscience, Univ. of Washington), guest post <a href="https://tim.blog/2026/04/24/how-to-keep-your-brain-sharp/" target="_blank" rel="noopener">"How to Keep Your Brain Sharp: A Practical Playbook Beyond the Basics"</a> (The Blog of Author Tim Ferriss, Apr 24 2026). Includes an inset note from Tim Ferriss on hotel CO₂. Author's book: <em>The Stimulated Mind</em>. Targets/doses/studies are as cited in the article; not medical advice. Related: <a href="../self-growth/the-self-help-trap.html">The Self-Help Trap</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-09 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
