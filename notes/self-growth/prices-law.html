@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mathematical Reason Most People Never "Make It" — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+  .formula{font-family:var(--mono);font-size:22px;color:#5a3a08;text-align:center;background:#f4f1ea;border:1px solid var(--line);border-radius:10px;padding:16px;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>The Mathematical Reason Most People Never "Make It"</h1>
+    <div class="meta">
+      <span>By <strong>Kaguura Gichuru</strong> (The Write Path)</span>
+      <span class="dot">•</span>
+      <span>Published Jan 18, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 15, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Price's Law</span>
+      <span class="tag">Power Laws</span>
+      <span class="tag">Leverage</span>
+      <span class="tag">Explore / Exploit</span>
+    </div>
+  </header>
+
+  <p class="lede">Effort doesn't equal outcome — not in any complex system. The square root of the people do half the work, everywhere you look. Once you see <strong>Price's Law</strong>, you can stop treading water and start letting the math work <em>for</em> you.</p>
+
+  <div class="callout key">
+    <h4>Price's Law</h4>
+    <p style="margin:0">The <strong>square root of the number of people in a domain does 50% of the work.</strong> Discovered by physicist Derek J. de Solla Price (1963) studying why a few researchers dominated their fields — the distribution wasn't a bell curve, it was a <strong>power law</strong>. The rest still publish/post/work; their output just barely registers.</p>
+  </div>
+
+  <div class="formula">√n&nbsp;=&nbsp;your high performers&nbsp;&nbsp;(n = total population)</div>
+  <p class="muted" style="text-align:center;margin-top:4px">100 employees → 10 produce half the output · 10,000 scientists → 100 produce half the research · a team of 25 → 5 carry it.</p>
+
+  <h2>Once you see it, you can't unsee it</h2>
+  <figure class="diagram">
+    <div class="dtitle">The square root does half the work — everywhere</div>
+    <table>
+      <tr><th>Domain</th><th>Population (n)</th><th>The √n that does ~50%</th></tr>
+      <tr><td>Spotify artists</td><td>~11 million</td><td>3,300 artists = half of all streams</td></tr>
+      <tr><td>US businesses</td><td>~30 million</td><td>~5,500 generate half the economic output (Amazon, Apple, Microsoft…)</td></tr>
+      <tr><td>Stars in the Milky Way</td><td>~100 billion</td><td>316,000 (0.0003%) produce half the light — most are dim red dwarfs</td></tr>
+      <tr><td>YouTube, Wikipedia, sales teams, wealth, river systems…</td><td>—</td><td>the square root, every time</td></tr>
+    </table>
+    <figcaption>Not a coincidence, rigged system, or unfair advantage (though those exist). "This is just how complex systems work when skill, consistency, opportunity, and luck all compound over time."</figcaption>
+  </figure>
+
+  <h2>Competence is rarer than we pretend</h2>
+  <blockquote>Competence scales linearly and incompetence scales exponentially.</blockquote>
+  <p>Price's Law violates our egalitarian instincts — we want to believe effort equals outcome and hard work is the great equalizer. Real competence (the kind that ships products and moves needles) needs <strong>four ingredients compounding in the same direction</strong>. Most people have one or two. The square root has all four.</p>
+  <figure class="diagram">
+    <div class="dtitle">What the √n have that others don't</div>
+    <div class="row grow" style="max-width:680px">
+      <div class="node accent"><div class="nh">Skill</div></div>
+      <div class="node accent"><div class="nh">Consistency</div></div>
+      <div class="node accent"><div class="nh">Opportunity</div></div>
+      <div class="node accent"><div class="nh">Luck</div></div>
+    </div>
+    <figcaption>All four, compounding together. Have only one or two and you stay in the 90% — necessary maintenance work that keeps the system running but doesn't drive outcomes.</figcaption>
+  </figure>
+
+  <h3>Two psychological traps</h3>
+  <figure class="diagram">
+    <div class="dtitle">The weird landscape Price's Law creates</div>
+    <div class="twocol">
+      <div class="vs good">
+        <h4>High performers → imposter syndrome</h4>
+        <p style="margin:0;font-size:14px">"I just got lucky." Sometimes true — but if you're consistently in the √n across multiple domains, luck isn't the full story. The isolation you feel ("few people get it") is mathematically predictable. There are fewer of you. <strong>Embrace it.</strong></p>
+      </div>
+      <div class="vs bad">
+        <h4>Everyone else → Dunning-Kruger trap</h4>
+        <p style="margin:0;font-size:14px">"I'm doing the work, why no results?" Because doing <em>"a work"</em> and doing <em>"the work"</em> that matters are not the same thing. 90% of effort in any system is treading water.</p>
+      </div>
+    </div>
+    <figcaption>"Equality of outcome and equality of opportunity cannot coexist in complex systems." Give everyone the same resources and outcomes still stratify. "Mathematics doesn't give a fuck about fairness or ethics."</figcaption>
+  </figure>
+
+  <h2>If you ARE the system: three applications</h2>
+  <p>For a one-person business or personal brand, Price's Law has immediate, practical consequences.</p>
+
+  <h3>1. Content — √n of your posts drive 50% of results</h3>
+  <div class="callout">
+    <p style="margin:0"><strong>The author's own 8 months:</strong> ~30 newsletters, 700+ notes, thousands of comments → only ~15 notes and 2 newsletters went viral and drove an overwhelming share of subscribers. That's <strong>17 of 730+ outputs ≈ 2.3%</strong> driving the majority of growth — "but I never would have found those 17 without posting the other 713." Publish 100 posts, ~10 matter; publish 400, ~20 matter; the rest are practice rounds. <em>You cannot predict which will hit before you publish.</em></p>
+  </div>
+  <div class="steps">
+    <div class="step"><b>Produce volume early.</b> You need enough shots on goal to identify patterns.</div>
+    <div class="step"><b>Track everything</b> — shares, replies, clicks, sign-ups, sales. Avoid vanity metrics; look for business outcomes.</div>
+    <div class="step"><b>Identify your √n.</b> After 50–100 pieces, patterns emerge. For him it was "long-form storytelling with a contrarian hook." For you, maybe tactical how-tos, vulnerability, or data breakdowns.</div>
+    <div class="step"><b>Double down ruthlessly.</b> Make more of what works; kill everything else. It feels limiting — but the other 90% wasn't mattering anyway.</div>
+  </div>
+  <p class="muted">Result he reports: "I now publish 70% less than I did a year ago. My engagement is up 4x."</p>
+
+  <h3>2. Skills / Offer — √n of your skills drive half your value</h3>
+  <p>You have dozens of skills; a handful are your multipliers. Stop chasing "well-rounded" — the education system, the corporate ladder, and the self-help industrial complex all oversell balanced competence ("work on your weaknesses!"). Instead, get so good at your two or three multiplier skills that you're top 1% at the <em>combination</em>.</p>
+  <blockquote>You don't need to be the best writer in the world… But if you're top 10% at writing and top 10% at strategy, you're suddenly top 1% at strategic writing. That's a great market position.</blockquote>
+
+  <h3>3. Time Management — ~6 of your 40 hours actually matter</h3>
+  <p>If you work 40 hours a week, about 6 of them move needles; the other 34 are maintenance, busywork, and meetings-that-could've-been-emails. His method: track time in <strong>2-hour blocks</strong> (15-min increments are too granular), each labeled <strong>high-leverage</strong> (writing, strategy, client calls) or <strong>low-leverage</strong> (admin, email, tinkering).</p>
+  <p class="muted">Not Ferriss's 4-hour week ("a bit far-fetched for someone still building") — but a 40-hour week with a <em>guaranteed</em> 6 hours of needle-moving work is doable. "The new meta."</p>
+
+  <h2>The paradox: you still need the other 90%</h2>
+  <p>You can't know which 10 of 100 posts will blow up without posting all 100. You can't know your multiplier skills without trying many. You can't know which relationships matter without meeting a lot of people. So the game has three stages:</p>
+  <figure class="diagram">
+    <div class="dtitle">Explore → Identify → Exploit</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node accent2"><div class="nh">Early game<br>EXPLORE</div><div class="ns">Plant seeds everywhere. Price's Law hasn't kicked in — you don't have enough data yet.</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Middle game<br>IDENTIFY</div><div class="ns">50 posts, 3 products, 200 people in. Patterns emerge. "Oh, this is what works." That's your √n.</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Late game<br>EXPLOIT</div><div class="ns">Double down on winners, cut the losers. Let Price's Law work <em>for</em> you.</div></div>
+    </div>
+    <figcaption>Most people never leave the early game — "mistaking activity for progress." Others skip to the late game — niching down on a sample size of three. You need both: explore the noise until you have signal, then exploit it.</figcaption>
+  </figure>
+  <blockquote>So do the work. Publish the "bad" posts, take the "pointless" meetings, develop the "useless" skills… Compounding happens in the margins, in the weird micro-connections between the stuff that didn't work and the stuff that did.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Kaguura Gichuru, <a href="https://kaguura.substack.com/p/the-mathematical-reason-most-people" target="_blank" rel="noopener">"The Mathematical Reason Most People Never 'Make It'"</a> (The Write Path on Substack, Jan 18 2026). Price's Law is attributed to Derek J. de Solla Price (1963). The Spotify/business/Milky-Way figures and the author's own posting stats are as stated in the article (his personal claims). Also cites Alex Hormozi ("do so much work it's impossible to lose") and Tim Ferriss (4-hour work week). The piece is a free Substack newsletter with a subscribe CTA. Related: <a href="hell-yeah-or-no.html">Hell Yeah or No</a>, <a href="do-it-now.html">Do It Now</a>, <a href="how-to-do-what-you-love.html">How to Do What You Love</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-15 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
