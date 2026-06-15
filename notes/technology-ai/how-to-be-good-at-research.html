@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Be Good at Research — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Be Good at Research</h1>
+    <div class="meta">
+      <span>By <strong>vivek</strong> (@itsreallyvivek, research fellow, Anthropic)</span>
+      <span class="dot">•</span>
+      <span>Published Jun 10, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 15, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">ML Research</span>
+      <span class="tag">Research Taste</span>
+      <span class="tag">Craft</span>
+      <span class="tag">Compounding</span>
+    </div>
+  </header>
+
+  <p class="lede">Nobody teaches you research — you get a desk, someone else's problem, and a vague instruction to be "novel." So most people learn to <em>look</em> like a researcher instead of being one. But the skill is a stack of smaller skills, and almost every one can be deliberately trained.</p>
+
+  <div class="callout key">
+    <h4>The core reframe</h4>
+    <p style="margin:0">Research isn't a gift you have or don't. It's eight trainable practices — <strong>pick your own problems · upgrade your inputs · write everything down · tighten the loop · stare at the outputs · wander on purpose · find your people · play the long game</strong>. Each is a muscle. Train the stack and the "novelty" takes care of itself.</p>
+  </div>
+
+  <h2>1. Pick your own problems</h2>
+  <p>Richard Hamming had a habit at Bell Labs that made him unpopular at lunch: he'd ask whoever sat near him <em>what the important problems in their field were</em> — then ask <em>why they weren't working on them.</em> People changed tables. The question stings because most of us have no good answer: we don't choose problems, we <strong>absorb</strong> them — from an advisor, from whatever a big lab announced last quarter, from the paper everyone is quote-tweeting this week.</p>
+  <p>The trouble with an absorbed problem is that you hold the conclusion without the reasoning. You know a famous lab cares about a direction, but not why, not what would make them drop it. When they pivot, you find out a year later — and a fashionable problem means racing a thousand people who started earlier with more compute.</p>
+  <figure class="diagram">
+    <div class="dtitle">John Schulman's two modes of research</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Literature-driven</h4>
+        <p style="margin:0;font-size:14px">Read the literature, hunt for things to improve. Safe, crowded — you arrive at the same conclusions as everyone, at the same time.</p>
+      </div>
+      <div class="vs good">
+        <h4>Goal-driven (work backwards)</h4>
+        <p style="margin:0;font-size:14px">Choose an outcome you genuinely want to exist, then reason backwards to the experiments. A goal you care about drags you into territory no survey paper covers — it <strong>manufactures originality.</strong></p>
+      </div>
+    </div>
+    <figcaption>Schulman argues for the second mode. The quiet reason: it's how you get original by construction.</figcaption>
+  </figure>
+
+  <h2>2. Train taste like a muscle</h2>
+  <p>Taste gets discussed like a gift. It behaves more like a muscle — and the training routine is concrete:</p>
+  <div class="steps">
+    <div class="step"><b>Predict every experiment's result before you run it.</b> A prediction you can check is the only kind that teaches.</div>
+    <div class="step"><b>Cover a paper's results section</b> and guess the numbers from the method alone.</div>
+    <div class="step"><b>Mark down which of this month's releases will matter in two years</b> — then check your hit rate later.</div>
+  </div>
+  <blockquote>A forecast plus a correction, repeated a few hundred times, is how every good model gets trained — including the one in your head.</blockquote>
+
+  <h2>3. Upgrade your inputs</h2>
+  <p>Shared reading lists produce shared ideas. If your information diet is the trending page of arXiv plus whatever survives the group-chat filter, you'll reach the same conclusions as everyone else at the same time — "which makes those conclusions worth approximately nothing."</p>
+  <figure class="diagram">
+    <div class="dtitle">Old material is criminally underpriced</div>
+    <div class="scroll">
+    <table>
+      <tr><th>Idea</th><th>Actually dates to</th></tr>
+      <tr><td class="k">Mixture of experts</td><td>1991</td></tr>
+      <tr><td class="k">LSTMs</td><td>1997</td></tr>
+      <tr><td class="k">Backprop goes mainstream</td><td>1986</td></tr>
+      <tr><td class="k">Sutton's <em>Bitter Lesson</em></td><td>2019 — ~1,000 words that predict the field's shape better than surveys 10× longer</td></tr>
+      <tr><td class="k">Shannon, <em>Creative Thinking</em> talk</td><td>1952 — shrink a problem until it's nearly trivial, crack the small version, then reintroduce the difficulty one piece at a time</td></tr>
+    </table>
+    </div>
+    <figcaption>The field reruns its own past on a delay. Shannon's shrink-it trick "will carry you through more walls than any modern productivity advice."</figcaption>
+  </figure>
+  <p><strong>Range matters as much as depth.</strong> Interpretability borrows shamelessly from neuroscience; eval design is "mechanism design wearing a lab coat"; a working sense of how GPUs move memory tells you which architecture papers are doomed before the benchmarks do. And "honest statistics might be the rarest skill in ML, where a lot of published rigor is vibes with error bars."</p>
+  <div class="callout">
+    <p style="margin:0"><strong>Read the paper, not the thread summarizing it.</strong> "The appendix is where the bodies are buried, and the limitations section is usually the most honest paragraph in the document."</p>
+  </div>
+
+  <h2>4. Write everything down</h2>
+  <p>Paul Graham points out that an idea can feel fully formed right up until you try to put it into words — the page finds the gaps your head papers over: the untested assumption, the step that doesn't follow, the two claims that quietly contradict.</p>
+  <blockquote>The first principle is that you must not fool yourself — and you are the easiest person to fool.<br><span style="font-size:14px;font-style:normal">— Feynman's rule; writing is the cheapest defense ever invented.</span></blockquote>
+  <p>Darwin made it procedural: any fact that cut against his theory got written down <em>on the spot</em>, because he'd caught his own memory deleting inconvenient evidence faster than convenient evidence. Your memory does the same to your failed runs.</p>
+  <figure class="diagram">
+    <div class="dtitle">Keep a research log — five fields per entry</div>
+    <div class="row grow" style="max-width:780px">
+      <div class="node accent"><div class="nh">Hypothesis</div></div>
+      <div class="node accent"><div class="nh">Setup</div></div>
+      <div class="node accent"><div class="nh">Expectation</div></div>
+      <div class="node accent"><div class="nh">Result</div></div>
+      <div class="node accent2"><div class="nh">Updated belief</div></div>
+    </div>
+    <figcaption>"Rereading last month's entries is humbling in a way no reviewer can match."</figcaption>
+  </figure>
+  <p>Then put some of it <strong>in public.</strong> Olah &amp; Carter's <em>Research Debt</em> essay argues fields choke on undigested ideas — a clear explanation is a genuine contribution, not a service job. Many people in interpretability today found the field through readable posts, not conference papers. "A body of public writing also doubles as the strongest credential you can hold, because it's an unfakeable sample of how you think."</p>
+
+  <h2>5. Tighten the loop</h2>
+  <p>The stories about Alec Radford rarely involve a single stroke of genius. They involve <strong>volume</strong> — more runs per day, more wrong ideas discarded per week, a model of reality that updated faster than anyone else's.</p>
+  <blockquote>Research speed is mostly the speed at which you discover you're wrong.</blockquote>
+  <p>Which makes <strong>tooling a first-class research activity.</strong> Launching a run should be one command; plotting it one more; every experiment reproducible from its config; comparing two runs should take seconds, not an afternoon of archaeology.</p>
+  <div class="callout">
+    <h4>Karpathy's highest-ROI step</h4>
+    <p style="margin:0"><strong>Overfit a single batch before training at scale.</strong> Thirty seconds, half your bugs gone. Shrink everything until it's cheap, get it right, then spend the compute.</p>
+  </div>
+  <p>And retire the idea that engineering is the junior partner. "At the frontier the two jobs have fused. The researcher who can build the harness, the eval, and the data pipeline is the one whose hypotheses actually get tested. Everyone else is waiting in a queue."</p>
+
+  <h2>6. Stare at the outputs</h2>
+  <blockquote>A descending loss curve is not analysis — it's reassurance.</blockquote>
+  <p>Your experiments throw off far more information than you consume — transcripts, failure cases, the strange tail of the distribution — and most of it dies unread in a logs folder. Karpathy's recipe <em>starts before any training code is written</em>, with hours spent on the raw data by hand: "most ML bugs live in the data, and they fail silently. Nothing crashes. You simply get a mediocre model and a wrong theory about why."</p>
+  <figure class="diagram">
+    <div class="dtitle">Andrew Ng's error analysis — unbeaten for a decade</div>
+    <div class="row" style="max-width:740px;align-items:center">
+      <div class="node ok"><div class="nh">Pull 100 failures</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Read all of them</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Sort into piles</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Attack the biggest pile</div></div>
+    </div>
+    <figcaption>Works on models and on evals: "a benchmark you've never read transcripts from is a benchmark you don't actually understand." One transcript of genuinely strange behavior teaches more than the next decimal of accuracy.</figcaption>
+  </figure>
+
+  <h2>7. Wander on purpose</h2>
+  <p>Your first subfield is an accident of timing — treat it like one. Spend real time in interpretability, evals, RL, and systems <em>before</em> deciding where you live. "Somewhere in this field is a corner where your specific weirdness is an unfair advantage, and the only way to locate it is to pay tuition in several places. Nobody waives the tuition."</p>
+  <div class="steps">
+    <div class="step"><b>Run the disposable version of every idea first</b> — let most of them die young.</div>
+    <div class="step"><b>Tune your baselines until it hurts.</b> "The graveyard of ML is full of gains that evaporated against a properly tuned baseline" — and a reviewer is the worst person to learn that from.</div>
+    <div class="step"><b>Ablate until you know which component carries the result.</b> "It's usually one, and it's usually not the one in the title."</div>
+  </div>
+  <p>Breadth is also insurance: subfields saturate — all of them — usually right after they peak on Twitter. The people who keep producing through the transition already know their way around the neighboring territory.</p>
+
+  <h2>8. Find your people</h2>
+  <p>Hamming noticed a pattern in who did important work. Colleagues with <em>closed</em> office doors got more done in any given year; colleagues with <em>open</em> doors did the work that mattered — because the interruptions carried information about what the world actually needed.</p>
+  <blockquote>Your open door is probably an inbox. Keep it that way.</blockquote>
+  <p>Generosity compounds in research like nothing else: replicate a result and publish what you find; release the tool you built for yourself; explain something hard in plain language. "The returns arrive sideways, months later, as the collaboration or the reference or the role you couldn't have applied for." Float half-formed ideas in public — "being wrong on the timeline is far cheaper than being wrong in print." And the collaborator who tells you an idea is bad before you sink three months into it "is worth more than compute."</p>
+
+  <h2>The long game</h2>
+  <p>Pasteur said luck favors the prepared mind; Hamming built a career philosophy on top of it: <strong>knowledge and productivity compound like interest.</strong> The daily edges look trivial in isolation — what you read, what you record, how fast your loop runs, who you argue with.</p>
+  <blockquote>Give them a few years and they produce careers that look like luck from the outside. Start compounding earlier than feels necessary. Future you already knows this was the cheap part.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> vivek (@itsreallyvivek), <a href="https://x.com/itsreallyvivek/status/2064686372737454155" target="_blank" rel="noopener">"how to be good at research"</a> (X article, Jun 10 2026). Quotes are from the article. Named references the essay draws on: Richard Hamming (<em>You and Your Research</em>), John Schulman's ML research guide, Claude Shannon (<em>Creative Thinking</em>, 1952), Rich Sutton (<em>The Bitter Lesson</em>), Paul Graham, Feynman, Darwin, Olah &amp; Carter (<em>Research Debt</em>), Alec Radford, Andrej Karpathy (<em>A Recipe for Training Neural Networks</em>), Andrew Ng, Pasteur. Related: <a href="llms-are-not-brains.html">LLMs Are Not Brains</a>, <a href="the-plan-is-code.html">The Plan Is Code</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-15 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
