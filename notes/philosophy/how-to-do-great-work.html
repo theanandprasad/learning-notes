@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Do Great Work — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:42px;line-height:1.12;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  h2{font-family:var(--serif);font-size:27px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Do Great Work</h1>
+    <div class="meta">
+      <span>By <strong>Paul Graham</strong></span>
+      <span class="dot">•</span>
+      <span>Published July 2023</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 15, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Ambition</span>
+      <span class="tag">Curiosity</span>
+      <span class="tag">Originality</span>
+      <span class="tag">Work</span>
+    </div>
+  </header>
+
+  <p class="lede">PG collected the techniques for doing great work across many fields and looked at the intersection. It has a definite shape — "it's not just a point labelled 'work hard.'" This is the recipe, assuming you're very ambitious.</p>
+
+  <div class="callout key">
+    <h4>The whole recipe in one breath</h4>
+    <p style="margin:0">Find something you have a <strong>natural aptitude</strong> for and a <strong>deep interest</strong> in. Learn enough to reach the frontier of knowledge. Notice the gaps. Explore the promising ones. Do it by following your <strong>curiosity</strong> — which chooses the field, gets you to the frontier, shows you the gaps, and drives you to explore them. "The whole process is a kind of dance with curiosity."</p>
+  </div>
+
+  <h2>The four steps</h2>
+  <figure class="diagram">
+    <div class="dtitle">How practically everyone who's done great work has done it</div>
+    <div class="row grow" style="max-width:720px">
+      <div class="node accent"><div class="nh">1 · Choose a field</div><div class="ns">Something you have an aptitude for + deep interest in</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">2 · Reach the frontier</div><div class="ns">Learn enough to get to the edge of what's known</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">3 · Notice the gaps</div><div class="ns">The edge looks smooth from afar; up close it's full of holes</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">4 · Explore</div><div class="ns">Boldly chase the promising ones — especially the ones others ignore</div></div>
+    </div>
+    <figcaption>"Knowledge expands fractally… the big prize is to discover a new fractal bud. You notice a crack in the surface of knowledge, pry it open, and there's a whole world inside." Steps 2 and 4 require hard work — which is why the interest matters.</figcaption>
+  </figure>
+  <blockquote>The three most powerful motives are curiosity, delight, and the desire to do something impressive. Sometimes they converge, and that combination is the most powerful of all.</blockquote>
+
+  <h2>Deciding what to work on</h2>
+  <figure class="diagram">
+    <div class="dtitle">The three qualities of the work to choose</div>
+    <div class="row grow" style="max-width:640px">
+      <div class="node accent"><div class="nh">Natural aptitude</div></div>
+      <div class="node accent"><div class="nh">Deep interest</div></div>
+      <div class="node accent2"><div class="nh">Scope to do great work</div></div>
+    </div>
+    <figcaption>"In practice you don't have to worry much about the third criterion. Ambitious people are if anything already too conservative about it." So really: aptitude + great interest.</figcaption>
+  </figure>
+  <blockquote>The way to figure out what to work on is by working. If you're not sure what to work on, guess. But pick something and get going.</blockquote>
+  <p>Develop a habit of working on <strong>your own projects</strong> — don't let "work" mean what others tell you to do. Chase whatever seems excitingly ambitious; as your taste evolves, exciting and important converge, but always preserve excitingness. The compass is a particular kind of curiosity:</p>
+  <blockquote>What are you excessively curious about — curious to a degree that would bore most other people? That's what you're looking for.</blockquote>
+  <div class="steps">
+    <div class="step"><b>When in doubt, optimize for interestingness.</b> A field should get more interesting as you learn more about it. If it doesn't, it's probably not for you. The stranger your tastes, the better — "strange tastes are often strong ones."</div>
+    <div class="step"><b>Make what you yourself want.</b> "Write the story you want to read; build the tool you want to use." The people who go wrong make what some imaginary, more sophisticated audience wants — "and once you go down that route, you're lost."</div>
+    <div class="step"><b>Stick to what's genuinely interesting</b> and you're proof against the forces that lead you astray: pretentiousness, fashion, fear, money, politics, other people's wishes. "If you're interested, you're not astray."</div>
+    <div class="step"><b>Make yourself a big target for luck.</b> Much of great work is chance discovery. "Try lots of things, meet lots of people, read lots of books, ask lots of questions."</div>
+  </div>
+  <div class="callout">
+    <h4>Stay upwind — don't over-plan</h4>
+    <p style="margin:0">"The recipe for doing great work is simply: work hard on excitingly ambitious projects, and something good will come of it." Planning only works for achievements you can describe in advance — "you can't discover natural selection that way." Instead of executing a plan, preserve invariants: at each stage do whatever's most interesting and gives the best options for the future.</p>
+  </div>
+
+  <h2>The technique of working</h2>
+  <p>Even on exciting work there are headwinds and hidden shoals — "there's a technique to working, just as there is to sailing." You must work hard, but past a point fatigue makes you stupid; the hardest work may only sustain four or five hours a day, ideally in big contiguous blocks.</p>
+  <div class="callout">
+    <h4>Activation energy &amp; permissible lies</h4>
+    <p style="margin:0">It's harder to <em>start</em> than to keep going — "work has a sort of activation energy, both per day and per project." Since the threshold is fake, it's OK to tell yourself a lie to get over it ("I'll just read over what I've got so far"; "How hard could it be?"). And <strong>try to finish what you start</strong> — "in many projects a lot of the best work happens in what was meant to be the final stage."</p>
+  </div>
+  <figure class="diagram">
+    <div class="dtitle">The two procrastinations</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Per-project — the dangerous one</h4>
+        <p style="margin:0;font-size:14px">Putting off the ambitious project year to year because "the time isn't quite right." It camouflages as work — you're busy on something else — so it never trips the alarms. "When you're procrastinating in units of years, you can get a lot not done."</p>
+      </div>
+      <div class="vs good">
+        <h4>The cure</h4>
+        <p style="margin:0;font-size:14px">Stop occasionally and ask: <strong>"Am I working on what I most want to work on?"</strong> When young it's OK if the answer is sometimes no — but it gets increasingly dangerous as you get older.</p>
+      </div>
+    </div>
+  </figure>
+  <blockquote>Writing a page a day doesn't sound like much, but if you do it every day you'll write a book a year. That's the key: consistency. People who do great things don't get a lot done every day. They get something done, rather than nothing.</blockquote>
+  <p>And work that <strong>compounds</strong> gives exponential growth (learning makes more learning easier; an audience brings more audience). "The trouble with exponential growth is that the curve feels flat in the beginning. It isn't." Because we underrate it early, almost no one consciously invests in it — but you can. Two more levers: protect the <strong>focus-relax cycle</strong> (the undirected thinking on a walk or in the shower solves what frontal attack can't — but only if interleaved with real work), and <strong>cultivate your taste</strong> — "if you don't try to be the best, you won't even be good."</p>
+
+  <h2>Be earnest, not affected</h2>
+  <blockquote>Don't try to work in a distinctive style. Just try to do the best job you can; you won't be able to help doing it in a distinctive way. Style is doing things in a distinctive way without trying to. Trying to is affectation.</blockquote>
+  <p>Affectation is pretending someone other than you is doing the work — "the fakeness is what shows in the work." The positive form of the rule is <strong>be earnest</strong>, whose core is <strong>intellectual honesty</strong>: to see more truth than others, you need a sharp eye for the truth, which is impossible if you're dishonest with yourself. So "be aggressively willing to admit that you're mistaken. Once you've admitted you were mistaken… you're free." Earnestness also means <em>informality</em> — focusing on what matters, not on how you seem. "Any energy that goes into how you seem comes out of being good."</p>
+
+  <h2>Originality</h2>
+  <blockquote>Originality isn't a process, but a habit of mind. Original thinkers throw off new ideas about whatever they focus on, like an angle grinder throwing off sparks. They can't help it.</blockquote>
+  <div class="steps">
+    <div class="step"><b>It comes from working, not from trying to be original.</b> "Original ideas don't come from trying to have original ideas. They come from trying to build or understand something slightly too difficult."</div>
+    <div class="step"><b>Talk and write</b> about what interests you — "when you try to put ideas into words, a missing idea creates a sort of vacuum that draws it out of you."</div>
+    <div class="step"><b>Travel in topic space.</b> Explore many topics (analogies are a rich source) — but distribute attention by a power law: "be professionally curious about a few topics and idly curious about many more."</div>
+    <div class="step"><b>Be prolific.</b> "You can't have a lot of good ideas without also having a lot of bad ones" (Pauling). Start lots of small things; "big things start small."</div>
+  </div>
+  <p>Curiosity and originality are nearly the same thing: "curiosity is itself a kind of originality; it's roughly to questions what originality is to answers." And the test of a new idea: <strong>"When an idea seems simultaneously novel and obvious, it's probably a good one."</strong> New ideas are hard to see because seeing them requires fixing a broken model of the world:</p>
+  <figure class="diagram">
+    <div class="dtitle">Fixing broken models: strictness + rule-breaking</div>
+    <div class="twocol">
+      <div class="vs a">
+        <h4>Be stricter than others</h4>
+        <p style="margin:0;font-size:14px">Broken models leave a trail of clues where they bash against reality. Most look away (it's what they think in). "Seize on signs of breakage instead of looking away." That's what Einstein did — "not so much because he was looking for new ideas as because he was stricter."</p>
+      </div>
+      <div class="vs b">
+        <h4>Be willing to break rules</h4>
+        <p style="margin:0;font-size:14px">A good new idea "has to seem bad to most people, or someone would have already explored it." So look for ideas that seem crazy — but the right kind of crazy (rich in implications, exciting, not depressing).</p>
+      </div>
+    </div>
+    <figcaption>Two ways to be comfortable breaking rules: <strong>aggressively independent-minded</strong> (you enjoy it; the audacity itself supplies activation energy) and <strong>passively independent-minded</strong> (you don't even know the rules — why novices and outsiders make discoveries). "In questions that really matter, only rule-breakers can be truly strict."</figcaption>
+  </figure>
+  <div class="callout">
+    <h4>Choosing the problem &gt; solving it</h4>
+    <p style="margin:0">"People show much more originality in solving problems than in deciding which problems to solve." Unfashionable problems are undervalued; so are problems everyone thinks are tapped out. To find overlooked ones, be self-indulgent — ask: "if you were going to take a break from 'serious' work to work on something just because it would be really interesting, what would you do? The answer is probably more important than it seems." <strong>"Originality in choosing problems seems to matter even more than originality in solving them."</strong></p>
+  </div>
+  <p>Big ideas are often really <strong>questions</strong> — "a really good question is a partial discovery." Carry your unanswered questions; the more you hold, the likelier you notice a solution, or that two questions are the same. "It's just as important to keep your youthful questions alive." Expertise isn't certainty — "the more puzzled you are, the better," so long as the puzzle matters and no one else understands it either.</p>
+
+  <h2>Start small, evolve in versions</h2>
+  <div class="steps">
+    <div class="step"><b>Err on the side of starting.</b> "You'll learn faster and have more fun by trying stuff" than by first studying everything done before — and you'll understand the prior work better afterward.</div>
+    <div class="step"><b>Make successive versions.</b> "Great things are almost always made in successive versions… the final version is both cleverer and more ambitious than anything you could have planned." Begin with the simplest thing that could possibly work.</div>
+    <div class="step"><b>Take as much risk as you can afford.</b> "If you're not failing occasionally, you're probably being too conservative." Even a failed project crosses territory few have seen. (It's the young, not the old, who wrongly fear risk.)</div>
+    <div class="step"><b>It's a good sign when an early version is dismissed as a "toy."</b> "That means it has everything a new idea needs except scale, and that tends to follow."</div>
+  </div>
+  <p class="muted">Planning isn't good per se — it's "a necessary evil," a response to inflexible media or coordinating many people. Keep projects small and media flexible, and your designs can evolve instead.</p>
+
+  <h2>Youth, schools, and copying</h2>
+  <p>Use the advantages of youth (energy, time, optimism, freedom) and of age (knowledge, efficiency, money, power) — "with effort you can acquire some of the latter when young and keep some of the former when old." The biggest youthful advantage is <strong>time</strong>; spend it lavishly but not wastefully — "to learn about something you don't need to know about, just out of curiosity… or to become freakishly good at something." Inexperience also means <strong>fresh eyes</strong>: "when you're learning about something for the first time, pay attention to things that seem wrong or missing" — come back later; if they're still there, they may be an undiscovered idea.</p>
+  <p>Clear away the nonsense schools leave: they induce passivity, tell you the problems (which are always soluble with what you've been taught), and worst, train you to win by hacking the test. <strong>"You can't trick God."</strong> Don't depend on a gatekeeper's "big break," and "don't take rejection by committees to heart."</p>
+  <blockquote>Originality is the presence of new ideas, not the absence of old ones.</blockquote>
+  <p>So copying is fine — there's "no better way to learn how something works than by trying to reproduce it." Just do it openly, not furtively or unconsciously (the train running on someone else's tracks). Don't copy flaws — "the features that are easiest to imitate are the most likely to be the flaws" (some talented people are jerks; being a jerk is how they get away with it, not why they're good). The most powerful copying is across fields, as metaphor.</p>
+
+  <h2>Colleagues &amp; morale</h2>
+  <p>Seek out the best colleagues — "quality is more important than quantity… one or two great ones" — because great work happens in clusters. Sufficiently good colleagues "offer surprising insights… things you can't." And they shape you:</p>
+  <blockquote>Work with people you want to become like, because you will.</blockquote>
+  <p><strong>Husband your morale</strong> — "it's the basis of everything when you're working on ambitious projects." It starts with optimism (think of yourself as lucky, not a victim) and compounds with work, in both directions — so when stuck, switch to easier work just to get something done. Treat setbacks as part of the process, not a balloon bursting:</p>
+  <figure class="diagram">
+    <div class="dtitle">Great work is a depth-first search</div>
+    <div class="col" style="max-width:560px;margin:0 auto">
+      <div class="node accent2"><div class="nh">Root node = the desire to do great work</div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="nh">Try → hit a wall → backtrack only as far as you need → try again</div></div>
+      <div class="arrow">↓</div>
+      <div class="node accent"><div class="nh">Corollary: never abandon the root node</div></div>
+    </div>
+    <figcaption>"'If at first you don't succeed, try, try again' isn't quite right. It should be: if at first you don't succeed, either try again, or backtrack and then try again." Learn to tell <strong>good pain</strong> (a sign of effort) from <strong>bad pain</strong> (a sign of damage).</figcaption>
+  </figure>
+  <p>An audience sustains morale, and "it doesn't need to be big… if a handful of people genuinely love what you're doing, that's enough" — avoid intermediaries between you and them. Spend time with people who increase your energy. And ultimately morale is physical: "you think with your body" — exercise, sleep, and eat well; running and walking are especially good for thinking. "If you're smart and ambitious, it's dangerous not to be productive."</p>
+  <p class="muted">On prestige: "the prestige of a type of work is at best a trailing indicator… If you do anything well enough, you'll make it prestigious. So the question to ask… is not how much prestige it has, but how well it could be done." And on impressing people: "the opinion of people you respect is signal. Fame… just adds noise."</p>
+
+  <h2>The close</h2>
+  <blockquote>Curiosity is the best guide. Your curiosity never lies, and it knows more than you do about what's worth paying attention to.</blockquote>
+  <figure class="diagram">
+    <div class="dtitle">The factors of great work (literally, mathematically)</div>
+    <div class="row grow" style="max-width:680px">
+      <div class="node"><div class="nh">Luck</div><div class="ns">Can't control it — ignore</div></div>
+      <div class="node"><div class="nh">Effort</div><div class="ns">Assume it (you want this)</div></div>
+      <div class="node accent"><div class="nh">Ability</div></div>
+      <div class="node accent2"><div class="nh">Interest</div></div>
+    </div>
+    <figcaption>So it boils down to ability × interest: "Can you find a kind of work where your ability and interest will combine to yield an explosion of new ideas?" Out of all the kinds of work, the one you're most suited for is "probably a comically close match. It's just a question of finding it… and you can only answer that by trying."</figcaption>
+  </figure>
+  <p>What holds most people back is a mix of modesty and fear — it seems presumptuous to try to be Newton or Shakespeare, and surely you'd fail. But "you don't have to tell anyone. And if it's too hard and you fail, so what?"</p>
+  <blockquote>Do you want to do great work, or not?… The discoveries are out there, waiting to be made. Why not by you?</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Paul Graham, <a href="https://www.paulgraham.com/greatwork.html" target="_blank" rel="noopener">"How to Do Great Work"</a> (paulgraham.com, July 2023). This is a heavily condensed map of a ~14,000-word essay — the four-step recipe, the major principles, and the lines kept verbatim are PG's; read the original for the full argument and footnotes (PG credits the activation-energy/finishing idea to G.H. Hardy's <em>A Mathematician's Apology</em>, and the "many ideas" line to Linus Pauling). Related: <a href="how-to-do-what-you-love.html">How to Do What You Love</a>, <a href="how-to-pick-a-career.html">How to Pick a Career</a>, <a href="a-project-of-ones-own.html">A Project of One's Own</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-15 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
