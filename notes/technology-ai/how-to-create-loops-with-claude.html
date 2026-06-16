@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Create Loops with Claude — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Create Loops with Claude</h1>
+    <div class="meta">
+      <span>By <strong>MIKE</strong> (@mikenevermiss)</span>
+      <span class="dot">•</span>
+      <span>Published Jun 15, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 15, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Claude Code</span>
+      <span class="tag">Agentic Loops</span>
+      <span class="tag">Automation</span>
+      <span class="tag">Evaluator-Optimizer</span>
+    </div>
+  </header>
+
+  <p class="lede">Stop making prompts. Start designing loops. A prompt gets you one response; a loop gets you a system that keeps working after you close the laptop.</p>
+
+  <div class="callout key">
+    <h4>The shift in leverage</h4>
+    <p style="margin:0">Boris Cherny (runs Claude Code at Anthropic) doesn't prompt Claude anymore — he has loops running that prompt Claude and figure out what to do. Peter Steinberger, same idea: don't prompt coding agents, design loops that prompt them. <strong>A loop is a recursive goal</strong>: you define a purpose, the agent iterates against it, and it runs until a real stopping condition is met. "The agent forgets everything between runs. The loop does not. That single fact is the entire architecture."</p>
+  </div>
+
+  <h2>What a loop actually is — the six parts</h2>
+  <p>Addy Osmani (a Google engineer who wrote the essay that named the practice) breaks a loop into six parts. Every working loop is some combination of these:</p>
+  <figure class="diagram">
+    <div class="dtitle">The six components of a loop</div>
+    <div class="row grow" style="max-width:760px">
+      <div class="node accent"><div class="nh">Automations</div><div class="ns">A schedule, cron, webhook, or hook that fires without you typing — finds &amp; triages work before you ask</div></div>
+      <div class="node accent"><div class="nh">Worktrees</div><div class="ns">Git worktrees give each agent an isolated repo copy so parallel agents don't collide</div></div>
+      <div class="node accent"><div class="nh">Skills</div><div class="ns">Procedure manuals the agent reads instead of being told from scratch each time</div></div>
+      <div class="node accent2"><div class="nh">Connectors</div><div class="ns">Links to the outside systems the loop acts on</div></div>
+      <div class="node accent2"><div class="nh">Sub-agents</div><div class="ns">Specialized agents the loop delegates to (explore / implement / verify)</div></div>
+      <div class="node accent2"><div class="nh">Memory</div><div class="ns">A state file on disk (markdown) that survives between runs — the agent forgets, the file does not</div></div>
+    </div>
+    <figcaption>Automations are what make a loop a loop instead of a one-time run.</figcaption>
+  </figure>
+
+  <h2>1 · Start with one trigger</h2>
+  <p>Every loop starts with something that fires without you. Simplest version: a cron job that runs a Claude Code prompt on a schedule. Next: a hook — a script that runs automatically on an event like a commit or a file change. Pick one recurring task you do manually and turn the trigger into the first piece.</p>
+  <div class="codeblk"><span class="lbl">A complete, working loop on its own</span>"Every morning at 8am, read yesterday's CI failures,
+ open issues, and recent commits, and write findings
+ to a markdown file."</div>
+  <p>Don't try to build the full six-part system on day one. "One automation that writes one state file is already more leverage than a hundred well-crafted prompts, because it runs without you."</p>
+
+  <h2>2 · Give the loop a memory file</h2>
+  <p>Create one markdown file — <code>STATE.md</code> or <code>PROGRESS.md</code> — where every iteration can read and write it. This is the loop's only memory. At the start of each run the agent reads it first; at the end it writes back what happened and what comes next. "This is the PROGRESS.md pattern, and it is the single most important file in any loop."</p>
+  <figure class="diagram">
+    <div class="dtitle">The PROGRESS.md pattern</div>
+    <div class="codeblk"><span class="lbl">Keep it short — plain sections</span># PROGRESS.md
+
+## Done last run
+- ...
+
+## In progress
+- ...
+
+## Blocked
+- ...
+
+## Try next
+- ...</div>
+    <figcaption>Without it, every run starts from zero regardless of how many came before. But "a memory file the agent has to read 2000 lines of is worse than no memory file at all." Keep it short.</figcaption>
+  </figure>
+
+  <h2>3 · Split the writer from the checker</h2>
+  <p>The model that wrote the code is, in Osmani's words, <strong>"too nice grading its own homework."</strong> A single agent that writes and reviews its own work marks it done more often than it should. The fix is the <strong>evaluator-optimizer pattern</strong> (named in Anthropic's "Building Effective Agents" writeup):</p>
+  <figure class="diagram">
+    <div class="dtitle">Evaluator-optimizer — generate, critique, repeat</div>
+    <div class="row" style="max-width:720px;align-items:center">
+      <div class="node accent"><div class="nh">Optimizer</div><div class="ns">Generates the work</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Evaluator</div><div class="ns">Critiques against an objective standard</div></div>
+      <div class="arrow">→</div>
+      <div class="node warn"><div class="nh">Hard gate</div><div class="ns">test suite · type checker · build · linter</div></div>
+      <div class="arrow">↺</div>
+    </div>
+    <figcaption>The check has to fail on something real. "A second agent told to 'review this' with no objective signal just adds a second optimist… The verifier needs a hard gate, not an opinion."</figcaption>
+  </figure>
+
+  <h2>4 · Isolate parallel work with worktrees</h2>
+  <p>Once you're running more than one agent against the same codebase, isolation stops being optional. Give each agent its own working directory pointed at its own branch:</p>
+  <div class="codeblk">git worktree add ../agent-1-branch</div>
+  <figure class="diagram">
+    <div class="dtitle">A typical parallel setup</div>
+    <div class="row grow" style="max-width:740px">
+      <div class="node accent"><div class="nh">Sub-agent 1 · Explore</div><div class="ns">Writes a plan</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Sub-agent 2 · Implement</div><div class="ns">Builds against the plan, in its own worktree</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Sub-agent 3 · Verify</div><div class="ns">Checks against tests, in a separate worktree</div></div>
+    </div>
+    <figcaption>Each agent only ever sees its own copy. This is where loops scale from "one task in the background" to "a whole pipeline running at once," each reporting back to the shared memory file.</figcaption>
+  </figure>
+
+  <h2>5 · Set a hard stop condition</h2>
+  <p>A loop without a real exit condition fails quietly. Geoffrey Huntley documented the <strong>"Ralph Wiggum loop"</strong>: an agent meant to emit a completion signal only when finished emits it early, and the loop exits believing a half-done job is complete.</p>
+  <div class="twocol">
+    <div class="vs good">
+      <h4>Real stop conditions</h4>
+      <p style="margin:0;font-size:14px">"The test suite passes." "The build succeeds." "The linked ticket moves to Done with a passing CI run." Checkable by something <em>other than</em> the agent's own claim.</p>
+    </div>
+    <div class="vs bad">
+      <h4>Not a stop condition</h4>
+      <p style="margin:0;font-size:14px">"The agent says it's finished."</p>
+    </div>
+  </div>
+  <p>Set a <strong>maximum iteration count</strong> as a backstop regardless — 10 or 20 is a reasonable ceiling. If the loop hits the ceiling without meeting the real stop condition, it should halt and flag for review, not keep running.</p>
+
+  <h2>6 · Wire in a human review checkpoint</h2>
+  <p>Not every loop should run fully unattended from day one. Boris Cherny's <strong>autonomy ladder</strong> has four levels:</p>
+  <figure class="diagram">
+    <div class="dtitle">The autonomy ladder</div>
+    <div class="scroll">
+    <table>
+      <tr><th>Level</th><th>What the loop does</th></tr>
+      <tr><td class="k">Level 1</td><td>Suggests only</td></tr>
+      <tr><td class="k">Level 2</td><td>Drafts changes for a human to apply</td></tr>
+      <tr><td class="k">Level 3</td><td>Applies low-risk changes, but requires human approval before publish or merge</td></tr>
+      <tr><td class="k">Level 4</td><td>Applies and completes automatically, with audit logs</td></tr>
+    </table>
+    </div>
+    <figcaption>Start every new loop at level 1 or 2. Run it for a week, read its output, correct what it gets wrong. Once it consistently produces work you'd approve without changes, move to level 3. <strong>"Level four is earned, not assumed."</strong></figcaption>
+  </figure>
+  <p>Runs that find something go to a triage inbox or flagged list. Runs that find nothing archive themselves silently — "you should never have to open a loop's output to confirm that nothing happened."</p>
+
+  <h2>7 · Watch the token cost</h2>
+  <p>"A single bad iteration is a wasted prompt. A single bad loop running unattended overnight is a bill." Each iteration is a full model call with the accumulated conversation history attached. Before letting any loop run unsupervised, estimate the worst case:</p>
+  <div class="codeblk">tokens/iteration  ×  max iterations      = worst-case cost / run
+worst-case / run  ×  automation frequency = worst-case cost / day</div>
+  <p>Run it manually for 3–5 iterations first and measure tokens per iteration. And build a <strong>command allowlist</strong> for any loop that executes shell commands — restrict it to what the task needs (<code>npm</code>, <code>git</code>, <code>ls</code>, <code>cat</code>).</p>
+  <blockquote>An agent with unrestricted shell access inside an unattended loop is the fastest way to turn a token-cost problem into a security problem.</blockquote>
+
+  <h2>8 · Build the second loop differently than the first</h2>
+  <p>Your first loop should be small, single-purpose, and heavily supervised. Your second should <strong>connect</strong> to the first — this is where automations, skills, and memory compound instead of just running in parallel.</p>
+  <figure class="diagram">
+    <div class="dtitle">Two loops forming a pipeline</div>
+    <div class="row" style="max-width:720px;align-items:center">
+      <div class="node accent"><div class="nh">Loop A · Triage</div><div class="ns">Daily; writes findings to a shared state file</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Shared STATE.md</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Loop B · Act</div><div class="ns">Reads state, picks the highest-priority item, acts</div></div>
+    </div>
+    <figcaption>Neither needs the other to function, but together they move work from "discovered" to "in progress" without you touching either. This is also when <strong>skills</strong> pay off: write a skill for triaging CI failures once, and every future loop that touches CI failures reads it instead of you re-explaining.</figcaption>
+  </figure>
+
+  <h2>What your job becomes</h2>
+  <figure class="diagram">
+    <div class="dtitle">The deciding moves up a level</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Before</h4>
+        <p style="margin:0;font-size:14px">Open a chat window to ask a question. The to-do list is a static pile of tasks. You decide per-task.</p>
+      </div>
+      <div class="vs good">
+        <h4>After</h4>
+        <p style="margin:0;font-size:14px">Open a triage inbox to review what the loops found overnight. The to-do list is a set of agents and routines converting ideas into drafts, fixes, and reviews. You decide at the <strong>loop-design level</strong>.</p>
+      </div>
+    </div>
+    <figcaption>"You are not writing fewer prompts because you are doing less. You are writing fewer prompts because the loops are writing them for you" — and your attention moves to the parts that need a human: the review checkpoint, the stop condition, and the next loop worth building.</figcaption>
+  </figure>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> MIKE (@mikenevermiss), <a href="https://x.com/mikenevermiss/status/2066401066518802637" target="_blank" rel="noopener">"How to Create Loops with Claude"</a> (X article, Jun 15 2026). Quotes are from the article. It synthesizes named sources: Boris Cherny (Claude Code at Anthropic — the autonomy ladder), Peter Steinberger, Addy Osmani (Google — the six-part breakdown + "too nice grading its own homework"), Anthropic's "Building Effective Agents" engineering writeup (the evaluator-optimizer pattern), and Geoffrey Huntley (the "Ralph Wiggum loop"). Related: <a href="agent-looping.html">What is Agent Looping</a>, <a href="the-plan-is-code.html">The Plan Is Code</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-15 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
