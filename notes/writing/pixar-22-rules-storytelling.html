@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pixar's 22 Rules of Storytelling — Learning Notes</title><style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:40px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--accent);font-size:18px;margin-right:8px}
+  h3{font-size:18px;margin:28px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:18px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:6px}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.84em;color:var(--accent2)}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)}
+  .vs h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#16181d}
+  .vs.bad h4{color:var(--warn)} .vs.good h4{color:var(--ok)}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .rulecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .rulecard .rn{font-family:var(--serif);font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .rulecard h3{margin:4px 0 8px;font-size:18px}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+  td.rn{font-family:var(--serif);color:var(--accent);font-weight:600;text-align:center;white-space:nowrap}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style></head><body><div class="wrap">
+
+<a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Pixar's 22 Rules of Storytelling</h1>
+    <div class="meta">
+      <span>By <strong>Dickie Bush</strong> (@dickiebush) — on Emma Coats' Pixar rules</span>
+      <span class="dot">•</span>
+      <span>Published Jun 15, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 15, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Storytelling</span>
+      <span class="tag">Story Spine</span>
+      <span class="tag">Craft</span>
+      <span class="tag">Pixar</span>
+    </div>
+  </header>
+
+  <p class="lede">The single most powerful skill to advance your career is storytelling — and no one tells better stories than Pixar. In 2011, Pixar storyboard artist Emma Coats shared their 22 Rules. Here they are, with Dickie Bush's notes on applying them to writing, brands, and business.</p>
+
+  <div class="callout key">
+    <h4>The one to steal first</h4>
+    <p style="margin:0">If you take one thing, take the <strong>story spine</strong> (Rule #4) — a fill-in-the-blanks scaffold any writer, founder, or brand can use to build a narrative effortlessly. The rest sharpen it: start from the ending, add constraints, give characters opinions, get it on paper, and strip to the essence.</p>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Rule #4 — The Story Spine</div>
+    <div class="codeblk">Once upon a time there was ___.
+Every day, ___.
+One day ___.
+Because of that, ___.
+Because of that, ___.
+Until finally ___.</div>
+    <figcaption>"Whether you're a writer, an entrepreneur, or a brand, you can use this story spine to effortlessly create a narrative." (Dickie's favorite of the 22.)</figcaption>
+  </figure>
+
+  <h2>The 22 rules — verbatim</h2>
+  <p>Emma Coats' original wording (2011):</p>
+  <table>
+    <tr><th>#</th><th>Rule</th></tr>
+    <tr><td class="rn">1</td><td>You admire a character for trying more than for their successes.</td></tr>
+    <tr><td class="rn">2</td><td>You gotta keep in mind what's interesting to you as an audience, not what's fun to do as a writer. They can be very different.</td></tr>
+    <tr><td class="rn">3</td><td>Trying for theme is important, but you won't see what the story is actually about til you're at the end of it. Now rewrite.</td></tr>
+    <tr><td class="rn">4</td><td>Once upon a time there was ___. Every day, ___. One day ___. Because of that, ___. Because of that, ___. Until finally ___.</td></tr>
+    <tr><td class="rn">5</td><td>Simplify. Focus. Combine characters. Hop over detours. You'll feel like you're losing valuable stuff but it sets you free.</td></tr>
+    <tr><td class="rn">6</td><td>What is your character good at, comfortable with? Throw the polar opposite at them. Challenge them. How do they deal?</td></tr>
+    <tr><td class="rn">7</td><td>Come up with your ending before you figure out your middle. Seriously. Endings are hard, get yours working up front.</td></tr>
+    <tr><td class="rn">8</td><td>Finish your story, let go even if it's not perfect. In an ideal world you have both, but move on. Do better next time.</td></tr>
+    <tr><td class="rn">9</td><td>When you're stuck, make a list of what WOULDN'T happen next. Lots of times the material to get you unstuck will show up.</td></tr>
+    <tr><td class="rn">10</td><td>Pull apart the stories you like. What you like in them is a part of you; you've got to recognize it before you can use it.</td></tr>
+    <tr><td class="rn">11</td><td>Putting it on paper lets you start fixing it. If it stays in your head, a perfect idea, you'll never share it with anyone.</td></tr>
+    <tr><td class="rn">12</td><td>Discount the 1st thing that comes to mind. And the 2nd, 3rd, 4th, 5th – get the obvious out of the way. Surprise yourself.</td></tr>
+    <tr><td class="rn">13</td><td>Give your characters opinions. Passive/malleable might seem likable to you as you write, but it's poison to the audience.</td></tr>
+    <tr><td class="rn">14</td><td>Why must you tell THIS story? What's the belief burning within you that your story feeds off of? That's the heart of it.</td></tr>
+    <tr><td class="rn">15</td><td>If you were your character, in this situation, how would you feel? Honesty lends credibility to unbelievable situations.</td></tr>
+    <tr><td class="rn">16</td><td>What are the stakes? Give us a reason to root for the character. What happens if they don't succeed? Stack the odds against.</td></tr>
+    <tr><td class="rn">17</td><td>No work is ever wasted. If it's not working, let go and move on — it'll come back around to be useful later.</td></tr>
+    <tr><td class="rn">18</td><td>You have to know yourself: the difference between doing your best &amp; fussing. Story is testing, not refining.</td></tr>
+    <tr><td class="rn">19</td><td>Coincidences to get characters into trouble are great. But coincidences to get them out of it are cheating.</td></tr>
+    <tr><td class="rn">20</td><td>Exercise: take the building blocks of a movie you dislike. How would you rearrange them into what you DO like?</td></tr>
+    <tr><td class="rn">21</td><td>You gotta identify with your situation/characters, can't just write 'cool'. What would make YOU act that way?</td></tr>
+    <tr><td class="rn">22</td><td>What's the essence of your story? Most economical telling of it? If you know that, you can build from there.</td></tr>
+  </table>
+
+  <h2>Dickie's standout applications</h2>
+  <div class="steps">
+    <div class="step"><b>#1 — Admire the trying.</b> Audiences love the path, the ups and downs. For stories, brands, and products, focus on the <em>how</em> and <em>why</em> (less on the <em>what</em>).</div>
+    <div class="step"><b>#2 — The writer is irrelevant.</b> Echoes Craig Clemens's first rule of writing: <em>"You, the writer, are completely irrelevant."</em> Focus on delivering to the audience.</div>
+    <div class="step"><b>#5 — Do more with less.</b> "Add constraints." The goal for every writer, marketer, or entrepreneur is to do more with less.</div>
+    <div class="step"><b>#7 — Start with the end in mind.</b> Stories, sales pages, brand pitches — always work backward from the ending.</div>
+    <div class="step"><b>#9 — Beat writer's block.</b> List everything that <em>wouldn't</em> happen next to get the juices flowing.</div>
+    <div class="step"><b>#11 — Get it out of your head.</b> "Your head is the worst place to store ideas." Tim Ferriss commits to <em>2 crappy pages per day</em> — focus on getting the raw material.</div>
+    <div class="step"><b>#12 — Unclog the faucet.</b> Julian Shapiro's <em>Creativity Faucet</em>: to reach your best ideas, drain the obvious junk first.</div>
+    <div class="step"><b>#13 — Take a stand.</b> "No 'it seems' or 'maybes' or 'potentiallys'." Strong opinions make the audience take a side.</div>
+    <div class="step"><b>#16 — Stakes are the foundation.</b> Give us a reason to root for them; stack the odds against. (See Matthew Dicks's <em>Storyworthy</em>.)</div>
+    <div class="step"><b>#22 — Strip to the essence.</b> Ask what you're really trying to say in as few words as possible, then cut everything that distracts from it.</div>
+  </div>
+
+  <h2>The lines worth keeping</h2>
+  <blockquote>No book is ever finished, it is merely abandoned.<cite>— on Rule #8: don't let perfectionism keep you from publishing</cite></blockquote>
+  <blockquote>90% of being a good writer or storyteller is being a good noticer.<cite>— on Rule #10: notice when things resonate, then ask why</cite></blockquote>
+  <p>And on Rule #18 — <em>"Story is testing, not refining"</em> — Dickie's gloss: planning every step from A to Z is "really procrastination in disguise." Pair it with Rule #17: "No work is ever wasted… focus on showing up — <strong>consistency creates competence.</strong>"</p>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Dickie Bush (@dickiebush), <a href="https://x.com/dickiebush/status/2066500589698314589" target="_blank" rel="noopener">"Steal Pixar's Secret Storytelling Framework"</a> (X article, Jun 15 2026). The 22 rules are <strong>Emma Coats'</strong> "Pixar's 22 Rules of Storytelling," originally shared in 2011 while she was a Pixar storyboard artist (reproduced verbatim here); the applied commentary, and cross-references to Craig Clemens, Julian Shapiro (Creativity Faucet), Tim Ferriss, and Matthew Dicks (Storyworthy), are Dickie's. Box-office figures in the original are the author's claims. The article ends with a promotional CTA (a free "Premium Ghostwriting Blueprint," tied to the author's writing business). Related: <a href="how-to-write-well.html">How to Write Well</a>, <a href="become-so-creative-it-feels-illegal.html">Become So Creative It Feels Illegal</a>, <a href="how-to-have-original-thoughts.html">How to Have Original Thoughts</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-15 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
