@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Become Dangerously Focused — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f4f1ea; --ink:#1f1b15; --muted:#6b6253;
+    --line:#e6e0d5; --accent:#b06d12; --accent2:#1f8f6b; --warn:#c25024; --ok:#2e9a52; --purple:#7b50d6;
+    --chip:#f1ece2; --radius:14px;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-family:var(--serif);font-size:38px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-family:var(--serif);font-size:21px;font-style:italic;color:#4a4234;border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:30px 0 8px;line-height:1.5}
+  .disclaimer{background:rgba(224,138,107,.10);border:1px solid #e3c9b0;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#7a3b1f}
+  h2{font-family:var(--serif);font-size:26px;margin:50px 0 10px;letter-spacing:-.01em;padding-top:16px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:26px 0 8px;color:#1f1b15;font-family:var(--serif)}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:8px 0}
+  strong{color:#16181d} em{color:#3f3a30}
+  blockquote{font-family:var(--serif);font-style:italic;font-size:19px;color:#3f3a30;border-left:3px solid var(--accent2);margin:22px 0;padding:8px 0 8px 22px;line-height:1.5}
+  blockquote cite{display:block;font-size:13px;font-style:normal;color:var(--muted);margin-top:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#faf6ee;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:16px;text-align:center;font-style:italic}
+  figure.diagram .dtitle{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:14px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:130px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:600px){.twocol{grid-template-columns:1fr}}
+  .vs{border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#16181d}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>How to Become Dangerously Focused</h1>
+    <div class="meta">
+      <span>By <strong>Tim Denning</strong> (@Tim_Denning)</span>
+      <span class="dot">•</span>
+      <span>Published Jun 18, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 18, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Focus</span>
+      <span class="tag">Priorities</span>
+      <span class="tag">Discipline</span>
+      <span class="tag">Phone Detox</span>
+    </div>
+  </header>
+
+  <p class="lede">We're living through a focus epidemic — brain cells lit on fire by choice. The antidote is extreme, because the problem is more extreme than people will admit. Get focus back and you become "dangerous": you have no competition.</p>
+
+  <div class="disclaimer">⚠️ <strong>Provocative manifesto, captured as-is.</strong> A deliberately extreme, profane, personal-anecdote-driven essay; the screen-time figures and routines are the author's own claims. Archived as one practitioner's hard-line method, not a prescription. Ends with a self-promotional CTA.</div>
+
+  <div class="callout key">
+    <h4>The core move</h4>
+    <p style="margin:0">A scatterbrain is really someone with <strong>no priorities</strong> — they drift from one urgent task to the next, and "whatever is loudest dominates the calendar." The fix is to choose a <em>single</em> priority and defend it with almost inhuman discipline. "Focused people are dangerous because they have no competition. It's life on easy mode, and it's the best cheat code I know."</p>
+  </div>
+
+  <h2>1 · Find the one priority</h2>
+  <p>Most people can't pick a single priority — life trained them to prioritize too many things, and everything seems urgent "by design." Denning's 10,000-foot exercise to surface yours:</p>
+  <figure class="diagram">
+    <div class="dtitle">The three questions → carve the statue</div>
+    <div class="steps">
+      <div class="step"><b>What do I want out of life?</b></div>
+      <div class="step"><b>What's the #1 goal that can get me there?</b></div>
+      <div class="step"><b>What do I love doing that brings me energy?</b></div>
+    </div>
+    <p class="muted" style="text-align:center;margin:8px 0 0">Then carve, like a block of stone into David: <strong>(1) say no to almost every ask</strong> and <strong>(2) hold your boundaries with discipline.</strong></p>
+    <figcaption>The discipline is "bland, cold, boring, and lonely" — and that ruthlessness is exactly what makes you dangerous. (And no, "I'm neurodivergent" isn't a pass — "focus is only impossible if you tell yourself it is.")</figcaption>
+  </figure>
+
+  <h2>2 · Tie focus to survival</h2>
+  <blockquote>A goal is a fantasy. Visions are p0rn. Systems are idealistic.</blockquote>
+  <p>None of the standard self-help tools work — "if they did, humans wouldn't be at peak burnout, peak loneliness, and living through a meaning crisis." The workaround: tie what you focus on directly to your <strong>survival</strong>. Denning keeps a photo of his two daughters beside him and imagines they'll <em>starve</em> if the essay doesn't get done. It's a deliberate delusion — and in 3 years (since his first daughter was born) he's never missed writing an essay.</p>
+  <div class="callout">
+    <p style="margin:0">"Your survival is deeply motivating. It helps your priorities transcend your own existence. And when a priority is about more than just you, it's easier to focus." <strong>Tell yourself you'll ruin your life if this single priority doesn't work out.</strong></p>
+  </div>
+
+  <h2>3 · The extreme phone rules</h2>
+  <p>Denning reports <strong>under 10 minutes of phone screen time a day.</strong> His rules — admittedly radical:</p>
+  <figure class="diagram">
+    <div class="dtitle">The phone rules</div>
+    <table>
+      <tr><td>📵 Phone permanently in <strong>do-not-disturb</strong> (only family gets through)</td></tr>
+      <tr><td>🚫 <strong>No social media apps</strong> installed on the phone</td></tr>
+      <tr><td>📧 <strong>No email</strong> on the phone</td></tr>
+      <tr><td>👨‍👧 <strong>No phones around family</strong></td></tr>
+      <tr><td>🍽️ <strong>No phones at meal time</strong></td></tr>
+      <tr><td>🔕 <strong>No notifications</strong></td></tr>
+      <tr><td>🧭 <strong>No scrolling</strong></td></tr>
+    </table>
+    <figcaption>He still has plenty of screen/internet time — but <strong>only on his desktop.</strong> The physical boundary does the work: in the office = work time; out of the office = be present. "My iPhone is only for phone calls… Smartphones are what made us dumb."</figcaption>
+  </figure>
+
+  <h2>4 · Stop dabbling like an amateur</h2>
+  <p>Because you can't know the outcome of any goal in advance, obsessing over <em>knowing</em> how it'll turn out makes you hedge your bets and dabble — never investing enough to reach the outcome.</p>
+  <blockquote>Dangerously focused people don't dabble. They assume things will work out. They go all in.</blockquote>
+  <p>Going all in means committing to one project, pouring all your energy into it, and choosing <strong>obsession over lukewarm passion</strong> — okay with failure as the price of finding out.</p>
+
+  <h2>5 · Extend your flow states</h2>
+  <p>Denning credits Mihaly Csikszentmihalyi's <em>Flow</em>. The protocol: remove distractions, focus on one task, make the work slightly beyond your capabilities, drink coffee, and do work that gives you energy — "an hour in flow will feel like 5 minutes." Most people's flow lasts an hour or two; he extends his to <strong>4–8 hours</strong> (longest ever: 16 hours straight). "Longer flow states are more potent." The two requirements: a distraction-free environment and a free calendar.</p>
+  <p class="muted">(See also the deep-dive note on the neuroscience and triggers of flow.)</p>
+
+  <h2>6 · Weaponize the hours of the day</h2>
+  <figure class="diagram">
+    <div class="dtitle">"Make, then manage"</div>
+    <div class="twocol">
+      <div class="vs good">
+        <h4>Morning → MAKE</h4>
+        <p style="margin:0;font-size:14px">Start the day with creation, imagination, making stuff — when your energy is highest.</p>
+      </div>
+      <div class="vs bad">
+        <h4>End of day → MANAGE</h4>
+        <p style="margin:0;font-size:14px">Push all the reactive stuff (email, admin) to when you're tired and it costs less.</p>
+      </div>
+    </div>
+    <figcaption>Match the energy level to the task. A simple shift, big payoff.</figcaption>
+  </figure>
+
+  <h2>7 · Let some crazy bastards into your life</h2>
+  <p>The bar around you is so low that focusing for 30 minutes earns compliments — which does more harm than good. Get around people who hold you to a far higher standard. Denning learned it from Olympic swimmer Kieren Perkins, who explained how he trained hard enough to win:</p>
+  <blockquote>It's hard to skip a 4 AM training session when you've got three other Olympic gold medalist teammates to drag you out of bed if you dare try to skip a session.<cite>— Kieren Perkins</cite></blockquote>
+  <p>"You lie to yourself when you only hear your own voice. Outside voices wake you the hell up from being in love with yourself and thinking you're focused."</p>
+
+  <h2>8 · Cultivate a psychopathic sense of urgency</h2>
+  <p>A lack of focus needs consequences — and most people have none, so nothing bad happens when they slack. Hardwire urgency instead. <strong>"'I'll start in 3 months' is ruining your life."</strong> Circumstances won't be better; there's always chaos, so you work around it (or learn to thrive in it). The "now" must be evidence-based. Denning's own pattern interrupt, after a 2015 cancer near-miss:</p>
+  <blockquote>What the hell makes you think you have the extreme privilege of being alive in three months to start this goal then?</blockquote>
+  <p>"Believing you'll be alive beyond today is sheer arrogance… You could be dead tomorrow. So do it today or shut up and stop complaining."</p>
+
+  <h2>Bringing it together</h2>
+  <p>It's simple but not easy. "Unless there's a reason for extreme focus, you'll default to a distracted state which produces low states of consciousness and piss-poor results." We're at war — guard your focus, or face the regret of not getting what you knew you could.</p>
+  <blockquote>Be honest — are you actually focused, or just busy?</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Tim Denning (@Tim_Denning), <a href="https://x.com/Tim_Denning/status/2067565172588466630" target="_blank" rel="noopener">"How to become dangerously focused"</a> (X article, Jun 18 2026). Quotes are from the article; the Kieren Perkins line is as Denning recounts it; screen-time and flow-state durations are the author's personal claims. References Mihaly Csikszentmihalyi's <em>Flow</em>. The piece ends with a self-promotional CTA (follow + a free guide tied to the author's digital-business teaching). 3rd Tim Denning note. Related: <a href="the-operator-trap.html">The Operator Trap</a>, <a href="how-to-enter-flow-state.html">How to Enter Flow State</a>, <a href="burn-your-bridges.html">Burn Your Bridges</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-06-18 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
