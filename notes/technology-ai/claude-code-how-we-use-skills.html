@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How We Use Skills (Lessons from Building Claude Code)</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>How We Use Skills (Lessons from Building Claude Code)</h1>
+  <div class="meta">
+    By <strong>Thariq</strong> (@trq212, Anthropic)
+    <span class="dot">•</span> Published Mar 17, 2026
+    <span class="dot">•</span> Saved Jun 27, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">Claude Code</span>
+    <span class="tag">Skills</span>
+    <span class="tag">Agent Tooling</span>
+    <span class="tag">Anthropic</span>
+  </div>
+</header>
+
+<p class="lede">Anthropic doesn't use a handful of skills in Claude Code — it uses hundreds, in active daily rotation. This is the engineer's-eye view of what they're for, how to write good ones, and how to share them without drowning the model in context.</p>
+
+<div class="callout key">
+  <h4>The reframe</h4>
+  <p>The common misconception is that skills are "just markdown files." That undersells them. A skill is a <strong>folder</strong> — it can carry scripts, assets, and data the agent can discover, explore, and manipulate. In Claude Code they also gain config options like dynamic hooks. The markdown is just the front door; the interesting part is everything behind it.</p>
+</div>
+
+<h2>What a skill actually is</h2>
+
+<p>Once you stop thinking "instruction file" and start thinking "directory the agent can walk into," the design space opens up. The model can read the markdown to learn <em>when</em> and <em>how</em> to act, then reach for the scripts, reference data, and helpers sitting next to it.</p>
+
+<figure class="diagram">
+  <div class="dtitle">A skill is a folder, not a file</div>
+  <div class="row grow">
+    <div class="node accent2"><div class="nh">SKILL.md</div><div class="ns">when to trigger + how to act</div></div>
+    <div class="node"><div class="nh">scripts/</div><div class="ns">code the agent runs</div></div>
+    <div class="node"><div class="nh">assets/ + data/</div><div class="ns">canonical tables, IDs, creds</div></div>
+    <div class="node purple"><div class="nh">hooks</div><div class="ns">activated only on call</div></div>
+  </div>
+  <figcaption>Discoverable, explorable, manipulable — the model treats the folder as a workspace.</figcaption>
+</figure>
+
+<h2>The categories of skills they build</h2>
+
+<p>Across Anthropic's internal use, the hundreds of skills cluster into a handful of recurring shapes. The example names below are the payload — they show what a useful skill looks like in practice.</p>
+
+<div class="scroll">
+<table>
+  <thead>
+    <tr><th>Category</th><th>What it does</th><th>Real example skills</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="k">Coding &amp; Design</span></td>
+      <td>Make Claude better at <em>your</em> system, not coding in general.</td>
+      <td><code>frontend-design</code> — aligns output to your design system</td>
+    </tr>
+    <tr>
+      <td><span class="k">Product Verification</span></td>
+      <td>Describe how to test &amp; verify code works, usually paired with an external tool.</td>
+      <td><code>signup-flow-driver</code>, <code>checkout-verifier</code>, <code>tmux-cli-driver</code></td>
+    </tr>
+    <tr>
+      <td><span class="k">Data &amp; Query</span></td>
+      <td>Query data with the right credentials, dashboard IDs, and canonical tables.</td>
+      <td><code>funnel-query</code>, <code>cohort-compare</code>, <code>grafana</code></td>
+    </tr>
+    <tr>
+      <td><span class="k">Business Process</span></td>
+      <td>Collapse a repetitive workflow into one command; log results for consistency.</td>
+      <td><code>standup-post</code>, <code>create-&lt;ticket-system&gt;-ticket</code></td>
+    </tr>
+    <tr>
+      <td><span class="k">Debugging</span></td>
+      <td>Stitch a single request's footprint across systems.</td>
+      <td>log correlator — request ID → all matching logs</td>
+    </tr>
+    <tr>
+      <td><span class="k">Infra Operations</span></td>
+      <td>Routine maintenance/ops, some destructive — fenced with guardrails.</td>
+      <td><code>&lt;resource&gt;-orphans</code>, <code>dependency-management</code>, <code>cost-investigation</code></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Product Verification — worth an engineer-week</h3>
+
+<blockquote>Verification skills are extremely useful… It can be worth having an engineer spend a week just making your verification skills excellent.</blockquote>
+
+<p>The reason verification pays off: it closes the loop between "the model wrote code" and "the code actually works." Two techniques carry most of the weight — have Claude <strong>record a video</strong> of its output to inspect, and enforce <strong>programmatic assertions on state at each step</strong> rather than trusting a final glance.</p>
+
+<figure class="diagram">
+  <div class="dtitle">signup-flow-driver — assert at every step</div>
+  <div class="row grow">
+    <div class="node accent"><div class="nh">Signup</div><div class="ns">headless browser</div></div>
+    <div class="arrow">→</div>
+    <div class="node accent"><div class="nh">Email verify</div><div class="ns">assert token state</div></div>
+    <div class="arrow">→</div>
+    <div class="node accent"><div class="nh">Onboarding</div><div class="ns">assert user record</div></div>
+    <div class="arrow">→</div>
+    <div class="node ok"><div class="nh">✓ Verified</div><div class="ns">state checks pass</div></div>
+  </div>
+  <figcaption><code>checkout-verifier</code> follows the same shape — drives checkout with Stripe test cards, then verifies the invoice lands in the right state.</figcaption>
+</figure>
+
+<h3>Data &amp; Query — encode the tribal knowledge</h3>
+
+<p>The value here is not SQL skill — it's the institutional answer to "which events do I join, and what's the canonical key." A good data skill carries datasource UIDs, cluster names, and the table that holds the real <code>user_id</code>, so the model stops guessing.</p>
+
+<div class="twocol">
+  <div class="vs a">
+    <h4><code>funnel-query</code></h4>
+    <p class="muted" style="font-size:13.5px;margin:0">Knows which events to join to see signup → activation → paid, and the table with the canonical <code>user_id</code>.</p>
+  </div>
+  <div class="vs b">
+    <h4><code>cohort-compare</code></h4>
+    <p class="muted" style="font-size:13.5px;margin:0">Compares two cohorts' retention / conversion and flags statistically significant deltas.</p>
+  </div>
+</div>
+
+<h3>Infra Operations — destructive, but fenced</h3>
+
+<figure class="diagram">
+  <div class="dtitle">&lt;resource&gt;-orphans — guardrails around a destructive op</div>
+  <div class="row grow">
+    <div class="node"><div class="nh">Find orphans</div><div class="ns">pods / volumes</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="nh">Post to Slack</div><div class="ns">visibility</div></div>
+    <div class="arrow">→</div>
+    <div class="node warn"><div class="nh">Soak period</div><div class="ns">wait before acting</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="nh">User confirms</div><div class="ns">human gate</div></div>
+    <div class="arrow">→</div>
+    <div class="node warn"><div class="nh">Cascade cleanup</div><div class="ns">delete</div></div>
+  </div>
+  <figcaption>Companions: <code>cost-investigation</code> ("why did our storage/egress bill spike") and <code>dependency-management</code>.</figcaption>
+</figure>
+
+<h2>Tips for making good skills</h2>
+
+<div class="steps">
+  <div class="step"><b>Don't state the obvious.</b> Claude Code already knows a lot about your codebase and about coding in general. Restating it just burns context. Spend the words on what the model <em>can't</em> infer.</div>
+  <div class="step"><b>The description IS the trigger.</b> "The field is not a summary — it's a description of <em>when</em> to trigger this skill." Write it as a routing signal, not a blurb.</div>
+  <div class="step"><b>Skills can hold memory.</b> Append-only text log, JSON, or SQLite. <code>standup-post</code> keeps a <code>standups.log</code>, so the next run reads its own history and reports only the delta. Caveat: data in the skill dir may be wiped on upgrade — store in a stable folder. Today Claude Code provides <code>${CLAUDE_PLUGIN_DATA}</code> per plugin.</div>
+  <div class="step"><b>Store scripts &amp; generate code.</b> "One of the most powerful tools you can give Claude is code." Hand it scripts/libraries and it spends turns on <em>composition</em> — deciding what to do — instead of rebuilding boilerplate.</div>
+  <div class="step"><b>Use on-demand hooks.</b> A skill can ship hooks that activate only when that skill is called, so you get the behavior without it weighing on every session.</div>
+</div>
+
+<figure class="diagram">
+  <div class="dtitle">Why giving Claude code beats making it reconstruct it</div>
+  <div class="twocol" style="margin:0">
+    <div class="vs bad">
+      <h4>Without helper scripts</h4>
+      <p class="muted" style="font-size:13.5px;margin:0">Every "What happened on Tuesday?" → re-derive how to fetch data, rebuild boilerplate, hope it's right.</p>
+    </div>
+    <div class="vs good">
+      <h4>With a data-science skill</h4>
+      <p class="muted" style="font-size:13.5px;margin:0">Helper functions to fetch data already exist → Claude writes a short script on the fly and spends its turns on the actual question.</p>
+    </div>
+  </div>
+  <figcaption>Code shifts the model's effort from reconstruction to composition.</figcaption>
+</figure>
+
+<h2>Sharing &amp; distribution</h2>
+
+<p>For a small team across a few repos, just check skills into the repos — it works. But there's a hidden cost: <strong>every checked-in skill adds a little to the model's context.</strong> At scale that tax compounds, which is where a marketplace earns its keep.</p>
+
+<figure class="diagram">
+  <div class="dtitle">From repo check-in to internal marketplace</div>
+  <div class="row grow">
+    <div class="node ok"><div class="nh">Small team</div><div class="ns">check skills into repos</div></div>
+    <div class="arrow">→</div>
+    <div class="node warn"><div class="nh">At scale</div><div class="ns">context tax compounds</div></div>
+    <div class="arrow">→</div>
+    <div class="node accent2"><div class="nh">Plugin marketplace</div><div class="ns">team chooses what to install</div></div>
+  </div>
+  <figcaption>An internal marketplace lets the team decide which skills to install rather than carrying all of them everywhere.</figcaption>
+</figure>
+
+<p>How they manage it: no centralized gatekeeper team. Useful skills surface <strong>organically</strong> — upload to a sandbox folder in GitHub, point people to it in Slack, and once a skill gets traction the owner PRs it into the marketplace.</p>
+
+<div class="callout">
+  <h4>The catch</h4>
+  <p>It's easy to create bad or redundant skills. Organic discovery only works if it's paired with curation — otherwise the marketplace fills with noise and the context tax returns through the back door.</p>
+</div>
+
+<hr class="soft">
+
+<p class="src"><strong>Source:</strong> Thariq (@trq212, Anthropic / Claude Code), <a href="https://x.com/trq212/status/2033949937936085378" target="_blank" rel="noopener">"Lessons from Building Claude Code: How We Use Skills"</a> (X article, Mar 17 2026). Example skill names and tips are from the article. Part of Thariq's "Lessons from Building Claude Code" series. Related: <a href="seeing-like-an-agent.html">Seeing Like an Agent</a>, <a href="build-claude-subagents.html">How to Build Claude Subagents</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-27 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>

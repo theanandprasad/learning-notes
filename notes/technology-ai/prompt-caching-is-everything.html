@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Caching Is Everything (Lessons from Building Claude Code)</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../../index.html">← All learning notes</a>
+
+<header class="post">
+  <h1>Prompt Caching Is Everything (Lessons from Building Claude Code)</h1>
+  <div class="meta">
+    By <strong>Thariq</strong> (@trq212, Anthropic) <span class="dot">•</span> Published Feb 20, 2026 <span class="dot">•</span> Saved Jun 27, 2026
+  </div>
+  <div class="tags">
+    <span class="tag">Claude Code</span>
+    <span class="tag">Prompt Caching</span>
+    <span class="tag">Latency &amp; Cost</span>
+    <span class="tag">Agent Harness</span>
+  </div>
+</header>
+
+<p class="lede">There's an old saying in engineering: cache is everything. For long-running agents, it's not a metaphor — it's the load-bearing wall. Claude Code is built around prompt caching, top to bottom.</p>
+
+<div class="callout key">
+  <h4>The thesis</h4>
+  <p><strong>"Cache is everything"</strong> in engineering — and the same holds for agents. Long-running agentic products like Claude Code are made feasible by <strong>prompt caching</strong>: reusing computation from previous roundtrips to cut latency and cost. Claude Code builds its <strong>entire harness around prompt caching</strong> — a high cache hit rate lowers cost and funds more generous rate limits, so the team <strong>runs alerts on the cache hit rate and declares SEVs (incidents) when it drops too low.</strong></p>
+</div>
+
+<p>An agent makes many roundtrips to the model over a single task. Each roundtrip resends the entire conversation so far — system prompt, tool definitions, every prior message and tool result. Without caching, the model re-processes all of it from scratch every single turn. With caching, the model reuses the work it already did on the unchanged part of the request. For a 50-turn coding session, that's the difference between viable and unaffordable.</p>
+
+<h2>The core mechanic: prefix matching</h2>
+
+<p>Prompt caching works by <strong>prefix matching</strong>. The API caches everything from the start of the request up to each <code>cache_control</code> breakpoint. On the next request, if the prefix is byte-for-byte identical, the cached computation is reused — and you only pay full price for what comes after the last match.</p>
+
+<p>This has one overwhelming consequence: <strong>order matters enormously</strong>. Put the most <strong>stable</strong> content first and the most <strong>dynamic</strong> content last. Anything that changes invalidates the cache for everything after it.</p>
+
+<figure class="diagram">
+  <div class="dtitle">A request is a prefix — stable first, dynamic last</div>
+  <div class="row grow">
+    <div class="node accent2"><div class="nh">Tools</div><div class="ns">tool definitions — most stable</div></div>
+    <div class="arrow">→</div>
+    <div class="node accent2"><div class="nh">System prompt</div><div class="ns">instructions, persona</div></div>
+    <div class="arrow">→</div>
+    <div class="node accent"><div class="nh">Conversation</div><div class="ns">messages &amp; tool results</div></div>
+    <div class="arrow">→</div>
+    <div class="node warn"><div class="nh">Latest turn</div><div class="ns">most dynamic</div></div>
+  </div>
+  <div class="legend">Cache hit = everything up to the first change is reused. Cost is only paid past that point.</div>
+  <figcaption>The cache matches a prefix from the left. Mutate something early, and you forfeit the cache for everything to its right.</figcaption>
+</figure>
+
+<p>The non-obvious part: <strong>tools are part of the cached prefix</strong>. They sit at the very front of the request, ahead of the system prompt and the conversation. So <strong>adding or removing a single tool invalidates the cache for the entire conversation</strong> — even a 40-turn one. This is the trap most agent builders walk into, and it reframes how you should design state changes.</p>
+
+<figure class="diagram">
+  <div class="dtitle">One tool change wipes the whole prefix</div>
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Remove a tool mid-conversation</h4>
+      <div class="col">
+        <div class="node warn"><div class="nh">Tool set changes</div><div class="ns">prefix no longer matches</div></div>
+        <div class="arrow">↓</div>
+        <div class="node warn"><div class="nh">Cache invalidated</div><div class="ns">entire conversation reprocessed</div></div>
+      </div>
+    </div>
+    <div class="vs good">
+      <h4>Keep tools fixed, change a message</h4>
+      <div class="col">
+        <div class="node ok"><div class="nh">Tools unchanged</div><div class="ns">prefix still matches</div></div>
+        <div class="arrow">↓</div>
+        <div class="node ok"><div class="nh">Cache hit</div><div class="ns">only new message is processed</div></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>The fix for almost every "I need to change the agent's behavior" problem: don't touch the prefix — append to the messages.</figcaption>
+</figure>
+
+<h2>Design example 1: Plan Mode — design around the cache</h2>
+
+<p>Plan Mode is a feature where Claude Code explores the codebase and proposes a plan without editing files. The <strong>intuitive</strong> implementation: when the user enters plan mode, swap the tool set to only read-only tools. That feels clean — and it breaks the cache. Changing the tool list invalidates the prefix, so every plan-mode toggle reprocesses the whole conversation.</p>
+
+<div class="twocol">
+  <div class="vs bad">
+    <h4>The intuitive (wrong) way</h4>
+    <p class="muted" style="margin:0">On entering plan mode, replace the tool set with read-only tools. Clean mental model — but it mutates the prefix and <strong>breaks the cache</strong> on every toggle.</p>
+  </div>
+  <div class="vs good">
+    <h4>The cache-safe way</h4>
+    <p class="muted" style="margin:0">Keep <strong>all tools</strong> in the request at all times. Model plan mode as tools: <code>EnterPlanMode</code> / <code>ExitPlanMode</code>. Toggling injects a <strong>system message</strong>, not a tool change.</p>
+  </div>
+</div>
+
+<p>The cache-safe design keeps every tool in the request at all times and models plan mode as <em>tools</em>: <code>EnterPlanMode</code> and <code>ExitPlanMode</code>. Toggling plan mode just injects a <strong>system message</strong> into the conversation — "you're in plan mode: explore the codebase, don't edit files, call <code>ExitPlanMode</code> when the plan is complete." The tool definitions never change, so the prefix stays intact and the cache holds.</p>
+
+<figure class="diagram">
+  <div class="dtitle">Plan mode as a message, not a tool swap</div>
+  <div class="row grow">
+    <div class="node accent2"><div class="nh">Full tool set</div><div class="ns">always present — incl. EnterPlanMode / ExitPlanMode</div></div>
+    <div class="arrow">→</div>
+    <div class="node accent"><div class="nh">Inject system message</div><div class="ns">"you're in plan mode — don't edit files"</div></div>
+    <div class="arrow">→</div>
+    <div class="node ok"><div class="nh">Cache preserved</div><div class="ns">prefix untouched</div></div>
+  </div>
+  <figcaption>State transitions live in the message stream, where they cost nothing in cache. The tool prefix is frozen.</figcaption>
+</figure>
+
+<p><strong>The bonus.</strong> Because <code>EnterPlanMode</code> is a tool the model can call itself, <strong>Claude can autonomously enter plan mode</strong> when it detects a hard problem — pausing to think and plan before acting — <strong>with no cache break.</strong> Modeling state as a tool didn't just protect the cache; it handed the capability to the model.</p>
+
+<h2>Design example 2: Tool Search — defer instead of remove</h2>
+
+<p>The same principle generalizes. As an agent gains tools, you might be tempted to trim the tool list down to only what's relevant for the current task — removing the rest to keep the model focused. But removing tools <strong>breaks the prefix</strong>, exactly like the naive plan-mode design.</p>
+
+<p>The fix is <strong>Tool Search</strong>: rather than removing tools, <strong>defer tool loading</strong>. The tools that aren't needed yet are loaded lazily on demand instead of being stripped out, so the cached prefix stays intact. You get the focus benefit without paying the cache-invalidation cost.</p>
+
+<div class="twocol">
+  <div class="vs bad">
+    <h4>Remove unused tools</h4>
+    <p class="muted" style="margin:0">Trims the prompt — but every removal rewrites the prefix and <strong>invalidates the cache</strong>.</p>
+  </div>
+  <div class="vs good">
+    <h4>Defer tool loading</h4>
+    <p class="muted" style="margin:0">Load tools lazily when needed. The prefix is never mutated, so the <strong>cache survives</strong>.</p>
+  </div>
+</div>
+
+<h2>Lessons learned</h2>
+
+<p>The whole approach distills into five rules. Each is a direct consequence of the prefix-matching mechanic.</p>
+
+<div class="steps">
+  <div class="step"><b>Prompt caching is a prefix match.</b> Any change anywhere in the prefix invalidates everything after it. Design your whole system around this constraint — get the ordering right (stable first, dynamic last) and most caching works for free.</div>
+  <div class="step"><b>Use messages, not system-prompt changes.</b> Tempted to edit the system prompt — to enter plan mode, change the date, and so on? Insert these into <strong>messages</strong> during the conversation instead. The system prompt is part of the prefix; the tail of the message stream is not.</div>
+  <div class="step"><b>Don't change tools or models mid-conversation.</b> Use tools to model state transitions (like plan mode) rather than changing the tool set; defer tool loading instead of removing tools. Switching models mid-conversation invalidates the cache for the same reason.</div>
+  <div class="step"><b>Monitor your cache hit rate like uptime.</b> Alert on cache breaks and treat them as incidents — a few percentage points of cache-miss rate can dramatically affect cost and latency. Claude Code declares SEVs when the hit rate drops.</div>
+  <div class="step"><b>Fork operations must share the parent's prefix.</b> For a side computation — compaction, summarization, skill execution — use identical cache-safe parameters so you still get cache hits on the parent's prefix, rather than starting a cold, uncached request.</div>
+</div>
+
+<blockquote>Claude Code is built around prompt caching from day one — you should do the same if you're building an agent.</blockquote>
+
+<hr class="soft">
+
+<p class="src"><strong>Source:</strong> Thariq (@trq212, Anthropic / Claude Code), <a href="https://x.com/trq212/status/2024574133011673516" target="_blank" rel="noopener">"Lessons from Building Claude Code: Prompt Caching Is Everything"</a> (X article, Feb 20 2026). The mechanics and lessons are from the article; it also references @RLanceMartin's piece on prompt caching and Anthropic's auto-caching launch. Part of Thariq's "Lessons from Building Claude Code" series. Related: <a href="seeing-like-an-agent.html">Seeing Like an Agent</a>, <a href="context-management-in-agent-harnesses.html">Context Management in Agent Harnesses</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>.</p>
+
+<div class="footer">Captured into Learning Notes · 2026-06-27 · <a href="../../index.html">Back to index</a></div>
+
+</div>
+</body>
+</html>
