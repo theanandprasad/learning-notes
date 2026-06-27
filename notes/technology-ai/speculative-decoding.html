@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speculative Decoding: 2-3x Faster LLM Inference</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Speculative Decoding: 2-3x Faster LLM Inference</h1>
+    <div class="meta">
+      <span>By <strong>Avi Chawla</strong> (@_avichawla)</span>
+      <span class="dot">•</span>
+      <span>Published May 14, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 26, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Inference</span>
+      <span class="tag">Speculative Decoding</span>
+      <span class="tag">LLM Optimization</span>
+      <span class="tag">EAGLE/Medusa</span>
+    </div>
+  </header>
+
+  <p class="lede">A small model guesses several tokens ahead; the large model checks them all in a single pass. Correct guesses are free. The output is mathematically identical to running the large model alone — you just got there 2-3x faster.</p>
+
+  <div class="callout key">
+    <h4>Key idea</h4>
+    <p>Google uses speculative decoding in AI Overviews to serve 1B+ Search users; Anthropic, Meta, and most major inference providers use it to cut latency at scale. The result is <strong>2-3x more tokens/sec with mathematically identical outputs</strong>. The trick is borrowed from CPU architecture (speculative execution): a small <em>draft</em> model proposes several tokens ahead, the large model <em>verifies</em> them all in one forward pass, and the correct predictions — typically <strong>60-80% of tokens</strong> — get accepted at the inference cost of the small model.</p>
+  </div>
+
+  <h2>The problem: decoding is memory-bound</h2>
+  <p>A 70B-parameter model in FP16 needs roughly <strong>140 GB</strong> of GPU memory just to hold its weights. During the decode phase, generation is autoregressive: <strong>every single token</strong> requires a full forward pass through all 70B parameters, which means reading the entire set of weights out of memory.</p>
+  <p>On an H100 with <strong>3.35 TB/s</strong> of memory bandwidth, just moving those weights takes about <strong>42 ms</strong> to produce one token. The GPU's compute units sit mostly idle — the bottleneck is memory, not math. Worse, the token you spent all that bandwidth on is often a common, predictable word like "the", "is", or "of" that a 0.5B model could have gotten right.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Why one token costs 42 ms on an H100</div>
+    <div class="row grow">
+      <div class="node warn"><div class="nh">70B model · FP16</div><div class="ns">≈ 140 GB of weights in GPU memory</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">Read all weights</div><div class="ns">every token = one full pass over 70B params</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">3.35 TB/s bandwidth</div><div class="ns">≈ 42 ms just to move the weights</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">1 token out</div><div class="ns">often "the" / "is" / "of"</div></div>
+    </div>
+    <figcaption>Decode is bandwidth-limited: the cost is moving weights, not computing. Compute units stay idle.</figcaption>
+  </figure>
+
+  <h2>How it works</h2>
+  <p>The insight: verifying a guess is cheap, because a single forward pass can score <em>many</em> token positions at once. So let a tiny model do the sequential guessing, and let the big model do one batched check.</p>
+
+  <div class="steps">
+    <div class="step"><b>1 · Draft.</b> A small model (e.g. Qwen2.5 0.5B, roughly 100x smaller than the target) generates <b>5 candidate tokens</b> autoregressively. Each draft step costs only about <b>1-2% of one large forward pass</b>.</div>
+    <div class="step"><b>2 · Verify in one pass.</b> The large model (e.g. Qwen2.5 7B) processes all 5 candidates in a <b>single forward pass</b>, computing its own distribution at every position simultaneously.</div>
+    <div class="step"><b>3 · Walk &amp; accept.</b> Verification steps through the draft tokens in order. Suppose the large model agrees on tokens 1, 2, 3 but disagrees at token 4: tokens 1-3 are <b>accepted</b>, token 4 is <b>replaced</b> with the large model's own prediction (already computed in this pass), and token 5 is <b>discarded</b>.</div>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Accept / reject on one verification pass</div>
+    <div class="row">
+      <div class="node ok"><div class="nh">tok 1 ✓</div><div class="ns">agree → accept</div></div>
+      <div class="node ok"><div class="nh">tok 2 ✓</div><div class="ns">agree → accept</div></div>
+      <div class="node ok"><div class="nh">tok 3 ✓</div><div class="ns">agree → accept</div></div>
+      <div class="node warn"><div class="nh">tok 4 ✗</div><div class="ns">disagree → replace with large model's own token</div></div>
+      <div class="node"><div class="nh">tok 5 —</div><div class="ns">discarded</div></div>
+    </div>
+    <figcaption>Result here: 3 drafted tokens accepted + 1 corrected token = 4 tokens from a single large forward pass.</figcaption>
+  </figure>
+
+  <div class="twocol">
+    <div class="vs good">
+      <h4>Best case</h4>
+      <p>All 5 drafted tokens accepted, <strong>plus 1 bonus token</strong> (the large model's free prediction at the next position) = <strong>6 tokens from one large forward pass</strong>.</p>
+    </div>
+    <div class="vs bad">
+      <h4>Worst case</h4>
+      <p>All 5 rejected — but you still get <strong>1 token</strong>, same as standard decoding. Rare, and only marginally more expensive than the baseline.</p>
+    </div>
+  </div>
+
+  <p>Why does this actually save time? Verification is <strong>structurally identical to prefill</strong>: many tokens scored together in parallel. That saturates the GPU's compute units instead of leaving them idle waiting on memory. And crucially, the output is <strong>mathematically identical</strong> to plain decoding because the accept/reject step is a proper rejection-sampling check — not a fuzzy "looks right enough" heuristic.</p>
+
+  <blockquote>Correct predictions get accepted at the inference cost of the small model.</blockquote>
+
+  <h2>The variants</h2>
+  <p>The core loop is always draft-then-verify. What changes across variants is <em>how the draft is produced</em> — and that determines acceptance rate, memory cost, and speedup.</p>
+
+  <div class="scroll">
+  <table>
+    <thead>
+      <tr><th>Variant</th><th>Mechanism</th><th>Notes / speedup</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="k">Separate draft model</span></td>
+        <td>The baseline two-model setup: a small model from the same family drafts, the large model verifies.</td>
+        <td>Needs a matched small model from the same family for best speedups; costs extra GPU memory for the drafter.</td>
+      </tr>
+      <tr>
+        <td><span class="k">EAGLE</span></td>
+        <td>Replaces the separate drafter with a lightweight head (&lt;1B params) trained on top of the large model. Takes the hidden state from the <em>second-to-last layer</em> (rich semantic info) and predicts the next token without running the full model.</td>
+        <td>A shortcut through just the EAGLE head — no separate model to host.</td>
+      </tr>
+      <tr>
+        <td><span class="k">Medusa</span></td>
+        <td>Multiple heads, each predicting a position ahead (head 2 → two ahead, head 3 → three ahead…), all run in parallel in one forward pass → predictions for the next ~5 positions at once.</td>
+        <td>Heads are independent (head 2 doesn't see head 1's output), so candidates can be inconsistent → <strong>lower acceptance than EAGLE</strong>. Upside: no separate model or extra memory; heads are tiny (a few linear layers).</td>
+      </tr>
+      <tr>
+        <td><span class="k">Self-speculative / early-exit</span></td>
+        <td>Run only the first N layers and exit early with a prediction, K times → K draft tokens. The full model (all 80 layers) then verifies all K in one pass. Easy tokens get accepted from the early layers; harder ones rejected.</td>
+        <td>More modest: <strong>1.3-1.8x</strong>, since the drafter is the same large model run partially.</td>
+      </tr>
+      <tr>
+        <td><span class="k">Diffusion-based drafting</span></td>
+        <td>All the above drafters are still autoregressive (sequential). A diffusion drafter starts from a block of random noise tokens and refines them <em>all in parallel</em> → generates e.g. 16 tokens in one pass instead of 16 sequential steps. Drafting cost no longer scales with the number of proposed tokens.</td>
+        <td><strong>DFlash</strong> makes it practical: instead of a standalone diffusion model, it trains a small diffusion head conditioned on the target model's hidden states (like EAGLE), generating the whole draft block in parallel. Verification is unchanged.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Where each variant produces the draft</div>
+    <div class="row grow">
+      <div class="node accent2"><div class="nh">Separate model</div><div class="ns">small model from same family drafts</div></div>
+      <div class="node accent"><div class="nh">EAGLE</div><div class="ns">one head on the 2nd-to-last hidden state</div></div>
+      <div class="node purple"><div class="nh">Medusa</div><div class="ns">many parallel heads, one per position</div></div>
+      <div class="node"><div class="nh">Early-exit</div><div class="ns">first N layers, K times</div></div>
+      <div class="node ok"><div class="nh">Diffusion / DFlash</div><div class="ns">whole block refined in parallel</div></div>
+    </div>
+    <figcaption>The verifier is the same large model in every case — only the drafting path differs.</figcaption>
+  </figure>
+
+  <h2>Cross-tokenizer pairing (UAG)</h2>
+  <p><strong>Universal Assisted Generation (UAG)</strong> pairs any two models regardless of tokenizer, by matching sequences — for example a Qwen small model drafting for a Gemma large model. The convenience has a cost: same-tokenizer pairs give better speedups because the native path skips re-encoding.</p>
+
+  <div class="twocol">
+    <div class="vs a">
+      <h4>Same tokenizer (native path)</h4>
+      <p><strong>1.5-3x</strong> speedup. Drafted tokens flow straight into the verifier — no re-encoding between models.</p>
+    </div>
+    <div class="vs b">
+      <h4>Cross tokenizer (UAG path)</h4>
+      <p><strong>1.5-1.9x</strong> speedup. Sequence matching bridges the two vocabularies, but adds re-encoding overhead.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h4>A subtle gotcha</h4>
+    <p>Even Instruct variants in the <em>same</em> family — e.g. <code>Qwen2.5-7B-Instruct</code> + <code>Qwen2.5-0.5B-Instruct</code> — can silently trigger the slower UAG path. Transformers compares tokenizer <em>configs</em> including chat templates, not just the vocabulary, so a chat-template mismatch is enough to kick you off the native route. Using the <strong>base models</strong> keeps you on the faster native path.</p>
+  </div>
+
+  <h2>Production tradeoffs</h2>
+  <p>The central tuning tension: a <strong>larger draft model improves the acceptance rate</strong> (its guesses agree with the big model more often) but <strong>increases drafting latency</strong> (each guess costs more). The sweet spot depends on the workload, and finding it is the main knob you tune in deployment.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The drafter-size tradeoff</div>
+    <div class="row grow">
+      <div class="node"><div class="nh">Tiny drafter</div><div class="ns">cheap guesses, lower acceptance → more wasted passes</div></div>
+      <div class="arrow">⇄</div>
+      <div class="node accent"><div class="nh">Right-sized drafter</div><div class="ns">balance acceptance vs draft cost</div></div>
+      <div class="arrow">⇄</div>
+      <div class="node warn"><div class="nh">Large drafter</div><div class="ns">high acceptance, but slow to draft</div></div>
+    </div>
+    <figcaption>Push the drafter bigger and acceptance climbs; push it too big and drafting itself becomes the bottleneck.</figcaption>
+  </figure>
+
+  <h2>Standard vs speculative decoding</h2>
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Standard decoding</h4>
+      <ul>
+        <li>One full forward pass through the large model <strong>per token</strong>.</li>
+        <li>Memory-bound: ~42 ms per token just to move 140 GB of weights on an H100.</li>
+        <li>Compute units mostly idle, waiting on memory bandwidth.</li>
+        <li>Pays full price even for trivially predictable words.</li>
+      </ul>
+    </div>
+    <div class="vs good">
+      <h4>Speculative decoding</h4>
+      <ul>
+        <li>Small model drafts several tokens; large model verifies them in <strong>one pass</strong>.</li>
+        <li>60-80% of tokens accepted at the small model's cost.</li>
+        <li>Verification looks like prefill → compute units saturated.</li>
+        <li><strong>2-3x</strong> tokens/sec, <strong>mathematically identical</strong> output.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="soft">
+
+  <p class="src"><strong>Source:</strong> Avi Chawla (@_avichawla), <a href="https://x.com/_avichawla/status/2054860740541207032" target="_blank" rel="noopener">"How to get 2-3x faster LLM inference with speculative decoding"</a> (X article, May 14 2026). A technical explainer; figures and speedup ranges are as stated in the article. Related: <a href="llms-are-not-brains.html">LLMs Are Not Brains</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-26 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

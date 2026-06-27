@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompts That Rewrite Themselves</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Prompts That Rewrite Themselves</h1>
+    <div class="meta">
+      By <strong>Hanako</strong> (@hanakoxbt)
+      <span class="dot">•</span> Published Jun 19, 2026
+      <span class="dot">•</span> Saved Jun 26, 2026
+    </div>
+    <div class="tags">
+      <span class="tag">Prompt Engineering</span>
+      <span class="tag">Self-Improving Systems</span>
+      <span class="tag">Claude</span>
+      <span class="tag">Evaluator-Apprentice</span>
+    </div>
+  </header>
+
+  <p class="lede">One of Anthropic's clients got 2,740 applications for a single role in 24 hours. No hand-written prompt stays right that long — so stop writing it once and start building a system that rewrites it for you.</p>
+
+  <div class="callout key">
+    <h4>The key idea</h4>
+    <p>A recruiter starts with a prompt: <em>"five years of backend, startup background, strong Python."</em> Two days in, after the first batch, they realize they actually want zero-to-one builders. The prompt is already wrong before they've read the second hundred. The teams shipping fastest don't hand-tune words — they build systems where <strong>the prompt watches what the user actually decides and rewrites itself in the background</strong>. By the time the user notices their preferences have shifted, the prompt has already shifted with them. This works anywhere a human makes judgment calls and the model helps: recruiting, support triage, content moderation, code review, deal scoring.</p>
+  </div>
+
+  <h2>Why a fixed prompt rots</h2>
+  <p>The problem isn't that your first prompt is bad. It's that the world it describes moves faster than you can re-type. When 2,740 applications land in a day, the recruiter's taste is being refined every few minutes — but the prompt that filters those applications is frozen at whatever you wrote on Monday morning. The gap between "what the prompt says" and "what the user is actually choosing" only widens.</p>
+  <p>Most teams treat the prompt as a deliverable they finish. The teams that ship the most treat it as a layer that's always learning. The rest of this note is the four-piece machine that makes that possible.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">Where fixed prompts break</div>
+    <div class="row grow">
+      <div class="node accent2"><div class="nh">Day 0</div><div class="ns">Prompt written: "5 yrs backend, startup, strong Python"</div></div>
+      <div class="arrow">→</div>
+      <div class="node warn"><div class="nh">Day 2</div><div class="ns">Recruiter now wants zero-to-one builders</div></div>
+      <div class="arrow">→</div>
+      <div class="node warn"><div class="nh">Day 2+</div><div class="ns">Prompt is already wrong — and nobody updated it</div></div>
+    </div>
+    <figcaption>Taste drifts within a single hiring cycle; a frozen prompt can't keep up.</figcaption>
+  </figure>
+
+  <h2>Piece 1 — Batch the learning, don't learn on every click</h2>
+  <p>The instinct is to update the prompt the moment a user makes a decision. Resist it. As one speaker, "Nick," put it on stage: you start spotting patterns every <strong>100 to 200 decisions</strong>, not on every click. One rejected CV is noise; a hundred of them is a signal.</p>
+  <p>There's a cost reason too. Running a smart model on every single action burns your budget by lunchtime. Running it on batches keeps the system alive in production. Batching is both more accurate and cheaper — the rare alignment where the right call is also the frugal one.</p>
+
+  <div class="callout">
+    <h4>Rule of thumb</h4>
+    <p>Patterns emerge around <strong>100–200 decisions</strong>. Below that, you're chasing noise. Pick a batch size and learn on the batch, never on the click.</p>
+  </div>
+
+  <h2>Piece 2 — Split into two layers, not one giant agent</h2>
+  <p>The tempting design is one giant agent that evaluates inputs, learns from decisions, and rewrites the prompt all at once. It doesn't scale and it burns tokens. The working pattern is two layers with very different jobs.</p>
+
+  <div class="twocol">
+    <div class="vs a">
+      <h4>The evaluator — bottom layer</h4>
+      <p><strong>Cheap, fast, runs on EVERY input.</strong> In the recruiting case that's <strong>Haiku</strong> scoring every CV against the current profile — thousands a day. Its job is narrow: take the input plus the current prompt, return a structured judgment. Nothing else.</p>
+    </div>
+    <div class="vs b">
+      <h4>The apprentice — top layer</h4>
+      <p><strong>Slower, smarter, runs RARELY.</strong> It watches only the decisions humans make. Every batch it asks one question: <em>does the prompt still match what the user is actually choosing?</em> If no, it rewrites it.</p>
+    </div>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">Two layers, two jobs</div>
+    <div class="row grow">
+      <div class="node accent2"><div class="nh">Evaluator (Haiku)</div><div class="ns">Runs on every input · scores CV vs current prompt · returns a structured judgment</div></div>
+      <div class="arrow">↑↓</div>
+      <div class="node purple"><div class="nh">Apprentice (frontier)</div><div class="ns">Runs every batch · reads human decisions · rewrites the prompt when it drifts</div></div>
+    </div>
+    <figcaption>Hot path stays cheap; the expensive thinking happens once per batch, not once per request.</figcaption>
+  </figure>
+
+  <p>Most teams skip the split. They put a frontier model in the hot path on every request, the bill explodes, and the system gets shelved before it proves itself.</p>
+  <blockquote>Splitting evaluation from learning is what keeps it alive in production.</blockquote>
+
+  <h2>Piece 3 — Write the prompt in prose, not in rules</h2>
+  <p>The engineer's instinct is a config: 30% weight on years of experience, 20 on company tier, 10 on education, a handful of keyword flags. It feels rigorous. It's a dead end. The model can't update it — there's nothing to update but numbers — and numbers don't capture <em>why</em> a recruiter said no.</p>
+  <p>The working format is plain-English markdown. Sentences the apprentice can actually edit:</p>
+
+  <div class="codeblk"><span class="lbl">The prompt — written as prose</span>We want someone who shipped a product from zero to one, ideally at a startup under fifty people.
+Strong engineering culture matters more than a specific tech stack.
+Red flag: only worked at companies bigger than a thousand people.</div>
+
+  <p>That's a prompt the apprentice can work with — add a sentence, remove one, tighten a phrase. You can't do any of that to a weighted scoring rubric. Prose is the only format that's both human-readable and machine-rewritable.</p>
+
+  <div class="twocol">
+    <div class="vs bad">
+      <h4>Config / rubric</h4>
+      <p>30% experience, 20% company tier, 10% education, keyword flags. Looks rigorous. Nothing to rewrite but numbers, and the numbers never explain the <em>why</em>.</p>
+    </div>
+    <div class="vs good">
+      <h4>Plain-English prose</h4>
+      <p>"Shipped zero to one at a startup under fifty." Captures intent and reasoning. The apprentice can add, cut, and tighten lines as taste moves.</p>
+    </div>
+  </div>
+
+  <h2>Piece 4 — The feedback loop is the whole product</h2>
+  <p>Once those three pieces are in place, the system runs on its own. The user never thinks about the prompt — they just keep making the calls only a human can make, and the prompt updates underneath them.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The self-rewriting loop</div>
+    <div class="row grow">
+      <div class="node accent"><div class="nh">1 · User decides</div><div class="ns">Recruiter accepts / rejects CVs</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">2 · Evaluator scores</div><div class="ns">Haiku rates each input against the current prompt</div></div>
+      <div class="arrow">→</div>
+      <div class="node purple"><div class="nh">3 · Apprentice rewrites</div><div class="ns">Every 100 decisions it reads the pile and updates the prompt</div></div>
+    </div>
+    <div class="arrow">↺ next batch is evaluated against the new version</div>
+    <figcaption>Decisions in, a sharper prompt out — and the cycle repeats without the user lifting a finger.</figcaption>
+  </figure>
+
+  <div class="steps">
+    <div class="step"><b>User makes decisions.</b> Real human judgment calls accumulate — the only signal that matters.</div>
+    <div class="step"><b>Evaluator scores against the current prompt.</b> Cheap and constant, on every input.</div>
+    <div class="step"><b>Every 100 decisions, the apprentice reads the pile and rewrites the prompt.</b> The expensive step, run rarely.</div>
+    <div class="step"><b>The next batch is evaluated against the new version.</b> The loop closes; the prompt stays current by construction.</div>
+  </div>
+
+  <p>Most teams treat the prompt as a deliverable they finish. The teams that ship the most treat it as a layer that's always learning. Build it that way from day one and you stop spending weeks tuning words — you spend them shipping the product.</p>
+
+  <hr class="soft">
+
+  <p class="src"><strong>Source:</strong> Hanako (@hanakoxbt), <a href="https://x.com/hanakoxbt/status/2067940044237688965" target="_blank" rel="noopener">"How to Make Claude's Prompt Update Itself After Every 100 User Decisions"</a> (X article, Jun 19 2026). The recruiting example and the 2,740-applications figure are from the article (the latter an Anthropic-client anecdote, as stated); "Nick" refers to a speaker the author cites. Ends with a Telegram channel CTA. Related: <a href="build-claude-subagents.html">How to Build Claude Subagents</a>, <a href="how-to-create-loops-with-claude.html">How to Create Loops with Claude</a>.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-26 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Claude Code Agent That Works in a Loop — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>A Claude Code Agent That Works in a Loop</h1>
+    <div class="meta">
+      <span>By <strong>darkzodchi</strong> (@zodchiii)</span>
+      <span class="dot">•</span>
+      <span>Published Jun 23, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jun 26, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Claude Code</span>
+      <span class="tag">Agentic Loops</span>
+      <span class="tag">Eval Gates</span>
+      <span class="tag">Reusable Setup</span>
+    </div>
+  </header>
+
+  <p class="lede">Without a loop, an agent hands you broken work and leaves you to check it and re-run it yourself. You become the loop — and it's exhausting.</p>
+
+  <div class="callout key">
+    <h4>The key idea</h4>
+    <p>Every self-fixing, self-optimizing, cost-cutting agent runs on the same pattern: <strong>do, check, repeat until done.</strong> Build that skeleton <em>once</em> and point it at anything — bugs, speed, cost. People write a separate "self-fixing agent," then a "self-optimizing agent," then another for cost, each from scratch. But they're all the same three moves: an agent does work, something measures whether it hit the goal, and a controller decides keep going or stop.</p>
+    <p style="margin-bottom:0">Get the skeleton right once and the specific job becomes a plug-in. <strong>Swap "run the tests" for "run the benchmark" and your bug-fixer becomes a speed-optimizer. The loop doesn't change, only the check does.</strong></p>
+  </div>
+
+  <h2>The three moves</h2>
+  <p>Strip away the names and every looping agent is just three things wired in a circle. The agent does work. A check measures it against the goal. A controller reads the check and decides: go around again, or stop. That circle is the entire design.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">The loop, in three moves</div>
+    <div class="row grow">
+      <div class="node accent"><div class="nh">1 · Do work</div><div class="ns">The agent makes a change toward the goal</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">2 · Check</div><div class="ns">Measure the result against the goal — tests, benchmark, lint</div></div>
+      <div class="arrow">→</div>
+      <div class="node purple"><div class="nh">3 · Controller decides</div><div class="ns">Met → stop with proof. Not met → loop</div></div>
+    </div>
+    <div class="arrowlbl" style="margin-top:14px">↺ &nbsp; not met → back to step 1</div>
+    <figcaption>Do → Check → Decide → repeat. The job changes; the skeleton never does.</figcaption>
+  </figure>
+
+  <h2>File 1 — the reusable loop command</h2>
+  <p>This is the skeleton: one slash command you write once and reuse forever. It lives at <code>.claude/commands/loop.md</code>. Notice it asks <em>you</em> what "done" means before it starts — that single question is the whole design.</p>
+
+  <div class="codeblk"><span class="lbl">.claude/commands/loop.md</span>---
+description: Work a task in a loop until a goal check passes
+argument-hint: &lt;task&gt;
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task
+model: sonnet
+---
+
+Work this task in a loop: $ARGUMENTS
+
+1. Establish the goal check. Ask me what "done" means if it
+   isn't obvious: tests green, benchmark under X, no lint errors.
+2. Do the work toward the goal.
+3. Run the goal check. Record the result.
+4. Met: stop and show me the result with proof.
+   Not met: use the check's output to decide the next change,
+   then go back to step 2.
+5. Cap at 5 cycles. Announce the cycle number each round.
+
+The check is the truth, not your opinion. Never declare done
+without running it. Never weaken the check to pass it.</div>
+
+  <div class="callout">
+    <h4>Where the design lives</h4>
+    <p style="margin:0">The whole thing is in step 1: <strong>the loop asks what "done" means, then runs that as the truth every cycle.</strong> Everything else — the work, the decision — hangs off that one anchor.</p>
+  </div>
+
+  <h2>File 2 — the pluggable check</h2>
+  <p>The loop is generic <em>because</em> the check is swappable. Keep your checks as tiny shell scripts in <code>.claude/checks/</code> and point the loop at whichever one matches the goal. A check is just something the agent <strong>runs</strong> and reads the output of.</p>
+
+  <div class="codeblk"><span class="lbl">.claude/checks/tests.sh</span>#!/usr/bin/env bash
+npm test --silent 2&gt;&amp;1 | tail -3</div>
+
+  <div class="codeblk"><span class="lbl">.claude/checks/speed.sh</span>#!/usr/bin/env bash
+node bench/run.mjs   # prints a median ms number</div>
+
+  <div class="codeblk"><span class="lbl">.claude/checks/lint.sh</span>#!/usr/bin/env bash
+npm run lint 2&gt;&amp;1 | tail -3</div>
+
+  <p>Same loop, three goals. <code>/loop fix the failing auth test</code> uses the test check; <code>/loop make the search 2x faster</code> points at the speed check. The skeleton never changes — you just tell it what "done" looks like.</p>
+
+  <figure class="diagram">
+    <div class="dtitle">One loop, many checks</div>
+    <div class="row">
+      <div class="node accent"><div class="nh">/loop</div><div class="ns">the one skeleton</div></div>
+    </div>
+    <div class="arrow" style="margin:10px 0">↓ &nbsp; pick a check</div>
+    <div class="row grow">
+      <div class="node ok"><div class="nh">tests.sh</div><div class="ns">→ bug-fixer</div></div>
+      <div class="node accent2"><div class="nh">speed.sh</div><div class="ns">→ speed-optimizer</div></div>
+      <div class="node purple"><div class="nh">lint.sh</div><div class="ns">→ style-cleaner</div></div>
+    </div>
+    <figcaption>One well-built loop beats five one-off ones. Each new goal is a 3-line shell script, not a new agent.</figcaption>
+  </figure>
+
+  <h2>File 3 — the stop rules</h2>
+  <p>A loop needs to know when to quit — both when it has won and when it's spinning. These rules go in <code>CLAUDE.md</code> so every run inherits them.</p>
+
+  <div class="codeblk"><span class="lbl">CLAUDE.md</span>## Loop stop rules
+
+Stop the loop when any of these is true:
+
+- The goal check passes. Stop, report success with the check output.
+- 5 cycles used. Stop, report what's left and what was tried.
+- The check result hasn't improved in two cycles. The agent is
+  stuck. Stop and show me, don't burn cycle 4 and 5 guessing.
+- A cycle makes the check worse than the cycle before. Something
+  is going backwards. Stop and surface it.
+
+Never report success without the check's output from the final cycle.
+Never edit the check itself to make it pass.</div>
+
+  <div class="callout key">
+    <h4>The rule that matters most</h4>
+    <p style="margin:0">"Hasn't improved in two cycles" is what <strong>separates real progress from spinning.</strong> That's a human's cue to step in — not the agent's licence to keep grinding through cycles 4 and 5 on a hunch.</p>
+  </div>
+
+  <h2>What you actually see</h2>
+  <p>Two real runs. Same skeleton, same stop rules, two completely different jobs — one fixes tests, one chases speed. Watch the check drive each decision.</p>
+
+  <div class="codeblk"><span class="lbl">Run A — /loop fix the failing checkout tests</span>cycle 1  →  3 failing  →  fixed null guard      →  1 failing
+cycle 2  →  1 failing  →  fixed rounding        →  ALL PASS
+done in 2 cycles.  proof: 12/12 green ✅</div>
+
+  <div class="codeblk"><span class="lbl">Run B — /loop make the report builder 2x faster</span>cycle 1  →  840ms  →  swapped loop for Map      →  410ms
+cycle 2  →  410ms  →  streamed the output       →  380ms  (gain &lt;10%)
+done in 2 cycles.  840ms → 380ms,  2.2x ⚡</div>
+
+  <blockquote>Same skeleton, same stop rules, two completely different jobs.</blockquote>
+
+  <h2>Common mistakes</h2>
+  <p>Four ways people break the loop — each one quietly turns it back into manual work.</p>
+
+  <div class="row grow" style="flex-direction:column">
+    <div class="node warn" style="text-align:left">
+      <div class="nh">No goal check</div>
+      <div class="ns">A loop without a concrete "done" runs on the agent's opinion — and the agent always thinks it's done. The check <em>is</em> the loop. No check, no loop.</div>
+    </div>
+    <div class="node warn" style="text-align:left">
+      <div class="nh">A check the agent can edit</div>
+      <div class="ns">It'll "pass" by weakening the test. The check must be something it <em>runs</em>, not something it can rewrite.</div>
+    </div>
+    <div class="node warn" style="text-align:left">
+      <div class="nh">No cap</div>
+      <div class="ns">A stuck loop burns tokens until you happen to notice. Five cycles, then stop.</div>
+    </div>
+    <div class="node warn" style="text-align:left">
+      <div class="nh">A new agent per goal</div>
+      <div class="ns">The whole point is one loop, many checks. Swap the check, keep the loop.</div>
+    </div>
+  </div>
+
+  <h2>The 10-minute setup</h2>
+  <p>Stand the whole thing up in one sitting. The trick at the end is to run it twice — once on each kind of goal — so you feel the skeleton stay still while the check changes.</p>
+
+  <div class="steps">
+    <div class="step"><b>3 min — Create the skeleton.</b> Drop the loop command into <code>.claude/commands/loop.md</code>.</div>
+    <div class="step"><b>3 min — Write the checks.</b> Add 2–3 scripts in <code>.claude/checks/</code> for the goals you hit most.</div>
+    <div class="step"><b>2 min — Add the stop rules.</b> Paste the loop stop rules into <code>CLAUDE.md</code>.</div>
+    <div class="step"><b>2 min — Run it twice.</b> Run <code>/loop</code> on a real task, then again on a totally different one with a different check.</div>
+  </div>
+
+  <blockquote>It didn't get smarter — you just stopped writing the same loop five times.</blockquote>
+
+  <hr class="soft">
+
+  <p class="src"><strong>Source:</strong> darkzodchi (@zodchiii), <a href="https://x.com/zodchiii/status/2069366611371241944" target="_blank" rel="noopener">"How to Build a Claude Code Agent That Works in a Loop (Exact Setup Inside)"</a> (X article, Jun 23 2026). The three config files and example run logs are reproduced from the article. Ends with a Telegram channel CTA. Related: <a href="how-to-create-loops-with-claude.html">How to Create Loops with Claude</a>, <a href="build-claude-subagents.html">How to Build Claude Subagents</a>, <a href="agent-looping.html">What is Agent Looping</a>.</p>
+
+  <div class="footer">Captured into Learning Notes · 2026-06-26 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
