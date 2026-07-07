@@ -142,6 +142,10 @@
   </figure>
 
   <h2>The meta-harness (Omnigent)</h2>
+  <div class="callout">
+    <h4>Concept — agents, harnesses, and a "meta-harness"</h4>
+    <p style="margin:0">A plain chatbot is one-shot: you ask, it answers. An <strong>agent</strong> instead runs in a loop — it reads context, calls a tool (read a file, run code, query an API), sees the result, and decides the next step, repeating until the task is done. The <strong>harness</strong> is the scaffolding around the model that makes that loop work: it defines the tools, executes the model's requested tool calls and feeds results back, and manages context and memory. The model <em>decides</em>; the harness <em>does</em> — Claude Code, Codex, and Cursor are harnesses driving a model. A <strong>meta-harness</strong>, then, is a layer <em>above</em> those harnesses so you can run and switch between them through one interface.</p>
+  </div>
   <p>Teams had built 5–6 near-identical internal agent frameworks, and everyone kept having to swap model + harness "every few months." An agent is also "useless if you can't share sessions, keep history, search, and collaborate" on top of it. <strong>Omnigent</strong> is the answer: an open-source <em>meta-harness</em> — a layer <em>above</em> individual coding agents (Claude Code, Codex, Cursor CLI, Antigravity) that makes them portable, secure, and collaborative.</p>
   <figure class="diagram">
     <div class="dtitle">One common API across every harness</div>
@@ -164,6 +168,10 @@
   </figure>
 
   <h2>Securing agents: contextual (stateful) policies</h2>
+  <div class="callout">
+    <h4>Concept — prompt injection (the threat this defends against)</h4>
+    <p style="margin:0"><strong>Prompt injection</strong> is the defining security flaw of LLM apps. A model has no reliable way to tell its <em>instructions</em> apart from the <em>data</em> it's reading — to it, both are just text in the same window. So attacker-controlled text hidden in that data can hijack it. <strong>Direct</strong> injection is a user typing "ignore your rules" (jailbreaking); the dangerous kind for agents is <strong>indirect</strong> injection, where the poison sits in content the agent fetches on its own — a web page, an email, a file, a tool result — and quietly tells it to, say, grab a secret and send it to an attacker's server. It's ranked the <strong>#1 risk in the OWASP LLM Top 10</strong> precisely because a tool-using agent can be talked into <em>acting</em> on the injected instruction (exfiltrating data, running destructive commands) within its own permissions. A recommended defense is to check each proposed action against the user's <em>original</em> intent — which is exactly what stateful policies enable.</p>
+  </div>
   <p>The security centerpiece. Most coding agents today allow/deny <em>per tool</em>, statically — which puts you in a bad spot, because individually-safe actions become dangerous in <em>combination</em>.</p>
   <figure class="diagram">
     <div class="dtitle">Static allow/deny vs contextual policies</div>
@@ -182,7 +190,13 @@
   <p>Because policies are stateful, one tracked state is <strong>$ spent per session</strong>. An agent once burned $500 reading log files; now you can say "launch a sub-agent, cap it at $5, ask me for more" and it pops up at the cap. Security ranks above cost for a cloud provider, but "token-maxing" matters when 100k engineers each add $1k/month.</p>
 
   <h2>The database split: OLTP, OLAP, and the pain of CDC</h2>
-  <p>"You cannot vibe-code with just markdown files" — once an app is serious, it needs a database. The world of databases splits in two:</p>
+  <p>"You cannot vibe-code with just markdown files" — once an app is serious, it needs a database. But no single database is great at everything, so the field split long ago into two camps tuned for opposite jobs.</p>
+  <div class="callout">
+    <h4>Concept — OLTP vs OLAP, and why data is stored two ways</h4>
+    <p style="margin:0 0 8px"><strong>OLTP</strong> (Online Transaction Processing) is the <em>live</em> database behind an app. It handles a flood of tiny, concurrent operations that each touch a few rows — place an order, update a balance — and is tuned for millisecond reads/writes and strong consistency so you never lose or corrupt data. Postgres, MySQL, and Oracle are OLTP databases; every serious app has one.</p>
+    <p style="margin:0 0 8px"><strong>OLAP</strong> (Online Analytical Processing, aka "analytics") exists because those same systems are terrible at business questions like <em>"revenue by store, per month, over three years."</em> Such a query scans millions of rows and does heavy aggregation; run on the live database it would both crawl <em>and</em> starve real customer traffic. So analytics gets its own system, tuned for a few big read-heavy scans instead of many small writes.</p>
+    <p style="margin:0"><strong>Why they can't be one system — physical layout.</strong> A <strong>row store</strong> (OLTP) keeps each record's fields together on disk, so grabbing or updating one whole row is a single local read — ideal for transactions. A <strong>column store</strong> (OLAP) keeps every value of a column together, so a query that sums two columns across millions of rows reads only those two columns instead of dragging every full row through memory — far less I/O, far faster scans. Columnar also compresses roughly <strong>5–10× better</strong> (a column holds one data type with lots of repetition, which encoders like dictionary and run-length compression love), which is why analytics data is stored column-oriented. The trade-off is symmetric: columnar makes single-row writes expensive, so row stores back OLTP and column stores back analytics.</p>
+  </div>
   <figure class="diagram">
     <div class="dtitle">Two halves of the database world</div>
     <div class="twocol">
@@ -196,12 +210,21 @@
       </div>
     </div>
   </figure>
-  <p>To bridge them, the industry standard is <strong>CDC (Change Data Capture)</strong> — read the DB's <em>bin log</em> (the delta of changes) and reconstruct state on the analytics side.</p>
+  <p>Because you now have two separate databases, you have to keep the analytics copy in sync with the live one — ideally continuously, not by re-dumping the whole table every night. That job is the source of the episode's biggest groan.</p>
+  <div class="callout">
+    <h4>Concept — CDC (Change Data Capture) and the write-ahead log</h4>
+    <p style="margin:0 0 8px"><strong>Change Data Capture</strong> is the standard way to stream a source database's row-level changes (inserts, updates, deletes) into downstream systems — a warehouse, a search index, a cache — incrementally, so they stay fresh without expensive full reloads. The clever trick it relies on: <em>every database already keeps a change journal.</em></p>
+    <p style="margin:0 0 8px">That journal is the <strong>write-ahead log</strong> — Postgres calls it the <strong>WAL</strong>, MySQL the <strong>binlog</strong>. The database writes each change into this append-only log <em>before</em> applying it to the actual data files (hence "write-ahead"), so that if it crashes mid-write it can replay the log on restart and lose nothing. It exists for durability and crash recovery — and it's also what powers replication (standby copies just re-apply the log).</p>
+    <p style="margin:0"><strong>Log-based CDC</strong> (e.g. the tool Debezium) simply tails that same log, turns each committed change into an event, and replays it into the target. It's efficient — it adds almost no load because it runs no extra queries — and it captures everything, including deletes, in commit order. But it's <em>fragile</em>: the log format isn't standardized and shifts across engine upgrades, and a <strong>schema change</strong> on the source can break the pipeline.</p>
+  </div>
   <blockquote>CDC is one of the most boring but most fundamental operations powering modern society — but it's so brittle we joke it should be called "continuous data corruption."</blockquote>
   <p>A schema change on the OLTP side breaks the pipeline; data engineers get woken at 3 a.m. ("everyone became a $5B company just doing CDC.")</p>
 
   <h2>HTAP → L-TAP: unify the storage, not the query engine</h2>
-  <p><strong>HTAP</strong> (hybrid transactional/analytical processing) is the database "holy grail" — a single engine for both workloads. But single-engine attempts are all compromises: you lose both the Postgres and Spark ecosystems, end up with a small proprietary API, and can't match either side's performance.</p>
+  <div class="callout">
+    <h4>Concept — HTAP, the "holy grail"</h4>
+    <p style="margin:0"><strong>HTAP</strong> (Hybrid Transactional/Analytical Processing — a term Gartner coined in 2014) is the long-sought dream of <em>one</em> database that serves both live transactions <em>and</em> analytics on the same fresh data. The appeal is obvious: no second system, no CDC pipeline, no lag — you can analyze data the instant it's written. The catch is that "great at fast small writes" and "great at big scans" pull the storage engine in opposite directions (recall row vs column above), so a single-engine HTAP system tends to <strong>compromise on both</strong> — and, as the Databricks folks add, you also give up the mature Postgres and Spark ecosystems for a smaller proprietary API you have to build from scratch.</p>
+  </div>
   <figure class="diagram">
     <div class="dtitle">HTAP vs L-TAP</div>
     <div class="twocol">
@@ -216,7 +239,13 @@
     </div>
     <figcaption>They explicitly do <em>not</em> collapse the query layer: agents are "very eloquent in Postgres SQL or Spark SQL" — one query language mattered for humans 5 years ago, not for agents, as long as the data is accessible.</figcaption>
   </figure>
-  <p>The mechanism — and the "what's the catch?" answer — is that L-TAP was "a tiny step" from the <strong>Lakebase</strong> architecture (separation of storage &amp; compute, largely from the <strong>Neon</strong> acquisition — Neon is a "serverless Postgres" company Databricks bought), which already writes row-oriented Postgres pages to the open lake:</p>
+  <p>Databricks's alternative rests on two background ideas worth knowing first.</p>
+  <div class="callout">
+    <h4>Concept — separation of storage &amp; compute, and open formats</h4>
+    <p style="margin:0 0 8px"><strong>Separation of storage and compute</strong> is the cloud-data pattern (pioneered by Snowflake) of keeping the data in cheap, shared <strong>object storage</strong> — Amazon S3 and its kind: virtually unlimited, highly durable, dirt-cheap file storage accessed over a simple HTTP API — while spinning processing power up and down <em>separately</em>. The point is independent scaling: store a petabyte cheaply and pay for compute only when a query actually runs, instead of the old model where storage and compute were bolted together and had to grow in lockstep. <strong>Lakebase</strong> applies this to Postgres (it came largely from Databricks' acquisition of <strong>Neon</strong>, a "serverless Postgres" company).</p>
+    <p style="margin:0"><strong>Open table formats</strong> are the other piece. Analytics data sits in the object store as <strong>Parquet</strong> files — an open, compressed, <em>columnar</em> file format. On top of those files, <strong>Delta Lake</strong> and <strong>Apache Iceberg</strong> are open <em>table</em> formats that add the guarantees a raw pile of files lacks: <strong>ACID transactions</strong> (no half-written/corrupt data), schema evolution, and "time travel" to past versions — via a metadata/transaction-log layer over the files. This is the "<strong>lakehouse</strong>" idea: cheap data-lake storage plus warehouse-grade guarantees on top. "Open" is the load-bearing word — no vendor owns the format, so many engines (Spark, Trino, DuckDB, even Snowflake) can read and write the <em>same</em> files, and your data isn't trapped in one product.</p>
+  </div>
+  <p>Now the mechanism — and the "what's the catch?" answer. L-TAP was "a tiny step" from the Lakebase architecture, which already writes row-oriented Postgres pages to that open lake:</p>
   <figure class="diagram">
     <div class="dtitle">The row→column trick that kills CDC</div>
     <div class="row" style="max-width:760px;align-items:center">
@@ -230,7 +259,11 @@
   </figure>
 
   <h2>Dream Engine: an ML "factory" for building a database</h2>
-  <p>Every analytics engine is ~a decade old — started narrow, then accreted hacks into "a gigantic pile." Rewriting from scratch risks <strong>second-system syndrome</strong> (your over-ambitious v2 dies). So instead of hand-picking algorithms from academic papers (which "look great on 70% of workloads, backfire on 30%"), they built a factory.</p>
+  <div class="callout">
+    <h4>Concept — what a database engine has to decide</h4>
+    <p style="margin:0">For any given query there are usually <em>many</em> ways to execute it — different algorithms and data structures (which join method, whether to build a hash table or sort, which index or scan). A database's <strong>query optimizer</strong> normally picks among them using hand-written rules and cost models. The best choice depends on the data and the query, and the choices genuinely trade off against each other — an algorithm that's fastest for a tiny low-latency lookup can be terrible for scanning petabytes. Dream Engine's bet is to replace that hand-tuned judgment with a <em>learned</em> one.</p>
+  </div>
+  <p>Every analytics engine is ~a decade old — started narrow, then accreted hacks into "a gigantic pile." Rewriting from scratch risks <strong>second-system syndrome</strong> (the classic trap where an engineer's over-ambitious second design collapses under its own scope). So instead of hand-picking algorithms from academic papers (which "look great on 70% of workloads, backfire on 30%"), they built a factory.</p>
   <figure class="diagram">
     <div class="dtitle">Traces → a model → dispatch the right algorithm</div>
     <div class="row" style="max-width:780px;align-items:center">
@@ -251,11 +284,15 @@
     <div class="step"><b>Ship incrementally; don't boil the ocean.</b> Products built "in weeks." First question to any team: "Who's the target customer — are you on a first-name basis, texting them?" Overfitting to 1–2 customers is fine (downside small, upside big); the real risk is being so ambitious you have <em>no</em> customer.</div>
     <div class="step"><b>Customizing models keeps getting easier.</b> Smarter base models → better traces → <strong>RL</strong> (learn from your own past traces) + <strong>synthetic data</strong>. They report a pipeline where an open model generates its own training environments, trains itself, and beats Opus / GPT-5.5 on a task. Example win: a specialized document-parsing vision model ~<strong>100× cheaper</strong> than frontier models and more accurate. Plus <strong>advisor models</strong> — small, cheap models that coach a bigger agent on one narrow part of a task — and specialized sub-agents.</div>
   </div>
+  <div class="callout">
+    <h4>Concept — RL fine-tuning &amp; synthetic data</h4>
+    <p style="margin:0">A model is first <strong>pre-trained</strong> to predict text; you then <strong>fine-tune</strong> it for a specific job. <strong>RL (reinforcement learning) fine-tuning</strong> does this with a reward signal instead of fixed answers — the model tries something, gets scored good/bad, and is nudged toward higher-scoring behavior (the classic version, RLHF, learns the reward from human preference rankings; newer "verifiable-reward" variants score against an objective check, like whether generated code passes its tests). <strong>Synthetic data</strong> is training data generated by a model rather than collected from the real world — cheaper and faster, and useful for targeting a narrow skill. Put together, that's how a smaller, cheaper, <em>specialized</em> model can beat a giant general one on one task: better base models now produce good enough traces and synthetic examples to train the specialist. (The main risk to know: training round after round on purely model-made data can cause "model collapse," where quality and diversity quietly degrade — so it's mixed with real data.)</p>
+  </div>
   <blockquote>Data is the new oil — context is the new oil — tokens as IP.</blockquote>
   <p>They explicitly connect this to <a href="frontier-ecosystem.html">Satya Nadella's "frontier ecosystem" essay</a> ("he sounded like a Databricks CEO"): any technology that makes your proprietary data more actionable gives an advantage, and AI is the latest such technology — which is exactly why owning your data/traces (and the <a href="context-graphs.html">learning loop over them</a>) is the durable moat.</p>
 
   <hr class="soft">
-  <p class="src"><strong>Source:</strong> <a href="https://www.youtube.com/watch?v=Yp_u1NpbkJg" target="_blank" rel="noopener">Latent Space podcast interview with Databricks (Matei Zaharia &amp; co-founder)</a>, recorded at the Databricks Data + AI Summit, 2026 (host: swyx). Distilled from the episode transcript; quotes are condensed from spoken dialogue and product names (Omnigent, L-TAP, Lakebase, Dream Engine, Genie, Panther, Unity Catalog, Delta Sharing) are as stated in the conversation. Timestamps and exact figures reflect the speakers' claims. Related: <a href="context-graphs.html">AI's Trillion-Dollar Opportunity: Context Graphs</a>, <a href="frontier-ecosystem.html">A Frontier Without an Ecosystem Is Not Stable</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>, <a href="build-claude-subagents.html">How to Build Claude Subagents</a>.</p>
+  <p class="src"><strong>Source:</strong> <a href="https://www.youtube.com/watch?v=Yp_u1NpbkJg" target="_blank" rel="noopener">Latent Space podcast interview with Databricks (Matei Zaharia &amp; co-founder)</a>, recorded at the Databricks Data + AI Summit, 2026 (host: swyx). Distilled from the episode transcript; quotes are condensed from spoken dialogue and product names (Omnigent, L-TAP, Lakebase, Dream Engine, Genie, Panther, Unity Catalog, Delta Sharing) are as stated in the conversation. Timestamps and exact figures reflect the speakers' claims. The "Concept —" primer boxes are background added for first-time readers, synthesized from standard references: OLTP/OLAP &amp; columnar storage (AWS docs, ClickHouse, Wikipedia); CDC &amp; write-ahead logs (Wikipedia, PostgreSQL docs); HTAP (term coined by Gartner, 2014); open formats (parquet.apache.org, delta.io, iceberg.apache.org); prompt injection (OWASP LLM Top 10, LLM01); MCP (Anthropic, Nov 2024). Related: <a href="context-graphs.html">AI's Trillion-Dollar Opportunity: Context Graphs</a>, <a href="frontier-ecosystem.html">A Frontier Without an Ecosystem Is Not Stable</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>, <a href="build-claude-subagents.html">How to Build Claude Subagents</a>.</p>
   <div class="footer">Captured into Learning Notes · 2026-07-07 · <a href="../../index.html">Back to index</a></div>
 </div>
 </body>
