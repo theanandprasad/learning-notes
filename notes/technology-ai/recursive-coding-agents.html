@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursive Coding Agents — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Recursive Coding Agents</h1>
+    <div class="meta">
+      <span>By <strong>Raymond Whitcomb</strong> (OpenProse / independent research) · conference talk</span>
+      <span class="dot">•</span>
+      <span>Published 2025–26</span>
+      <span class="dot">•</span>
+      <span>Saved Jul 7, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Recursive Language Models</span>
+      <span class="tag">Coding Agents</span>
+      <span class="tag">Orchestration</span>
+      <span class="tag">OpenProse</span>
+    </div>
+  </header>
+
+  <p class="lede">The bottleneck to trustworthy AI agents isn't intelligence — the models already know the whole internet. It's that they can't reliably <em>deliver outcomes</em>. The fix isn't a smarter model; it's better orchestration — and "recursive language models" are Whitcomb's bet on how.</p>
+
+  <div class="callout key">
+    <h4>The thesis — "mismanaged geniuses"</h4>
+    <p style="margin:0">Today's agents are <strong>mismanaged geniuses</strong> (a phrase from the RLM authors): the raw intelligence is there, and the missing layer is <em>how we specify, manage, reuse, and verify the work.</em> <strong>Trust is reliability</strong> — you can't trust something that isn't reliable — and the next step forward is behavioral/orchestration, not more raw IQ. The tool this talk champions: <strong>Recursive Language Models (RLMs)</strong>, and applying them to coding agents.</p>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">New here? A plain-English decoder</div>
+    <div class="scroll">
+    <table>
+      <tr><th>Term</th><th>What it means — and why it's used</th></tr>
+      <tr><td class="k">Agent / sub-agent / harness</td><td>An <em>agent</em> is an LLM that acts in a loop via tools (read files, run code) to finish a task; a <em>sub-agent</em> is one it spawns for a piece of the job; the <em>harness</em> is the scaffolding that runs the loop. (See <a href="what-is-an-agent-harness.html">the harness note</a>.)</td></tr>
+      <tr><td class="k">Context window</td><td>The maximum amount of text (in tokens) a model can consider at once. A hard ceiling — the thing RLMs route around.</td></tr>
+      <tr><td class="k">REPL</td><td>Read–Eval–Print Loop — an interactive shell (e.g. a Python prompt) where you type code, it runs, and returns a result. RLMs give the model a REPL to run code over the prompt.</td></tr>
+      <tr><td class="k">Chain-of-thought / reasoning model</td><td>Getting a model to think step-by-step before answering. "Reasoning models" bake this in, emitting explicit reasoning tokens.</td></tr>
+      <tr><td class="k">Tool / function calling</td><td>Letting the model invoke external functions (run code, search) rather than only emit text; <em>parallel</em> tool calling runs several at once.</td></tr>
+      <tr><td class="k">Test-/inference-time compute</td><td>Spending extra computation while the model is <em>answering</em> (not training) — longer reasoning, more tool calls — to get a better result.</td></tr>
+      <tr><td class="k">Map-reduce</td><td>Split a big job into independent pieces (<em>map</em>), process them in parallel, then combine the results (<em>reduce</em>).</td></tr>
+      <tr><td class="k">RAG</td><td>Retrieval-Augmented Generation — fetch relevant snippets from a corpus and put them in the prompt so the model can answer over data it wasn't trained on.</td></tr>
+      <tr><td class="k">Y combinator (λ-calculus)</td><td>A classic construct that lets a function call itself (achieve recursion) — the namesake of Whitcomb's "Y-Pi."</td></tr>
+    </table>
+    </div>
+  </figure>
+
+  <h2>The problem: agents you can't trust</h2>
+  <p>We all want reliable co-workers getting things done while we're out on a hike. But the models "can't reliably deliver outcomes, so I can't trust them." Whitcomb's illustrative war story: one day a near-working SaaS app from a single (long) prompt; the next, "Claude Code emptied the entire contents of my Solana wallet." That whiplash is the whole problem — the intelligence is there, the <em>management</em> isn't.</p>
+
+  <div class="callout">
+    <h4>Concept — Recursive Language Models (RLMs)</h4>
+    <p style="margin:0 0 8px"><strong>What.</strong> RLMs (introduced Oct 2025 by <strong>Alex Zhang, Tim Kraska &amp; Omar Khattab</strong> at MIT) are an <em>inference strategy</em>, not a new model architecture. The slogan: <strong>"the context itself is the object of computation."</strong> Instead of the whole prompt being read into the model's context window, the full prompt is treated as a <strong>variable</strong> — it might be a file, or many files — sitting in an executable environment.</p>
+    <p style="margin:0 0 8px"><strong>Why.</strong> A model's context window is a hard ceiling, and stuffing a huge prompt into it also <em>degrades</em> quality. RLMs sidestep both: because the prompt lives as data in a REPL, the model can handle inputs <strong>1–2 orders of magnitude larger than its context window</strong> (tens of millions of tokens) and often answer <em>better</em> than a plain long-context model — at comparable or cheaper cost.</p>
+    <p style="margin:0"><strong>How.</strong> The model is told to explore the prompt <strong>symbolically</strong> inside a REPL (Python in the original paper) — grep it, slice it, sample it — rather than read it all. And it can <strong>recursively call other LLMs / sub-RLMs</strong> on the pieces, decompose the problem, and work its way back up to a final answer. In the reference implementation, GPT-5 / GPT-5-mini is queried inside a Python REPL that holds the user's prompt in a variable.</p>
+  </div>
+
+  <h2>What an RLM actually does</h2>
+  <p>Two things fuse: <strong>reasoning and code execution</strong> — where "the code execution <em>is</em> the reasoning." Whitcomb frames it as the natural next step of a well-worn evolution:</p>
+  <figure class="diagram">
+    <div class="dtitle">The lineage RLMs sit at the end of</div>
+    <div class="row grow" style="max-width:780px">
+      <div class="node"><div class="nh">Chain-of-thought</div><div class="ns">a prompting trick: "think step by step"</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">Reasoning models</div><div class="ns">CoT baked in as explicit reasoning tokens</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">Tool / parallel tool calling</div><div class="ns">the model runs functions, not just text</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">RLMs</div><div class="ns">reason <em>through</em> code + recursive sub-calls</div></div>
+    </div>
+    <figcaption>Whitcomb's take: "RLMs are the new reasoning models" — the next paradigm of test-time compute, where tool calling and reasoning are unified.</figcaption>
+  </figure>
+  <figure class="diagram">
+    <div class="dtitle">The recursion tree</div>
+    <div class="col" style="max-width:560px;margin:0 auto">
+      <div class="node accent"><div class="nh">RLM</div><div class="ns">prompt = a variable in a REPL; explore it symbolically</div></div>
+      <div class="arrow">↓ decompose</div>
+      <div class="row" style="max-width:520px">
+        <div class="node accent2"><div class="nh">sub-RLM / sub-LLM</div></div>
+        <div class="node accent2"><div class="nh">sub-RLM / sub-LLM</div></div>
+        <div class="node accent2"><div class="nh">sub-RLM / sub-LLM</div></div>
+      </div>
+      <div class="arrow">↑ combine</div>
+      <div class="node ok"><div class="nh">final answer</div></div>
+    </div>
+    <figcaption>Set the recursion depth however you like. Each sub-call does symbolic manipulation on its slice; results bubble back up.</figcaption>
+  </figure>
+
+  <h2>Why they're so powerful (the results)</h2>
+  <div class="callout">
+    <h4>Concept — DSPy &amp; ARC-AGI-3 (the tools/benchmarks below)</h4>
+    <p style="margin:0 0 8px"><strong>DSPy</strong> ("Declarative Self-improving Python", from Omar Khattab, NeurIPS 2023) is a framework for <em>programming, not prompting,</em> language models: you write modular Python and DSPy compiles/optimizes the prompts under the hood, so pipelines are robust instead of brittle prompt strings. It's the ecosystem the RLM benchmark work is built in.</p>
+    <p style="margin:0"><strong>ARC-AGI-3</strong> (ARC Prize Foundation, launched March 2026) is the first <em>interactive</em> reasoning benchmark: agents must explore unfamiliar game-like environments, form a model, and plan — learning on the fly with no instructions. At launch every frontier model scored well under 1% while humans solved 100% — which is what makes the RLM result below notable.</p>
+  </div>
+  <div class="scroll">
+  <table>
+    <tr><th>Claim (from the talk / cited work)</th><th>Result</th></tr>
+    <tr><td class="k">Unbounded context</td><td>An RLM can process inputs <strong>orders of magnitude larger</strong> than its context window — tens of millions of tokens.</td></tr>
+    <tr><td class="k">RLM harness as memory</td><td>An unmodified RLM harness is itself a "top-10" memory system; with small tweaks, "amazing" results — vs the billions being spent on custom memory systems.</td></tr>
+    <tr><td class="k">Long-CoT reasoning (SOTA)</td><td>Via the RLM framework (DSPy implementation), a <em>small</em> Qwen3 model runnable on a laptop <strong>beats Opus and GPT-5.x</strong> (used as plain LLMs) on the Long-CoT benchmark — problems too long-chained for top reasoning models to hold the thread.</td></tr>
+    <tr><td class="k">ARC-AGI-3</td><td>Symbolica's RLM harness "Agentica" scored <strong>~30%+ within hours</strong> of ARC-AGI-3's release, where frontier models sat at ~2–3%. (The ARC Prize team, wary of tool-using harnesses, declined the full private eval.)</td></tr>
+  </table>
+  </div>
+  <p class="muted">Whitcomb's stance on the "is that fair?" drama: "I don't care whether it's latent space or reasoning tokens or code execution. I want results." (He and the RLM authors did push benchmark maintainers to add a separate <em>open-harness</em> leaderboard so RLM results don't contaminate no-tool-calling leaderboards.)</p>
+
+  <h2>What counts as an RLM — the rubric</h2>
+  <p>To cut through "isn't this just X?", Whitcomb offers a rubric (companion GitHub repo). An RLM needs all of:</p>
+  <div class="steps">
+    <div class="step"><b>1 · An executable environment</b> — a REPL the model can run code in.</div>
+    <div class="step"><b>2 · The prompt is externalized</b> — it lives as a variable/file, not jammed into the context window.</div>
+    <div class="step"><b>3 · Code is what calls the model</b> — the program drives the LLM, not the other way round.</div>
+    <div class="step"><b>4 · The model picks the decomposition</b> — it decides how to break the problem into sub-calls/sub-agents.</div>
+    <div class="step"><b>5 · State stays symbolic</b> — work over references to the data, not the raw data pulled into context.</div>
+  </div>
+  <figure class="diagram">
+    <div class="dtitle">Close, but not an RLM</div>
+    <div class="row grow" style="max-width:760px">
+      <div class="node warn"><div class="nh">Plain LLMs &amp; RAG</div><div class="ns">no executable env / no decomposition by the model</div></div>
+      <div class="node warn"><div class="nh">Coding agents + sub-agents + loops</div><div class="ns">get close — but not quite all five</div></div>
+      <div class="node warn"><div class="nh">Hard-coded map-reduce</div><div class="ns">e.g. λ-RLM: the <em>human</em> decides the decomposition, not the model</div></div>
+    </div>
+    <figcaption>The load-bearing criterion is #4: the model deciding <em>how</em> to decompose is what makes it "agent-native" rather than a fixed pipeline.</figcaption>
+  </figure>
+
+  <h2>From RLMs to recursive <em>coding</em> agents</h2>
+  <p>Swap "RLM/LLM" for "agent/sub-agent" and you get the same picture — a recursive coding agent. (Trick question: an RLM already <em>is</em> one.) The interesting work is applying RLM principles to real coding agents. Whitcomb's experiments:</p>
+  <div class="steps">
+    <div class="step"><b>RLM-as-a-tool.</b> Wrap the RLM package as a CLI so a coding agent can call an RLM as a single tool — e.g. "go sift this 100M-token corpus," and the RLM does the RLM thing.</div>
+    <div class="step"><b>Y-Pi — a fully recursive harness.</b> Make the coding agent call <em>itself</em>. Built on <strong>Pi</strong> (a minimal, extension-first coding agent by "Mario"); "Y" is the λ-calculus Y combinator (recursion). Now shipped as a pure <code>pi-recursive</code> extension + the <code>y-pi</code> convenience wrapper — "Pi calls Pi calls Pi," depth of your choosing.</div>
+  </div>
+  <p>Notable projects in the space: the original <strong>RLM</strong> implementation (Alex Zhang) and its <strong>DSPy</strong> version (his benchmarking go-to); <strong>AXE</strong> (agent-native — an AXE agent can write a whole TypeScript interface to another AXE agent, recursion all the way down); the <strong>Unix RLM</strong> (Dan @ OpenProse — pure bash, the environment is just the Linux file system, showing "the REPL can be anything"); and <strong>OpenProse</strong> itself.</p>
+
+  <h2>Is Claude Code an RLM?</h2>
+  <p>The most-asked question. Release-day answer: no. Now, arguably yes — because of <strong>Dynamic Workflows</strong>. As Omar Khattab put it: "Claude Code is finally an RLM now that you have dynamic workflows."</p>
+  <div class="callout">
+    <h4>Concept — Claude Code Dynamic Workflows</h4>
+    <p style="margin:0">Dynamic Workflows let Claude Code turn "the plan" into actual orchestration <em>code</em> that spawns and coordinates agents (spawn one, run several in parallel, pipeline them), rather than doing everything in one chat thread. That's exactly what makes it recursive/RLM-shaped: code decides the decomposition and calls the model over pieces. Whitcomb points to Anthropic's write-up <em>"A Harness for Every Task"</em> (six workflow patterns). For the deeper mechanics, see the sibling note <a href="the-plan-is-code.html">The Plan Is Code</a>.</p>
+  </div>
+  <p>To show the rubric in action he wrote two Claude Code workflows: one deliberately <em>not</em> an RLM (a hard-coded map-reduce), and one that is — "deep research over a file system" (pick a handle, hand it to an agent, analyze, bring findings back).</p>
+
+  <h2>OpenProse: turn any coding agent into an RLM</h2>
+  <p>Dynamic Workflows are great but Claude-Code-only. <strong>OpenProse</strong> is the portable alternative. It's "technically a programming language, but not compiled by your computer — compiled by your <em>coding agent</em>": a Markdown spec in logical English, no exotic syntax. A <code>prose write</code> command gets Claude Code / Codex / Pi to author a <code>.prose.md</code> file for you (much like Claude Code's ultra-code command writing workflows).</p>
+  <figure class="diagram">
+    <div class="dtitle">What a Prose program declares</div>
+    <div class="row" style="max-width:760px;align-items:center">
+      <div class="node accent"><div class="nh">Break the problem up</div><div class="ns">into pieces assigned to sub-agents</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Each sub-agent + its deps</div><div class="ns">declare the <strong>skills &amp; tools</strong> it must have to do its role</div></div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Parent verifies the work</div><div class="ns">in the parent session</div></div>
+    </div>
+    <figcaption>The "Prose contract": you declare not just <em>how</em> the work is split, but that each sub-agent is configured with the exact skills/CLI tools it needs — or it can't run. Any agent with a file system + sub-agents becomes an RLM.</figcaption>
+  </figure>
+
+  <h2>What you can actually do with it</h2>
+  <div class="row grow" style="max-width:780px">
+    <div class="node accent"><div class="nh">Repo-scale migrations</div><div class="ns">refactor a huge codebase with a parallel swarm, then merge</div></div>
+    <div class="node accent"><div class="nh">Recursive deep-research</div><div class="ns">go after a directory and deep-analyze it recursively</div></div>
+    <div class="node accent"><div class="nh">Audits &amp; red-teams</div><div class="ns">bug sweeps; skeptical / adversarial agents improving the system in parallel</div></div>
+    <div class="node accent2"><div class="nh">Golden sessions</div><div class="ns">capture a great run and replay it reliably (below)</div></div>
+  </div>
+  <p><strong>Golden sessions</strong> close the loop back to the trust problem. You have one great day with an agent — then want that quality on demand. OpenProse can take a "golden session" (Claude Code, Codex, Pi…), have an agent <em>deconstruct</em> it, and turn it into a reusable Prose workflow — so you reach that reliable "golden state" over and over.</p>
+
+  <h2>Three takeaways</h2>
+  <div class="twocol">
+    <div class="vs a">
+      <h4>1 · Trust is reliability</h4>
+      <p style="margin:0;font-size:14px">The next step isn't more raw intelligence — it's behavioral: orchestration, specification, verification.</p>
+    </div>
+    <div class="vs b">
+      <h4>2 · RLMs = a new test-time paradigm</h4>
+      <p style="margin:0;font-size:14px">Tool calling and reasoning unified — you reason <em>through</em> tool calls, and one tool is "call another agent to do a subtask," recursively.</p>
+    </div>
+  </div>
+  <div class="vs good" style="margin-top:14px">
+    <h4>3 · Coding agents <em>can</em> be RLMs — but aren't automatically</h4>
+    <p style="margin:0;font-size:14px">Claude Code Dynamic Workflows and OpenProse are two ways to turn a coding agent into a recursive one.</p>
+  </div>
+  <blockquote>With great power comes great responsibility. Until next time — recurse responsibly.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Raymond Whitcomb, <a href="https://www.youtube.com/watch?v=3hXJI2q0Jz8" target="_blank" rel="noopener">"Recursive Coding Agents"</a> (conference talk; slides live at recursivecodingagents.com; references AI Engineer Code, Nov 2025). Distilled from the talk transcript; the Solana-wallet story and benchmark figures (tens of millions of tokens, ~30% on ARC-AGI-3, the small-Qwen3-beats-frontier claim) are the speaker's/cited-work's claims — a couple of transcript slips of "LLM" for "RLM" are read as intended. <strong>Concept —</strong> primers are background for first-time readers, grounded in: the <a href="https://arxiv.org/abs/2512.24601" target="_blank" rel="noopener">Recursive Language Models paper</a> (Zhang, Kraska, Khattab, MIT) and <a href="https://alexzhang13.github.io/blog/2025/rlm/" target="_blank" rel="noopener">Alex Zhang's RLM blog</a>; <a href="https://github.com/stanfordnlp/dspy" target="_blank" rel="noopener">DSPy</a>; and <a href="https://arcprize.org/arc-agi/3" target="_blank" rel="noopener">ARC-AGI-3</a>. Related: <a href="the-plan-is-code.html">The Plan Is Code</a>, <a href="build-claude-subagents.html">How to Build Claude Subagents</a>, <a href="how-to-create-loops-with-claude.html">How to Create Loops with Claude</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-07-07 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
