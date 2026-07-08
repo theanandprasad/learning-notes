@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic Memory (for TanStack AI) — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .codeblk .lbl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Agentic Memory (for TanStack AI)</h1>
+    <div class="meta">
+      <span><strong>Blue Collar Coder</strong> (YouTube) · demo &amp; explainer</span>
+      <span class="dot">•</span>
+      <span>Published 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jul 7, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Agentic Memory</span>
+      <span class="tag">Vector Search</span>
+      <span class="tag">TanStack AI</span>
+      <span class="tag">LLM Infrastructure</span>
+    </div>
+  </header>
+
+  <p class="lede">Tell a chatbot "I like sushi," and later it suggests sushi for dinner — great. Start a new conversation, and it's forgotten you entirely. This is a walkthrough of a prototype that gives an agent <em>durable</em> memory across chats, and the surprisingly small set of moving parts behind it.</p>
+
+  <div class="callout key">
+    <h4>The core idea</h4>
+    <p style="margin:0">By default a chat only "remembers" what's in the <strong>current conversation</strong> — so it forgets everything the moment you start a new one. <strong>Agentic memory</strong> fixes this by extracting durable <em>facts</em> from your chats and reusing them: before each turn it <strong>recalls</strong> facts relevant to what you just said and injects them into context; after each turn it <strong>retains</strong> new facts from the transcript. This POC (built for TanStack AI) wraps that behind one generic <code>MemoryDriver</code> interface, over three vendors (Hindsight, Mem0, Honcho) or a DIY local store.</p>
+  </div>
+
+  <figure class="diagram">
+    <div class="dtitle">New here? A plain-English decoder</div>
+    <div class="scroll">
+    <table>
+      <tr><th>Term</th><th>What it means — and why it's used</th></tr>
+      <tr><td class="k">Context window</td><td>The max text a model can hold at once. What's in it is all the model "knows" in a given turn — the reason a fresh chat starts blank.</td></tr>
+      <tr><td class="k">Embedding / vector</td><td>A list of numbers that captures the <em>meaning</em> of a piece of text. Similar meanings → nearby vectors. Produced by an "embedding model."</td></tr>
+      <tr><td class="k">Vector (semantic) search</td><td>Finding stored text by <em>meaning</em> rather than exact keywords — embed the query, return the nearest stored vectors. "Sushi" can match "Japanese food."</td></tr>
+      <tr><td class="k">Middleware</td><td>A pluggable step in a request pipeline that runs automatically (here: recall before a turn, retain after) without you wiring it by hand.</td></tr>
+      <tr><td class="k">Scope</td><td>Who the user is + which session — so stored facts attach to the right person and topic.</td></tr>
+      <tr><td class="k">SQLite / Docker</td><td>SQLite = a tiny self-contained database in a file. Docker = a way to run software (here, the memory vendors) in isolated containers on your machine.</td></tr>
+      <tr><td class="k">MCP</td><td>Model Context Protocol — a standard way to plug external tools into an agent (e.g. an ad-hoc "remember this" tool).</td></tr>
+    </table>
+    </div>
+  </figure>
+
+  <div class="callout">
+    <h4>Concept — TanStack AI</h4>
+    <p style="margin:0">TanStack AI is a <strong>type-safe, provider-agnostic TypeScript AI SDK</strong> — a unified way to build streaming chat, tool-calling, and agents across OpenAI, Anthropic, Gemini, etc., and across React/Vue/Svelte/Solid. It's pitched as "the Switzerland of AI tooling" (vendor-neutral). This note's project is a <em>proof-of-concept</em> exploring how to add memory to it — so "for TanStack AI" just means it plugs in as middleware there; the ideas apply to any agent.</p>
+  </div>
+
+  <h2>The demo: why agents forget</h2>
+  <figure class="diagram">
+    <div class="dtitle">Memory off vs on</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>Memory OFF</h4>
+        <p style="margin:0;font-size:14px">Say "I like sushi" → later in the <em>same</em> chat, "what's for dinner?" → "sushi." But refresh into a new conversation → "what's for dinner?" → generic answer. It only had <strong>episodic memory</strong> (the current chat).</p>
+      </div>
+      <div class="vs good">
+        <h4>Memory ON</h4>
+        <p style="margin:0;font-size:14px">Say "I like sushi" → the system retains one durable fact ("user likes sushi"). Any <em>new</em> conversation, "what's for dinner?" → it recalls the pertinent fact → suggests sushi. Information persists <strong>between</strong> chats.</p>
+      </div>
+    </div>
+  </figure>
+
+  <div class="callout">
+    <h4>Concept — the types of LLM memory</h4>
+    <p style="margin:0">The project borrows a tidy taxonomy (from cognitive science) for what "memory" can even mean for an LLM: <strong>model memory</strong> = what it learned in training; <strong>working memory</strong> = what it holds within a single response; <strong>episodic / context-window memory</strong> = the current chat; and <strong>long-term user/application memory</strong> = durable facts, preferences, observations, and summaries gleaned across conversations. That last one — persistent and personal — is what "agentic memory" means here, and the only one you have to build yourself.</p>
+  </div>
+
+  <h2>What a memory system actually does</h2>
+  <p>Behind the generic <code>MemoryDriver</code> interface, a memory system is just three operations:</p>
+  <figure class="diagram">
+    <div class="dtitle">Recall · Retain · (Tools)</div>
+    <div class="row" style="max-width:800px;align-items:center">
+      <div class="node accent"><div class="nh">1 · Recall</div><div class="ns"><em>before</em> the turn: take the user input, fetch relevant facts, inject them into the system context</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">the conversation turn</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">2 · Retain</div><div class="ns"><em>after</em> the turn: run an LLM over the whole transcript to extract new facts, store them</div></div>
+    </div>
+    <figcaption><strong>3 · Tools</strong> (some vendors) let the LLM decide <em>mid-conversation</em> — "that's worth remembering" — to store or recall facts ad hoc, rather than only at the turn boundaries.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <h4>Concept — embeddings &amp; vector search (how "recall" finds the right fact)</h4>
+    <p style="margin:0 0 8px"><strong>The problem:</strong> when the user says "what's for dinner?", how does the system know the fact "user likes sushi" is relevant? Plain keyword matching fails — the words don't overlap.</p>
+    <p style="margin:0"><strong>The mechanism:</strong> an <strong>embedding model</strong> turns each fact into a <strong>vector</strong> (a list of numbers capturing its meaning), stored in a database. At recall time the query is embedded too, and the system does a <strong>vector search</strong> — returning the stored facts whose vectors are <em>closest in meaning</em>. This is "concept search, not keyword search," which is what an LLM wants: "dinner" can surface "likes sushi" because they're semantically near, even with no shared words.</p>
+  </div>
+
+  <h2>The DIY pipeline (how the local version works)</h2>
+  <figure class="diagram">
+    <div class="dtitle">Extract → embed → store → recall</div>
+    <div class="row grow" style="max-width:800px">
+      <div class="node accent"><div class="nh">LLM extracts facts</div><div class="ns">Anthropic, over the transcript</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Embed the facts</div><div class="ns">OpenAI embeddings → vectors</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Store</div><div class="ns">facts + vectors in SQLite</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Recall</div><div class="ns">vector search = concept search</div></div>
+    </div>
+    <figcaption>The DIY local store uses SQLite for storage, OpenAI for vectorization, Anthropic for the fact-extraction LLM. "Memory Bench" (the demo app) can <strong>fan one input out to all four systems at once</strong> to compare what facts each extracts and stores.</figcaption>
+  </figure>
+
+  <h2>The four memory engines</h2>
+  <div class="callout">
+    <h4>Concept — the memory vendors</h4>
+    <p style="margin:0"><strong>Mem0</strong> — a scalable long-term-memory layer for agents; incrementally extracts salient facts and manages them (add / update / delete), as a managed API or self-hosted. <strong>Honcho</strong> — a <em>managed</em> memory service that abstracts away the embedding store, retrieval, and persistence so you add "remembering" with minimal code. <strong>Hindsight</strong> — the most distinct: it maintains graphs of facts, experiences, entities, and beliefs with retain / recall / <em>reflect</em> operations, aiming at reflection and self-improvement over time (and, per the talk, has tool support). All three convert conversations into reusable structured memory (facts, preferences, entities).</p>
+  </div>
+  <div class="scroll">
+  <table>
+    <tr><th>Engine</th><th>Notes (from the talk)</th></tr>
+    <tr><td class="k">Hindsight</td><td>Unique in having <strong>tool support</strong> (the ad-hoc remember/recall path).</td></tr>
+    <tr><td class="k">Mem0</td><td>Its own advantages; widely used long-term-memory substrate.</td></tr>
+    <tr><td class="k">Honcho</td><td>Its own advantages; managed memory service.</td></tr>
+    <tr><td class="k">DIY (local)</td><td>Built in Memory Bench: SQLite storage + OpenAI embeddings + Anthropic LLM.</td></tr>
+  </table>
+  </div>
+  <p class="muted">Setup is light: you need an Anthropic key + an OpenAI key, but <em>not</em> paid subscriptions to the three vendors — they run locally via Docker (though some still call out to LLMs, so the keys are needed regardless).</p>
+
+  <h2>Adding it to a chat (the code)</h2>
+  <p>Two imports (from the unpublished <code>ai-memory</code> package) do the work: a <code>createMemoryMiddleware</code> factory and an engine (e.g. <code>hindsightEngine</code>). You give it the engine and a <strong>scope</strong> (who you are + which session), then drop the returned middleware into your pipeline — it puts itself in the right place to recall before the turn and retain after.</p>
+  <figure class="diagram">
+    <div class="dtitle">createMemoryMiddleware(engine, scope)</div>
+    <div class="codeblk"><span class="lbl">packages/ai-memory — usage sketch</span>import { createMemoryMiddleware, hindsightEngine } from 'ai-memory'
+
+const memory = createMemoryMiddleware(
+  hindsightEngine,
+  scope,          // who you are + which session
+)
+
+// then just add it to the pipeline:
+middleware: [ ...otherMiddleware, memory ]</div>
+    <figcaption>For a tool-capable engine (Hindsight), you can also request <strong>scope-based tools</strong> and add them to the tools array — enabling the ad-hoc "remember this" path.</figcaption>
+  </figure>
+  <div class="callout">
+    <h4>Two memory "roles" — full vs incognito</h4>
+    <p style="margin:0">You choose the role memory plays in a conversation. <strong>Full</strong> = recall + retain (uses what it knows about you <em>and</em> stores new facts from this chat). <strong>Incognito</strong> = it can use what it already knows about you, but won't store anything from this conversation — "know about me, but don't remember this chat." (The talk labels this "retain-only"; the described behavior is recall-without-storing — useful for sensitive sessions.)</p>
+  </div>
+
+  <h2>Beyond TanStack AI: memory for any coding agent</h2>
+  <p>The same pattern works if you run coding agents agnostically (Claude Code, Codex): there's no middleware hook, so you drive the two phases yourself.</p>
+  <figure class="diagram">
+    <div class="dtitle">Wrap any agent with recall → agent → retain</div>
+    <div class="row" style="max-width:760px;align-items:center">
+      <div class="node accent"><div class="nh">Recall (before)</div><div class="ns">on the user prompt, fetch relevant facts</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="nh">Invoke the agent</div><div class="ns">Claude Code / Codex, with the facts in context</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Retain (after)</div><div class="ns">on the full transcript, extract &amp; store new facts</div></div>
+    </div>
+    <figcaption>Any backend works (Hindsight, Mem0, Honcho), and you could even inject <strong>MCP tools</strong> for ad-hoc memory storage. Conceptually this is the durable-memory sibling of the on-disk <a href="how-to-create-loops-with-claude.html">PROGRESS.md pattern</a> — "the agent forgets, the store does not."</figcaption>
+  </figure>
+
+  <blockquote>Episodic memory is the chat you're in. Long-term memory is what makes an agent feel like it actually knows you.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> <a href="https://www.youtube.com/watch?v=whyz0m302ZI" target="_blank" rel="noopener">"Agentic Memory for TanStack AI"</a> — Blue Collar Coder (YouTube), a demo/explainer of the author's open-source POC monorepo (code linked in the video description; presented as pre-work/prototype for bringing memory into TanStack AI). Distilled from the transcript; the speaker's personal name isn't given, so it's attributed to the channel. The two-role feature is described by its stated behavior (the video's "retain-only" label appears to describe recall-without-storing). <strong>Concept —</strong> primers are background for first-time readers, grounded in: <a href="https://github.com/TanStack/ai" target="_blank" rel="noopener">TanStack AI</a>; and the memory providers <a href="https://mem0.ai" target="_blank" rel="noopener">Mem0</a>, <a href="https://honcho.dev" target="_blank" rel="noopener">Honcho</a>, and Hindsight (per their docs and a provider comparison). Related: <a href="how-to-create-loops-with-claude.html">How to Create Loops with Claude</a>, <a href="context-graphs.html">Context Graphs</a>, <a href="build-claude-subagents.html">How to Build Claude Subagents</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-07-07 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
