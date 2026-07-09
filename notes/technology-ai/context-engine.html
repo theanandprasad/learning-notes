@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building a Context Engine for an Agent — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  .disclaimer{background:rgba(210,86,47,.08);border:1px solid #eccabd;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#8a3b1f}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Building a Context Engine for an Agent</h1>
+    <div class="meta">
+      <span>By <strong>Cassidy Williams</strong> (DevRel, GitHub) · TLDR blog</span>
+      <span class="dot">•</span>
+      <span>Published Jun 12, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jul 7, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Context Engine</span>
+      <span class="tag">Agent Memory</span>
+      <span class="tag">Retrieval</span>
+      <span class="tag">Caching</span>
+    </div>
+  </header>
+
+  <p class="lede">An almost-working agent needed "a couple small things" — a little memory, and access to real data. That weekend project became a monster. This is the very funny, very real story of discovering that the thing you're actually building is called a <strong>context engine</strong>.</p>
+
+  <div class="disclaimer">ℹ️ <strong>Sponsored/promotional piece.</strong> A Redis-sponsored essay on the TLDR blog; the back half is a soft pitch for <strong>Redis Iris</strong> (a Redis product). The <em>problem framing</em> is broadly useful and vendor-neutral; the recommended solution is the sponsor's — captured as one practitioner's take, not an endorsement.</div>
+
+  <div class="callout key">
+    <h4>The core idea</h4>
+    <p style="margin:0">Giving an agent "a little memory and some data" is a trap: memory isn't one thing, data retrieval is its own infrastructure project, and caching sits on top. Put together, that layer has a name — a <strong>context engine</strong>: "the layer that gives an agent the right context, in the right shape, at the right time." It's most needed <em>at runtime</em>, while the agent is actually doing the work.</p>
+  </div>
+
+  <blockquote>A "little memory" is… more than a little memory.</blockquote>
+
+  <h2>Memory is not one thing</h2>
+  <p>The wrong assumption: that "memory" is a checkbox — save the conversation somewhere and boom, done. But the moment you say an agent should "remember things," you have to answer <em>what things?</em> — and every answer is different:</p>
+  <figure class="diagram">
+    <div class="dtitle">"Should it remember…?"</div>
+    <div class="scroll">
+    <table>
+      <tr><th>Remember…</th><th>Answer</th><th>…which really means</th></tr>
+      <tr><td>the current conversation</td><td class="k">Yes</td><td>short-term state</td></tr>
+      <tr><td>that the user prefers TypeScript over Python</td><td class="k">Maybe</td><td>a durable preference</td></tr>
+      <tr><td>the half-finished task from yesterday</td><td class="k">Sure?</td><td>task history</td></tr>
+      <tr><td>every support ticket the customer opened</td><td class="k">…that's business data</td><td>external system, not "memory"</td></tr>
+      <tr><td>something the user corrected</td><td class="k">Definitely</td><td>updates / overrides</td></tr>
+      <tr><td>and forget what the user deleted</td><td class="k">Yes</td><td>deletion (with rules)</td></tr>
+    </table>
+    </div>
+    <figcaption>Now "memory" has <strong>categories</strong>, each with different rules: some expire, some update, some are searchable, some private, some shared, some "deleted" (and even "deleted" means different things). "Deciding which context mattered, to whom, and for how long turned into a whole system of choices."</figcaption>
+  </figure>
+  <p>Then the second wave: <strong>build vs buy.</strong> Store memory yourself? Use Postgres? A vector database? A memory framework? A model provider's built-in memory? A dedicated service? "Everything was a bit too reasonable, and scope creep loomed heavily with every option."</p>
+
+  <h2>Data retrieval is a whole other infrastructure project</h2>
+  <p>"At least passing in actual data should be straightforward — it's just one thing." (Editor's note in the piece: "I would like to throw the word 'just' into the sea.") Turns out data comes in flavors:</p>
+  <figure class="diagram">
+    <div class="dtitle">Three kinds of data</div>
+    <div class="row grow" style="max-width:760px">
+      <div class="node accent"><div class="nh">Structured</div><div class="ns">users, orders, invoices, tickets, events, accounts, product records</div></div>
+      <div class="node accent2"><div class="nh">Unstructured</div><div class="ns">docs, PDFs, emails, support chats, meeting notes — incl. "that one load-bearing document"</div></div>
+      <div class="node warn"><div class="nh">Semi-structured</div><div class="ns">"the developer equivalent of 'surprise, good luck, ha ha!'"</div></div>
+    </div>
+    <figcaption>Plus data that exists "but not in a format any reasonable tool should be allowed to touch directly."</figcaption>
+  </figure>
+  <p>"Maybe the agent can just query Postgres?" opens its own can of worms — which tables can it access, which <em>rows</em> can <em>this</em> user see, what if the schema changes, what if it writes a bad query, or one that's technically correct but "wildly expensive," or the data is stale, or it finds the right record but misses the related ones… or the answer needs Postgres <em>and</em> Salesforce <em>and</em> Zendesk <em>and</em> "a PDF from 2014 named <code>final_FINAL_v3.pdf</code>." Raw data isn't usable; agents need <strong>the right data, shaped the right way, at the right time</strong> — and that "isn't just throwing search on it."</p>
+
+  <h2>The trade-offs that make it hard</h2>
+  <figure class="diagram">
+    <div class="dtitle">Every knob has a failure mode</div>
+    <div class="scroll">
+    <table>
+      <tr><th>If the agent has…</th><th>…then</th></tr>
+      <tr><td class="k">Stale data</td><td>it gives bad answers</td></tr>
+      <tr><td class="k">Too much data</td><td>it gets confused or expensive</td></tr>
+      <tr><td class="k">Too little data</td><td>"it hallucinates politely"</td></tr>
+      <tr><td class="k">Data it should not have</td><td>"congratulations, now you have a security incident with vibes"</td></tr>
+    </table>
+    </div>
+    <figcaption>And when every useful piece of context lives in a different system, you're building "sync pipelines, indexes, permissions layers, fallback logic, search systems, and you know there's just duct tape everywhere."</figcaption>
+  </figure>
+
+  <h2>…and caching, of course</h2>
+  <blockquote>There are only two hard things in Computer Science: caching and naming things.<br><span style="font-size:14px;font-style:normal">— Phil Karlton</span></blockquote>
+  <p>Repeated questions, repeated retrieval, repeated LLM calls — all money and latency you pay again and again. So the last layer is caching (ideally <em>semantic</em> caching: reuse an answer when a new question <em>means</em> the same thing, not just when it's byte-identical).</p>
+
+  <h2>All powers combined: the context engine</h2>
+  <div class="callout">
+    <p style="margin:0"><strong>A context engine is the layer that gives an agent the right context, in the right shape, at the right time.</strong> At runtime it supplies: <em>user state</em> while answering · the <em>latest data</em> when deciding which tool to call · the <em>relevant docs</em> for planning · <em>cached results</em> to cut waiting · and <em>memory</em> so it doesn't repeat mistakes.</p>
+  </div>
+
+  <h2>The "boring" infrastructure answer</h2>
+  <p>The author's conclusion: she didn't want to build this herself anymore, and <strong>Redis</strong> "started to make a lot of sense… because it's boring in the best possible way." Developers already use it for fast, reliable infra that sits close to the runtime — hot data, caching, search, session state, queues, real-time workloads where latency matters. Agent context is very similar, and needs to sit close to where the user is.</p>
+  <figure class="diagram">
+    <div class="dtitle">Redis Iris — an integrated context engine for agents</div>
+    <div class="scroll">
+    <table>
+      <tr><th>Piece</th><th>Job</th></tr>
+      <tr><td class="k">Redis Data Integration</td><td>keep operational data synced and fresh</td></tr>
+      <tr><td class="k">Context Retriever</td><td>help agents access the right business context</td></tr>
+      <tr><td class="k">Agent Memory</td><td>short-term and long-term agent context</td></tr>
+      <tr><td class="k">Redis Search</td><td>fast search across the data the agent needs</td></tr>
+      <tr><td class="k">LangCache</td><td>semantic caching so the agent doesn't keep paying for the same work</td></tr>
+    </table>
+    </div>
+    <figcaption>The appeal: one "practical, boring default" instead of "too many individual tools… too many lifecycle rules… too many places where mysterious behavior squished together could ruin my afternoon."</figcaption>
+  </figure>
+  <blockquote>Boring means fewer surprises, fewer custom glue layers… Now, I can build the agent. Redis can handle the context. No more drama.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Cassidy Williams (DevRel at GitHub), <a href="https://tldr.tech/blog/context-layer-redis-iris" target="_blank" rel="noopener">"I Tried to Build a Context Layer for My Agent in a Weekend. Reader, I Did Not Build a Context Layer for My Agent in a Weekend."</a> (TLDR blog, Jun 12 2026). A sponsored/promotional essay — the second half pitches <strong>Redis Iris</strong> (a Redis product); the component list and its descriptions are as stated in the article. Quotes condensed from the author's own words (incl. the Phil Karlton line she cites). Related: <a href="agentic-memory.html">Agentic Memory</a>, <a href="context-graphs.html">Context Graphs</a>, <a href="how-to-create-loops-with-claude.html">How to Create Loops with Claude</a>, <a href="what-is-an-agent-harness.html">What is an Agent Harness?</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-07-07 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
