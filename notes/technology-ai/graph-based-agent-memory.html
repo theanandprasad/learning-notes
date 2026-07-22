@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graph-Based Agent Memory — Learning Notes</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel2:#f1f3f7; --ink:#1b1f27; --muted:#5b6573;
+    --line:#dfe3ea; --accent:#3858d6; --accent2:#0e9e88; --warn:#d2562f; --ok:#1f9d57; --purple:#7b50d6;
+    --chip:#eef1f6; --radius:14px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:48px 24px 96px}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .back{display:inline-block;margin-bottom:28px;color:var(--muted);font-size:14px}
+  header.post h1{font-size:40px;line-height:1.12;margin:0 0 12px;letter-spacing:-.02em}
+  .meta{color:var(--muted);font-size:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .meta .dot{opacity:.4}
+  .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{background:var(--chip);color:var(--muted);font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+  .lede{font-size:19px;color:#3a4250;border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:30px 0 8px;font-style:italic}
+  .disclaimer{background:rgba(210,86,47,.08);border:1px solid #eccabd;border-left:3px solid var(--warn);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:13.5px;color:#8a3b1f}
+  h2{font-size:26px;margin:52px 0 10px;letter-spacing:-.01em;padding-top:14px;border-top:1px solid var(--line)}
+  h3{font-size:18px;margin:28px 0 8px;color:#222a36}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  ul,ol{padding-left:22px} li{margin:7px 0}
+  strong{color:#16181d}
+  blockquote{font-size:19px;font-style:italic;color:#2b3340;border-left:3px solid var(--accent2);margin:22px 0;padding:6px 0 6px 20px;line-height:1.5}
+  code{font-family:var(--mono);background:#f0f1f4;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:.85em;color:var(--accent2)}
+  .codeblk{font-family:var(--mono);font-size:12.5px;background:#f0f1f4;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:#1f3a8a;white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.5}
+  .callout{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:24px 0}
+  .callout.key{border-left:3px solid var(--accent2)}
+  .callout h4{margin:0 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+  figure.diagram{margin:30px 0;background:#f3f5f8;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px 16px;overflow-x:auto}
+  figure.diagram figcaption{color:var(--muted);font-size:13px;margin-top:14px;text-align:center}
+  figure.diagram .dtitle{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);text-align:center;margin-bottom:20px;font-weight:600}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center}
+  .node .nh{font-weight:600;font-size:14px;color:#16181d}
+  .node .ns{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+  .node.accent{border-color:var(--accent)} .node.accent2{border-color:var(--accent2)} .node.warn{border-color:var(--warn)} .node.ok{border-color:var(--ok)} .node.purple{border-color:var(--purple)}
+  .col{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .row{display:flex;gap:12px;align-items:stretch;justify-content:center;flex-wrap:wrap}
+  .grow .node{flex:1;min-width:120px}
+  .arrow{color:var(--muted);font-size:20px;text-align:center;line-height:1}
+  .arrowlbl{color:var(--muted);font-size:11px;text-align:center}
+  .legend{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  @media(max-width:640px){.twocol{grid-template-columns:1fr}}
+  .vs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .vs.a{border-top:3px solid var(--accent2)} .vs.b{border-top:3px solid var(--purple)} .vs.bad{border-top:3px solid var(--warn)} .vs.good{border-top:3px solid var(--ok)}
+  .vs h4{margin:0 0 8px;font-size:14px;color:#16181d}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:12px 16px}
+  .step b{color:#16181d}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13px;min-width:480px}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--line)}
+  td .k{color:#16181d;font-weight:600}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .src{font-size:13px;color:var(--muted)}
+  .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../index.html">← All learning notes</a>
+
+  <header class="post">
+    <h1>Graph-Based Agent Memory</h1>
+    <div class="meta">
+      <span>By <strong>Neo Kim</strong> · The System Design Newsletter</span>
+      <span class="dot">•</span>
+      <span>Published Jul 7, 2026</span>
+      <span class="dot">•</span>
+      <span>Saved Jul 7, 2026</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Agent Memory</span>
+      <span class="tag">Knowledge Graph</span>
+      <span class="tag">Object Storage</span>
+      <span class="tag">Git for Data</span>
+    </div>
+  </header>
+
+  <p class="lede">You have several agents on one project — coding agents in your terminal, a chatbot in the browser, a background agent on AWS — and each keeps its <em>own</em> memory. So you copy decisions between chats by hand. What's missing is one shared memory every agent can read from and write to — and building that turns out to be a hard systems problem.</p>
+
+  <div class="disclaimer">ℹ️ <strong>Sponsored/partnered piece.</strong> The author partnered with <strong>Omnigraph</strong> (an MIT-licensed open-source graph engine) and uses it as the case study. The <em>problem framing and design patterns</em> are broadly educational and vendor-neutral; the specific product is the sponsor's. Ends with paid-masterclass and referral CTAs.</div>
+
+  <div class="callout key">
+    <h4>The core idea</h4>
+    <p style="margin:0">A shared agent memory must do three jobs: <strong>read</strong> (assemble context by following connected facts), <strong>write</strong> (persist knowledge that outlives the task), and — the genuinely new one — <strong>coordinate</strong> (let many agents read/write at once without overwriting each other or exposing half-finished, possibly-wrong changes). A pile of documents or a vector database handles read and write, but not coordination. The answer explored here: a <strong>typed graph</strong> on shared object storage, where every change is <strong>proposed on a branch, reviewed, and merged</strong> — "Git for AI memory."</p>
+  </div>
+
+  <h2>Why the obvious approaches break</h2>
+  <figure class="diagram">
+    <div class="dtitle">Two tempting options, both insufficient</div>
+    <div class="twocol">
+      <div class="vs bad">
+        <h4>A shared document folder</h4>
+        <p style="margin:0;font-size:14px">Notion / Drive / a wiki. No structure to reason over — "a folder stores text, NOT knowledge." An agent can answer from one file, but not when the answer is spread across 200+ files; it doesn't know <em>deploy</em>, <em>service</em>, and <em>person</em> are different things, so it reads everything — or hallucinates.</p>
+      </div>
+      <div class="vs bad">
+        <h4>A vector database (RAG)</h4>
+        <p style="margin:0;font-size:14px">Returns the text chunks most similar to your question — great for "find the passage about X." But it holds <strong>no relationships or types</strong>. It can't start at a customer, follow to their open tickets, to the on-call engineer, to the commit that broke it. You get a bag of similar snippets and connect the dots yourself.</p>
+      </div>
+    </div>
+    <figcaption>Neither lets an agent start at one fact and follow it to a related fact. And both collapse the moment a <em>second</em> agent writes: a folder does last-write-wins (the other write vanishes); a vector DB can't tell a <em>proposed</em> change from an <em>accepted</em> one, so one agent's mistake instantly becomes every agent's input.</figcaption>
+  </figure>
+  <blockquote>Reads and writes aren't new… but coordination is. Traditional memory assumes a few deterministic writers making short, careful updates. AI agents reason for minutes, revise conclusions, make mistakes, and run alongside many others touching the same knowledge.</blockquote>
+
+  <h2>Graph-shaped memory</h2>
+  <p>Model facts as <strong>nodes</strong> (dots) and relationships as <strong>edges</strong> (lines). To answer a question, don't search thousands of documents — follow the edges that already exist:</p>
+  <figure class="diagram">
+    <div class="dtitle">Four hops, not a thousand documents</div>
+    <div class="row" style="max-width:760px;align-items:center">
+      <div class="node accent"><div class="nh">Customer</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Ticket</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent"><div class="nh">Engineer</div></div>
+      <div class="arrow">→</div>
+      <div class="node accent2"><div class="nh">Commit</div><div class="ns">that probably caused the bug</div></div>
+    </div>
+    <figcaption>The graph stores relationships <em>alongside</em> the facts — exactly what shared agent memory has been missing.</figcaption>
+  </figure>
+
+  <h3>A graph alone isn't enough — you need a schema</h3>
+  <p>Let many agents write freely and a subtle failure appears. Three agents record the same event as "deploy," "deployment," and "release" → three <em>different</em> nodes, because nothing tells the graph they mean the same thing. Ask "show every deploy this week," and the query follows only the <code>deploy</code> nodes — silently missing the rest.</p>
+  <blockquote>The result looks complete… but it's WRONG. The graph didn't fail — the schema did.</blockquote>
+  <p>So define the schema <em>before</em> anyone writes: which <strong>node types</strong> may exist, which <strong>relationships</strong> connect them, and how each node is <strong>identified</strong> (a <code>@key</code>). Every agent writes against the same schema, so hundreds of agents describe the world the same way. In Omnigraph the schema is a plain-text file the agent generates and updates from your graph — e.g. nodes <code>Person</code>/<code>Service</code>/<code>Deploy</code>, and an edge <code>Deploy -&gt; Service</code> meaning "from the deploy to the service it touched." The memory isn't just a graph — it's a <strong>typed graph with a shared schema.</strong></p>
+
+  <h2>Where the graph lives: object storage</h2>
+  <p>The graph lives in <strong>object storage</strong> (a cloud data bucket — S3, GCS, R2). Why S3:</p>
+  <div class="row grow" style="max-width:780px">
+    <div class="node accent"><div class="nh">Low cost</div><div class="ns">a few cents/GB/month — memory grows without a big DB cluster</div></div>
+    <div class="node accent"><div class="nh">High durability</div><div class="ns">replicated across many availability zones; it's the system of record</div></div>
+    <div class="node accent"><div class="nh">Shared access</div><div class="ns">not tied to one machine — every agent with credentials reads/writes one bucket</div></div>
+  </div>
+  <div class="callout">
+    <p style="margin:0"><strong>The catch — no atomic writes.</strong> Object storage safely stores <em>one</em> object at a time, but can't commit several as a single all-or-nothing operation (what a database calls an <strong>atomic write</strong>). Write A, then B, then C, and the bucket treats them as three independent writes — there's no "commit all three or none." And a graph update almost always touches many objects. So how do you get atomicity from storage that doesn't offer it?</p>
+  </div>
+
+  <h2>Atomic writes via a manifest</h2>
+  <p>The graph is <em>not</em> one file. Omnigraph splits it into many <strong>stores</strong> — one per node type and per edge type — each keeping every record of that type in <strong>versioned</strong> files (columnar format Lance under the hood), plus a tiny <strong>manifest</strong> store. Recording "Alice pushed deploy d-913 to checkout" writes three stores: <code>nodes/Deploy/</code>, <code>nodes/Person/</code>, and <code>edges/TriggeredBy/</code>. Crash mid-way and the graph is inconsistent — and the bucket can't roll back, because it never knew those writes belonged together.</p>
+  <p>The manifest fixes this. It's a small table recording, for each store, <strong>which version is live right now</strong>, under two rules: (1) <strong>stores are immutable</strong> — a write creates a new version <em>beside</em> the old, which stays live until the manifest says otherwise; (2) <strong>each store has exactly one live version</strong> — the manifest is the pointer.</p>
+  <figure class="diagram">
+    <div class="dtitle">The all-or-nothing publish sequence</div>
+    <div class="steps">
+      <div class="step"><b>1 · Write the new versions, invisibly.</b> Create <code>Deploy v8</code>, <code>Person v12</code>, <code>TriggeredBy v4</code> in the bucket. They exist, but every agent still reads v7/v11/v3 — the manifest hasn't moved.</div>
+      <div class="step"><b>2 · Move all pointers with one manifest write.</b> A single write flips Deploy→v8, Person→v12, TriggeredBy→v4 at once. <strong>The only atomic operation is this manifest update.</strong></div>
+    </div>
+    <figcaption>Before → old graph visible (consistent). After → new graph visible. During → no partial state. Crash before the manifest write and nothing becomes visible; the new versions are just orphaned files. This is the same trick <strong>Apache Iceberg and Delta Lake</strong> use for atomic commits on object storage.</figcaption>
+  </figure>
+  <div class="callout">
+    <h4>Compare-and-Swap (CAS) prevents lost updates</h4>
+    <p style="margin:0">Before updating the manifest, Omnigraph checks whether every store is still on the version the writer originally read. Writer started from <code>Deploy v7</code> and made v8 → "Is Deploy still v7?" <strong>Yes</strong> → the commit succeeds. <strong>No</strong> → someone already published a newer version, so the commit is rejected and the writer retries from the latest state. The manifest is append-only. CAS stops one writer from silently clobbering changes it never saw.</p>
+  </div>
+
+  <h2>Git for AI memory: branch, review, merge</h2>
+  <p>CAS stops <em>conflicting</em> writes — but it doesn't judge whether a write is <em>correct</em>. Agents hallucinate; a wrong write that wins CAS instantly becomes shared fact. So Omnigraph borrows the Git workflow: don't edit shared truth directly — branch, change, review, merge.</p>
+  <figure class="diagram">
+    <div class="dtitle">Every agent works on its own branch</div>
+    <div class="row" style="max-width:780px;align-items:center">
+      <div class="node accent"><div class="nh">main</div><div class="ns">shared truth — unchanged</div></div>
+      <div class="arrow">→</div>
+      <div class="col">
+        <div class="node accent2"><div class="nh">Agent A's branch</div><div class="ns">private edits, in parallel</div></div>
+        <div class="node accent2"><div class="nh">Agent B's branch</div><div class="ns">private edits, in parallel</div></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node ok"><div class="nh">Review &amp; merge</div><div class="ns">approved → becomes main</div></div>
+    </div>
+    <figcaption>Branching is cheap: a store is copied only when an agent first writes to it (copy-on-write); until then the branch shares main's storage. A branch is only a <em>proposal</em> — and <strong>an AI agent never approves its own changes.</strong> Policy rules can auto-approve routine, low-risk changes; larger/riskier ones go to human review.</figcaption>
+  </figure>
+  <p><strong>Merge conflicts.</strong> Changes to <em>different</em> parts of the graph merge automatically (both kept). A real conflict is only when two branches set the <em>same field</em> differently (A: d-913 → <code>rolled-back</code>; B: same field → <code>succeeded</code>) — Omnigraph won't guess; it reports the exact node, field, and both values for a human/policy to resolve. Graphs add a second kind: one branch deletes a node while another adds an edge to it (a dangling edge) — detected before the merge. "Every disagreement becomes an explicit conflict, not a silent overwrite." (Prior art: <strong>Dolt</strong> = Git for SQL, <strong>lakeFS</strong> = for data lakes; Omnigraph extends it to typed graphs.)</p>
+
+  <h2>Who did what: commits, authorization, audit</h2>
+  <p>A safe write leaves three questions — <em>who's allowed</em> to change this, <em>who actually did</em>, and <em>how to undo it</em> — all answered by one object: the <strong>commit</strong>.</p>
+  <div class="steps">
+    <div class="step"><b>Authorization lives in the engine, not the API.</b> You can reach Omnigraph via HTTP, a CLI, or an embedded SDK (agents usually connect through an <strong>MCP server</strong>). Enforcing permissions at the HTTP layer would leave the CLI and SDK as back doors — so every write passes the same authorization check <em>inside the engine</em>. No path bypasses it.</div>
+    <div class="step"><b>Policies in Cedar.</b> Rules (written in Cedar, AWS's open policy language) govern the actions: read, make a change, create/modify a branch, merge into main, change the schema. Permissions are <strong>branch-level</strong> today; field-level ("edit a deploy's status without touching its owner") is on the roadmap.</div>
+    <div class="step"><b>Identity comes from the token, not the request.</b> Each <strong>actor</strong> (agent, human, service) gets a token; the engine identifies it from the token. A request can <em>claim</em> "I'm an admin" — the token decides.</div>
+    <div class="step"><b>Commit history = the audit trail.</b> Each accepted change is a commit recording who, when, and its parent — chained into the full history. No separate audit log needed. Crash-recovery commits use a reserved <em>system</em> identity, so you can tell human vs agent vs system apart.</div>
+  </div>
+  <p><strong>Everything is reversible.</strong> Because nothing is ever updated in place — every change is a new version beside the old — you can read the graph exactly as it looked before any merge, compare, or roll back (discard a branch, or revert a merge with a new commit restoring an earlier state). Nothing is reconstructed because nothing was overwritten.</p>
+
+  <h2>One query, three kinds of search</h2>
+  <p>An agent is only as good as the context it gets — and context rarely comes from one lookup. Omnigraph answers a query with three retrieval methods over <em>one</em> copy of the data:</p>
+  <figure class="diagram">
+    <div class="dtitle">Three searches, fused into one ranking</div>
+    <div class="row grow" style="max-width:800px">
+      <div class="node accent"><div class="nh">Graph traversal</div><div class="ns">follow edges — "which services depend on LoginService? who owns it?"</div></div>
+      <div class="node accent"><div class="nh">Full-text search</div><div class="ns">exact strings — an error code <code>ERR_AUTH_443</code>, a ticket ID (BM25, like grep)</div></div>
+      <div class="node accent"><div class="nh">Vector search</div><div class="ns">meaning — "can't log in" matches "authentication failure" (k-NN + cosine)</div></div>
+    </div>
+    <figcaption>Building three separate systems (graph DB + search index + vector DB) creates a sync problem — each holds its own copy and they drift. Instead, Omnigraph keeps <strong>one</strong> copy in object storage and builds all three indexes on top, so they stay in sync. Each search returns a ranked list; the lists are merged with <strong>Reciprocal Rank Fusion (RRF)</strong> — results near the top across many searches rise to the top (no averaging of incompatible scores).</figcaption>
+  </figure>
+
+  <h2>When to use it — and when not</h2>
+  <figure class="diagram">
+    <div class="dtitle">Right tool for the workload</div>
+    <div class="twocol">
+      <div class="vs good">
+        <h4>Use graph memory when…</h4>
+        <p style="margin:0;font-size:14px">Multiple agents read shared context, write new knowledge, and must coordinate without corrupting it — over time. E.g. a company knowledge graph, long-term agent memory that outlives a task, a codebase graph coding agents keep updating, a personal knowledge graph.</p>
+      </div>
+      <div class="vs bad">
+        <h4>Don't, when…</h4>
+        <p style="margin:0;font-size:14px">You need thousands of low-latency writes/sec — object-storage writes take tens–hundreds of ms (fine for agents that reason for seconds, wrong for payments, click counters, session state → a transactional DB). Or you only need one retrieval method: semantic-only → a vector DB; single-writer graph traversal → Neo4j; high-throughput txns → a transactional DB.</p>
+      </div>
+    </div>
+    <figcaption>"The common pattern isn't the domain — it's multiple agents working on the same knowledge over time."</figcaption>
+  </figure>
+  <blockquote>AI agents turned out to be a new kind of memory user. They need a memory system built for how they actually read, write, and coordinate. The agents are already here… and the memory is finally catching up.</blockquote>
+
+  <hr class="soft">
+  <p class="src"><strong>Source:</strong> Neo Kim, <a href="https://newsletter.systemdesign.one/p/graph-based-agent-memory" target="_blank" rel="noopener">"Graph based Agent Memory"</a> (The System Design Newsletter, Jul 7 2026). A partnered/sponsored piece; the case study is <strong>Omnigraph</strong> (open-source, MIT — built on Apache Arrow, Lance, and DataFusion). Named prior art cited by the article: Apache Iceberg / Delta Lake (atomic commits on object storage), Dolt (Git for SQL), lakeFS (versioned data lakes), Cedar (AWS policy language), BM25 / vector k-NN / RRF (retrieval). The article's own footnotes define most terms; a few are glossed inline here. Related: <a href="context-graphs.html">Context Graphs</a>, <a href="agentic-memory.html">Agentic Memory</a>, <a href="context-engine.html">Building a Context Engine</a>, <a href="databricks-agents-and-databases.html">Databricks on Agents &amp; Databases</a>.</p>
+  <div class="footer">Captured into Learning Notes · 2026-07-07 · <a href="../../index.html">Back to index</a></div>
+</div>
+</body>
+</html>
